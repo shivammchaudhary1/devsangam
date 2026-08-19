@@ -1,3 +1,4 @@
+import { LogoutButton } from '@/features/auth/components/LogoutButton';
 import { BarChart3, BookOpen, Home, PlayCircle, User } from 'lucide-react';
 
 import { NavLink, Outlet } from 'react-router';
@@ -110,6 +111,9 @@ export function AppShell() {
               </NavLink>
             ))}
           </nav>
+          <div className="mt-auto">
+            <LogoutButton />
+          </div>
         </aside>
 
         {/* Main Application */}
