@@ -1,0 +1,61 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: var(--border);
+  }
+
+  html {
+    color-scheme: dark;
+    background: var(--background);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100dvh;
+    margin: 0;
+    background:
+      radial-gradient(
+        circle at 15% 15%,
+        rgb(245 158 11 / 0.05),
+        transparent 25rem
+      ),
+      radial-gradient(
+        circle at 85% 0%,
+        rgb(212 175 55 / 0.04),
+        transparent 30rem
+      ),
+      var(--background);
+    color: var(--foreground);
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: 'Cinzel', Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+
+  .sanskrit,
+  [lang='sa'],
+  [lang='hi'] {
+    font-family: 'Noto Serif Devanagari', serif;
+    line-height: 1.65;
+  }
+
+  ::selection {
+    background: rgb(245 158 11 / 0.28);
+    color: var(--foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+}

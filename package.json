@@ -1,0 +1,36 @@
+{
+  "name": "devsangam",
+  "version": "0.1.0",
+  "description": "1. Product direction I recommend building one responsive React PWA first, not separate React web + React Native applications.",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "bugs": {
+    "url": "https://github.com/shivammchaudhary1/devsangam/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivammchaudhary1/devsangam.git"
+  },
+  "license": "ISC",
+  "author": "Shivamm Chaudhary",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently -n WEB,API -c auto \"npm run dev -w @devsangam/web\" \"npm run dev -w @devsangam/api\"",
+    "dev:web": "npm run dev -w @devsangam/web",
+    "dev:api": "npm run dev -w @devsangam/api",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.9.3"
+  }
+}
