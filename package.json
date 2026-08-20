@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "1. Product direction I recommend building one responsive React PWA first, not separate React web + React Native applications.",
   "private": true,
+  "engines": {
+    "node": "26.7.0"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
