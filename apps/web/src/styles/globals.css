@@ -1,61 +1,62 @@
-@custom-variant dark (&:where(.dark, .dark *));
-
 @layer base {
   * {
-    box-sizing: border-box;
-    border-color: var(--border);
+    @apply border-border;
   }
 
   html {
+    min-width: 320px;
+    background: var(--ds-obsidian);
     color-scheme: dark;
-    background: var(--background);
-    scroll-behavior: smooth;
   }
 
   body {
-    min-width: 320px;
-    min-height: 100dvh;
     margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    overflow-x: hidden;
+
     background:
       radial-gradient(
-        circle at 15% 15%,
-        rgb(245 158 11 / 0.05),
-        transparent 25rem
+        circle at 15% -10%,
+        rgb(245 158 11 / 0.07),
+        transparent 32rem
       ),
       radial-gradient(
-        circle at 85% 0%,
-        rgb(212 175 55 / 0.04),
-        transparent 30rem
+        circle at 95% 105%,
+        rgb(212 175 55 / 0.045),
+        transparent 36rem
       ),
-      var(--background);
-    color: var(--foreground);
-    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-    text-rendering: optimizeLegibility;
+      var(--ds-obsidian);
+
+    color: var(--ds-cream);
+
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
   }
 
   h1,
   h2,
   h3,
+  h4,
   .font-display {
     font-family: 'Cinzel', Georgia, serif;
-    letter-spacing: -0.02em;
   }
 
-  .sanskrit,
-  [lang='sa'],
-  [lang='hi'] {
+  .font-devanagari {
     font-family: 'Noto Serif Devanagari', serif;
-    line-height: 1.65;
   }
 
   ::selection {
-    background: rgb(245 158 11 / 0.28);
-    color: var(--foreground);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 3px;
+    background: rgb(245 158 11 / 0.3);
+    color: #f8fafc;
   }
 }

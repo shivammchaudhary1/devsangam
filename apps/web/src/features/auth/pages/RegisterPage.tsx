@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useMutation } from '@tanstack/react-query';
 
-import { Loader2, Mail, User } from 'lucide-react';
+import { Loader2, LockKeyhole, Mail, Sparkles, User } from 'lucide-react';
 
 import { useForm } from 'react-hook-form';
 
@@ -10,18 +10,13 @@ import { Link, useNavigate } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field';
-
 import { Input } from '@/components/ui/input';
 
 import { isApiError } from '@/services/api/client';
 
 import { registerUser } from '../api/auth.api';
+
+import { AuthCard } from '../components/AuthCard';
 
 import { AuthLayout } from '../components/AuthLayout';
 
@@ -38,6 +33,7 @@ export function RegisterPage() {
   const navigate = useNavigate();
 
   const auth = useAuth();
+
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
 
@@ -88,167 +84,322 @@ export function RegisterPage() {
       }
 
       form.setError('root', {
-        message: 'Unable to create account. Please try again.',
+        message: 'Unable to create your account. Please try again.',
       });
     }
   }
 
   return (
     <AuthLayout>
+      {/* Mobile Login / Sign Up switch */}
+
       <div
         className="
-          rounded-3xl
+          mb-7
+          grid
+          grid-cols-2
+          rounded-lg
           border
-          border-border
-          bg-card/85
-          p-6
-          shadow-2xl
-          shadow-black/30
-          backdrop-blur
-          sm:p-8
+          border-white/[0.07]
+          bg-[#11151d]
+          p-1
+          lg:hidden
         "
       >
-        <header className="mb-8 text-center">
-          <h1
-            className="
-              font-display
-              text-3xl
-            "
-          >
-            Begin Your Journey
-          </h1>
+        <Link
+          to="/auth/login"
+          className="
+            flex
+            h-10
+            items-center
+            justify-center
+            rounded-md
+            text-xs
+            font-medium
+            text-[#afb6c1]
+          "
+        >
+          Login
+        </Link>
 
-          <div
-            className="
-              mx-auto
-              my-4
-              h-px
-              w-20
-              bg-gradient-to-r
-              from-transparent
-              via-amber-500
-              to-transparent
-            "
-          />
+        <Link
+          to="/auth/register"
+          className="
+            flex
+            h-10
+            items-center
+            justify-center
+            rounded-md
+            border
+            border-[#d0a347]/60
+            bg-gradient-to-b
+            from-[#9a672a]/70
+            to-[#604018]/80
+            text-xs
+            font-semibold
+            text-[#f7d891]
+            shadow-[0_0_15px_rgba(245,158,11,0.14)]
+          "
+        >
+          Sign Up
+        </Link>
+      </div>
 
-          <p
-            className="
-              text-sm
-              text-muted-foreground
-            "
-          >
-            Create your DevSangam account
-          </p>
-        </header>
+      <AuthCard
+        title="Begin Your Journey"
+        description="Create your DevSangam account"
+      >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          {/* Name */}
 
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <Field data-invalid={Boolean(form.formState.errors.name)}>
-              <FieldLabel htmlFor="register-name">Name</FieldLabel>
+          <div>
+            <label
+              htmlFor="register-name"
+              className="
+                mb-2
+                block
+                text-[13px]
+                font-medium
+                text-[#e4e7ec]
+              "
+            >
+              Name
+            </label>
 
-              <div className="relative">
-                <User
-                  className="
-                    absolute
-                    left-3
-                    top-1/2
-                    -translate-y-1/2
-                    text-muted-foreground
-                  "
-                  size={17}
-                />
+            <div className="relative">
+              <User
+                size={17}
+                className="
+                  pointer-events-none
+                  absolute
+                  left-4
+                  top-1/2
+                  z-10
+                  -translate-y-1/2
+                  text-[#788396]
+                "
+              />
 
-                <Input
-                  id="register-name"
-                  autoComplete="name"
-                  placeholder="Enter your name"
-                  className="h-12 pl-10"
-                  {...form.register('name')}
-                />
-              </div>
+              <Input
+                id="register-name"
+                autoComplete="name"
+                placeholder="Enter your name"
+                aria-invalid={Boolean(form.formState.errors.name)}
+                className="
+                  h-[50px]
+                  rounded-lg
+                  border-[#343b49]
+                  bg-[#0d1118]
+                  pl-11
+                  text-[#f8fafc]
+                  placeholder:text-[#657080]
+                  hover:border-[#454e5d]
+                  focus-visible:border-[#c99836]/80
+                  focus-visible:ring-[3px]
+                  focus-visible:ring-amber-500/[0.08]
+                "
+                {...form.register('name')}
+              />
+            </div>
 
-              {form.formState.errors.name && (
-                <FieldError errors={[form.formState.errors.name]} />
-              )}
-            </Field>
+            {form.formState.errors.name && (
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  text-red-400
+                "
+              >
+                {form.formState.errors.name.message}
+              </p>
+            )}
+          </div>
 
-            <Field>
-              <FieldLabel htmlFor="register-email">Email</FieldLabel>
+          {/* Email */}
 
-              <div className="relative">
-                <Mail
-                  className="
-                    absolute
-                    left-3
-                    top-1/2
-                    -translate-y-1/2
-                    text-muted-foreground
-                  "
-                  size={17}
-                />
+          <div>
+            <label
+              htmlFor="register-email"
+              className="
+                mb-2
+                block
+                text-[13px]
+                font-medium
+                text-[#e4e7ec]
+              "
+            >
+              Email
+            </label>
 
-                <Input
-                  id="register-email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="Enter your email"
-                  className="h-12 pl-10"
-                  {...form.register('email')}
-                />
-              </div>
+            <div className="relative">
+              <Mail
+                size={17}
+                className="
+                  pointer-events-none
+                  absolute
+                  left-4
+                  top-1/2
+                  z-10
+                  -translate-y-1/2
+                  text-[#788396]
+                "
+              />
 
-              {form.formState.errors.email && (
-                <FieldError errors={[form.formState.errors.email]} />
-              )}
-            </Field>
+              <Input
+                id="register-email"
+                type="email"
+                autoComplete="email"
+                placeholder="Enter your email"
+                aria-invalid={Boolean(form.formState.errors.email)}
+                className="
+                  h-[50px]
+                  rounded-lg
+                  border-[#343b49]
+                  bg-[#0d1118]
+                  pl-11
+                  text-[#f8fafc]
+                  placeholder:text-[#657080]
+                  hover:border-[#454e5d]
+                  focus-visible:border-[#c99836]/80
+                  focus-visible:ring-[3px]
+                  focus-visible:ring-amber-500/[0.08]
+                "
+                {...form.register('email')}
+              />
+            </div>
 
-            <Field>
-              <FieldLabel htmlFor="register-password">Password</FieldLabel>
+            {form.formState.errors.email && (
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  text-red-400
+                "
+              >
+                {form.formState.errors.email.message}
+              </p>
+            )}
+          </div>
+
+          {/* Password */}
+
+          <div>
+            <label
+              htmlFor="register-password"
+              className="
+                mb-2
+                block
+                text-[13px]
+                font-medium
+                text-[#e4e7ec]
+              "
+            >
+              Password
+            </label>
+
+            <div className="relative">
+              <LockKeyhole
+                size={17}
+                className="
+                  pointer-events-none
+                  absolute
+                  left-4
+                  top-1/2
+                  z-10
+                  -translate-y-1/2
+                  text-[#788396]
+                "
+              />
 
               <PasswordInput
                 id="register-password"
                 autoComplete="new-password"
                 placeholder="Minimum 10 characters"
-                className="h-12"
+                className="pl-11"
+                aria-invalid={Boolean(form.formState.errors.password)}
                 {...form.register('password')}
               />
+            </div>
 
-              {form.formState.errors.password && (
-                <FieldError errors={[form.formState.errors.password]} />
-              )}
-            </Field>
+            {form.formState.errors.password && (
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  text-red-400
+                "
+              >
+                {form.formState.errors.password.message}
+              </p>
+            )}
+          </div>
 
-            <Field>
-              <FieldLabel htmlFor="register-confirm-password">
-                Confirm Password
-              </FieldLabel>
+          {/* Confirm Password */}
+
+          <div>
+            <label
+              htmlFor="register-confirm-password"
+              className="
+                mb-2
+                block
+                text-[13px]
+                font-medium
+                text-[#e4e7ec]
+              "
+            >
+              Confirm Password
+            </label>
+
+            <div className="relative">
+              <LockKeyhole
+                size={17}
+                className="
+                  pointer-events-none
+                  absolute
+                  left-4
+                  top-1/2
+                  z-10
+                  -translate-y-1/2
+                  text-[#788396]
+                "
+              />
 
               <PasswordInput
                 id="register-confirm-password"
                 autoComplete="new-password"
                 placeholder="Confirm your password"
-                className="h-12"
+                className="pl-11"
+                aria-invalid={Boolean(form.formState.errors.confirmPassword)}
                 {...form.register('confirmPassword')}
               />
+            </div>
 
-              {form.formState.errors.confirmPassword && (
-                <FieldError errors={[form.formState.errors.confirmPassword]} />
-              )}
-            </Field>
-          </FieldGroup>
+            {form.formState.errors.confirmPassword && (
+              <p
+                className="
+                  mt-2
+                  text-xs
+                  text-red-400
+                "
+              >
+                {form.formState.errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
+          {/* API Error */}
 
           {form.formState.errors.root && (
             <div
               role="alert"
               className="
-                mt-5
-                rounded-xl
+                rounded-lg
                 border
-                border-red-500/30
-                bg-red-500/10
+                border-red-500/25
+                bg-red-500/[0.07]
                 px-4
                 py-3
-                text-sm
+                text-xs
                 text-red-300
               "
             >
@@ -256,27 +407,41 @@ export function RegisterPage() {
             </div>
           )}
 
+          {/* Create Account */}
+
           <Button
             type="submit"
             disabled={registerMutation.isPending}
             className="
-              mt-7
-              h-12
+              h-[52px]
               w-full
-              bg-gradient-to-r
-              from-amber-500
-              to-[#d4af37]
+              rounded-lg
+              border
+              border-[#ffd06b]
+              bg-gradient-to-b
+              from-[#fac360]
+              via-[#efa83a]
+              to-[#db8d1c]
+              text-[15px]
               font-semibold
-              text-[#0c0d12]
+              text-[#211504]
+              shadow-[0_0_26px_rgba(245,158,11,0.34)]
+              transition-all
+              duration-200
+              hover:brightness-105
+              hover:shadow-[0_0_36px_rgba(245,158,11,0.46)]
             "
           >
             {registerMutation.isPending ? (
               <>
-                <Loader2 className="animate-spin" />
+                <Loader2 size={17} className="animate-spin" />
                 Creating account...
               </>
             ) : (
-              'Create Account'
+              <>
+                <Sparkles size={16} />
+                Create Account
+              </>
             )}
           </Button>
         </form>
@@ -285,8 +450,9 @@ export function RegisterPage() {
           className="
             mt-7
             text-center
-            text-sm
-            text-muted-foreground
+            text-xs
+            text-[#8d95a2]
+            sm:text-sm
           "
         >
           Already have an account?{' '}
@@ -294,13 +460,15 @@ export function RegisterPage() {
             to="/auth/login"
             className="
               font-medium
-              text-amber-400
+              text-[#e8b647]
+              transition
+              hover:text-[#ffd16c]
             "
           >
             Sign in
           </Link>
         </p>
-      </div>
+      </AuthCard>
     </AuthLayout>
   );
 }

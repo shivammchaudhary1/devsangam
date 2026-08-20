@@ -1,4 +1,4 @@
-/* DevSangam design tokens — aligned to the approved dark/amber UI direction. */
+/* DevSangam design tokens — aligned to the approved dark/amber UI direction.
 :root {
   --background: #0c0d12;
   --foreground: #f8fafc;
@@ -48,7 +48,7 @@
     0 0 0 1px rgb(245 158 11 / 0.55), 0 0 42px rgb(245 158 11 / 0.32);
 }
 
-/* Optional warm-light theme for future use. The product should ship dark-first. */
+/* Optional warm-light theme for future use. The product should ship dark-first. 
 .light {
   --background: #f7f2e8;
   --foreground: #1a1712;
@@ -110,4 +110,78 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.35rem);
   --radius-2xl: calc(var(--radius) + 0.75rem);
+}
+
+*/
+
+:root {
+  --ds-obsidian: #0c0d12;
+  --ds-sidebar: #101218;
+  --ds-charcoal: #161922;
+  --ds-elevated: #1b1f2a;
+  --ds-surface: #222736;
+  --ds-border: #2e3648;
+
+  --ds-saffron: #f59e0b;
+  --ds-gold: #d4af37;
+  --ds-soft-gold: #e5c07b;
+
+  --ds-cream: #f8fafc;
+  --ds-muted: #94a3b8;
+
+  --ds-success: #10b981;
+  --ds-danger: #ef4444;
+
+  --ds-saffron-soft: rgb(245 158 11 / 0.1);
+  --ds-gold-soft: rgb(212 175 55 / 0.1);
+
+  --ds-shadow-card: 0 18px 60px rgb(0 0 0 / 0.28);
+
+  --ds-shadow-gold: 0 0 32px rgb(245 158 11 / 0.14);
+
+  --ds-shadow-gold-strong: 0 0 48px rgb(245 158 11 / 0.22);
+}
+
+.dark {
+  --background: #0c0d12;
+  --foreground: #f8fafc;
+
+  --card: #161922;
+  --card-foreground: #f8fafc;
+
+  --popover: #161922;
+  --popover-foreground: #f8fafc;
+
+  --primary: #f59e0b;
+  --primary-foreground: #0c0d12;
+
+  --secondary: #222736;
+  --secondary-foreground: #f8fafc;
+
+  --muted: #1b1f2a;
+  --muted-foreground: #94a3b8;
+
+  --accent: #222736;
+  --accent-foreground: #f8fafc;
+
+  --destructive: #ef4444;
+
+  --border: #2e3648;
+  --input: #222736;
+  --ring: #f59e0b;
+
+  --sidebar: #101218;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #f59e0b;
+  --sidebar-primary-foreground: #0c0d12;
+  --sidebar-accent: #1b1f2a;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #252b39;
+  --sidebar-ring: #f59e0b;
+
+  --chart-1: #f59e0b;
+  --chart-2: #d4af37;
+  --chart-3: #e5c07b;
+  --chart-4: #10b981;
+  --chart-5: #94a3b8;
 }
