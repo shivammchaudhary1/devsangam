@@ -11,6 +11,20 @@ import App from '@/App';
 
 import '@/index.css';
 
+// Fonts
+
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/500.css';
+import '@fontsource/plus-jakarta-sans/600.css';
+import '@fontsource/plus-jakarta-sans/700.css';
+
+import '@fontsource/cinzel/500.css';
+import '@fontsource/cinzel/600.css';
+import '@fontsource/cinzel/700.css';
+
+import '@fontsource/noto-serif-devanagari/400.css';
+import '@fontsource/noto-serif-devanagari/600.css';
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>

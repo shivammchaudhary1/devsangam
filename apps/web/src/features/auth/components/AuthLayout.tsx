@@ -1,237 +1,172 @@
 import type { ReactNode } from 'react';
 
+import { appImages } from '@/assets/assets';
+import { DevSangamLogo } from '@/components/brand/DevSangamLogo';
+
 interface AuthLayoutProps {
   children: ReactNode;
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <main
-      className="
-        grid
-        min-h-dvh
-        bg-background
-        lg:grid-cols-[0.9fr_1.1fr]
-      "
-    >
-      {/* Desktop Branding */}
-
-      <section
+    <main className="min-h-dvh overflow-hidden bg-[#080a0f] text-white">
+      <div
         className="
-          relative
-          hidden
-          overflow-hidden
-          border-r
-          border-border
-          bg-[#090b10]
-          lg:flex
-          lg:flex-col
-          lg:justify-center
-          lg:px-16
+          grid
+          min-h-dvh
+          lg:grid-cols-[44%_56%]
         "
       >
-        {/* ambient glow */}
+        {/* =========================================
+            LEFT DESKTOP ARTWORK
+            ========================================= */}
 
-        <div
+        <aside
           className="
-            pointer-events-none
-            absolute
-            -left-24
-            top-20
-            h-96
-            w-96
-            rounded-full
-            bg-amber-500/10
-            blur-[110px]
+            relative
+            hidden
+            min-h-dvh
+            overflow-hidden
+            border-r
+            border-white/[0.055]
+            bg-[#05070a]
+            lg:block
           "
-        />
+        >
+          <img
+            src={appImages.authBackground}
+            alt=""
+            aria-hidden="true"
+            className="
+              absolute
+              inset-0
+              h-full
+              w-full
+              object-cover
+              object-center
+            "
+          />
 
-        <div
-          className="
-            pointer-events-none
-            absolute
-            bottom-10
-            right-0
-            h-72
-            w-72
-            rounded-full
-            bg-[#d4af37]/10
-            blur-[100px]
-          "
-        />
-
-        <div className="relative z-10 max-w-md">
+          {/* Blend image toward form side */}
           <div
             className="
-              mb-8
-              flex
-              h-20
-              w-20
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-amber-500/30
-              bg-amber-500/10
-              text-4xl
-              text-amber-400
-              shadow-[0_0_45px_rgba(245,158,11,0.18)]
-            "
-          >
-            ॐ
-          </div>
-
-          <h1
-            className="
-              font-display
-              text-5xl
-              text-[#e5c07b]
-            "
-          >
-            DevSangam
-          </h1>
-
-          <p
-            className="
-              mt-3
-              text-sm
-              font-medium
-              tracking-wide
-              text-[#d4af37]
-            "
-          >
-            Chant. Connect. Transform.
-          </p>
-
-          <div
-            className="
-              my-10
-              h-px
-              w-32
+              pointer-events-none
+              absolute
+              inset-0
               bg-gradient-to-r
-              from-amber-500
+              from-transparent
+              via-transparent
+              to-[#080a0f]/30
+            "
+          />
+
+          {/* Bottom cinematic shade */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-x-0
+              bottom-0
+              h-36
+              bg-gradient-to-t
+              from-black/30
               to-transparent
             "
           />
 
-          <p
-            className="
-              max-w-sm
-              text-lg
-              leading-8
-              text-muted-foreground
-            "
-          >
-            Your sacred space for daily mantra practice and inner alignment.
-          </p>
-
+          {/* Right edge gold hint */}
           <div
             className="
-              mt-12
-              font-serif
-              text-lg
-              leading-8
-              text-[#d4af37]
+              pointer-events-none
+              absolute
+              bottom-[10%]
+              right-0
+              top-[10%]
+              w-px
+              bg-gradient-to-b
+              from-transparent
+              via-[#d4af37]/15
+              to-transparent
             "
-            lang="sa"
-          >
-            ॐ असतो मा सद्गमय ।
-            <br />
-            तमसो मा ज्योतिर्गमय ।
-          </div>
-        </div>
-      </section>
+          />
+        </aside>
 
-      {/* Form */}
+        {/* =========================================
+            RIGHT AUTH AREA
+            ========================================= */}
 
-      <section
-        className="
-          relative
-          flex
-          items-center
-          justify-center
-          px-5
-          py-10
-          sm:px-10
-          lg:px-16
-        "
-      >
-        <div
-          className="
-            pointer-events-none
-            absolute
-            left-1/2
-            top-1/4
-            h-72
-            w-72
-            -translate-x-1/2
-            rounded-full
-            bg-amber-500/5
-            blur-[100px]
-          "
-        />
-
-        <div
+        <section
           className="
             relative
-            z-10
-            w-full
-            max-w-md
+            flex
+            min-h-dvh
+            items-center
+            justify-center
+            overflow-hidden
+            bg-[#080a0f]
+            px-5
+            py-8
+            sm:px-8
+            lg:px-10
+            xl:px-16
           "
         >
-          {/* Mobile logo */}
+          {/* Warm ambient glow */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-[48%]
+              h-[38rem]
+              w-[38rem]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-amber-500/[0.025]
+              blur-[130px]
+            "
+          />
+
+          {/* Secondary glow */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -bottom-48
+              right-0
+              h-96
+              w-96
+              rounded-full
+              bg-[#d4af37]/[0.025]
+              blur-[120px]
+            "
+          />
 
           <div
             className="
-              mb-10
-              text-center
-              lg:hidden
+              relative
+              z-10
+              w-full
+              max-w-[570px]
             "
           >
+            {/* Mobile branding only */}
             <div
               className="
-                mx-auto
-                mb-4
+                mb-7
                 flex
-                h-14
-                w-14
-                items-center
                 justify-center
-                rounded-full
-                border
-                border-amber-500/30
-                bg-amber-500/10
-                text-2xl
-                text-amber-400
+                lg:hidden
               "
             >
-              ॐ
+              <DevSangamLogo />
             </div>
 
-            <div
-              className="
-                font-display
-                text-3xl
-                text-[#e5c07b]
-              "
-            >
-              DevSangam
-            </div>
-
-            <p
-              className="
-                mt-1
-                text-xs
-                text-[#d4af37]
-              "
-            >
-              Chant. Connect. Transform.
-            </p>
+            {children}
           </div>
-
-          {children}
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
