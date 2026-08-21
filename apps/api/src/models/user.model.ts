@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from 'mongoose';
+import { type InferSchemaType,model, Schema } from 'mongoose';
 
 const userSchema = new Schema(
   {
@@ -37,6 +37,15 @@ const userSchema = new Schema(
     emailVerified: {
       type: Boolean,
       default: false,
+    },
+    favoriteMantraIds: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Mantra',
+        },
+      ],
+      default: [],
     },
 
     preferences: {

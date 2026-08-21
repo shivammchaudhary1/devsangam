@@ -1,91 +1,125 @@
+import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
+import { RouteLoadingFallback } from '@/components/shared/RouteLoadingFallback';
+import { GuestRoute } from '@/features/auth/components/GuestRoute';
+import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
+import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 
-import { AppShell } from '@/components/layout/AppShell';
-import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
+const AppShell = lazy(() =>
+  import('@/components/layout/AppShell').then((module) => ({
+    default: module.AppShell,
+  }))
+);
 
-import { LoginPage } from '@/features/auth/pages/LoginPage';
+const LoginPage = lazy(() =>
+  import('@/features/auth/pages/LoginPage').then((module) => ({
+    default: module.LoginPage,
+  }))
+);
 
-import { RegisterPage } from '@/features/auth/pages/RegisterPage';
+const RegisterPage = lazy(() =>
+  import('@/features/auth/pages/RegisterPage').then((module) => ({
+    default: module.RegisterPage,
+  }))
+);
 
-import { GuestRoute } from '@/features/auth/components/GuestRoute';
+const ForgotPasswordPage = lazy(() =>
+  import('@/features/auth/pages/ForgotPasswordPage').then((module) => ({
+    default: module.ForgotPasswordPage,
+  }))
+);
 
-import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
+const ResetPasswordPage = lazy(() =>
+  import('@/features/auth/pages/ResetPasswordPage').then((module) => ({
+    default: module.ResetPasswordPage,
+  }))
+);
 
-import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage';
+const MantraLibraryPage = lazy(() =>
+  import('@/features/mantras/pages/MantraLibraryPage').then((module) => ({
+    default: module.MantraLibraryPage,
+  }))
+);
 
-import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage';
+const MantraDetailPage = lazy(() =>
+  import('@/features/mantras/pages/MantraDetailPage').then((module) => ({
+    default: module.MantraDetailPage,
+  }))
+);
+
+const ProfilePage = lazy(() =>
+  import('@/features/profile/pages/ProfilePage').then((module) => ({
+    default: module.ProfilePage,
+  }))
+);
 
 function App() {
   return (
-    <Routes>
-      {/* Guest-only */}
-      <Route element={<GuestRoute />}>
-        <Route path="/auth/login" element={<LoginPage />} />
+    <Suspense fallback={<RouteLoadingFallback />}>
+      <Routes>
+        {/* Guest routes */}
+        <Route element={<GuestRoute />}>
+          <Route path={APP_ROUTES.auth.login} element={<LoginPage />} />
 
-        <Route path="/auth/register" element={<RegisterPage />} />
-
-        <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-      </Route>
-
-      <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
-
-      {/* Authenticated app */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<AppShell />}>
-          {/* existing app routes */}
+          <Route path={APP_ROUTES.auth.register} element={<RegisterPage />} />
 
           <Route
-            path="/"
-            element={
-              <PlaceholderPage
-                title="Dashboard"
-                description="Your daily spiritual practice."
-              />
-            }
-          />
-
-          <Route
-            path="/practice"
-            element={
-              <PlaceholderPage
-                title="Start Practice"
-                description="Choose a mantra and begin your Sadhana."
-              />
-            }
-          />
-
-          <Route
-            path="/insights"
-            element={
-              <PlaceholderPage
-                title="Insights & Progress"
-                description="Track consistency and chanting progress."
-              />
-            }
-          />
-
-          <Route
-            path="/library"
-            element={
-              <PlaceholderPage
-                title="Sadhana Library"
-                description="Explore sacred mantras."
-              />
-            }
-          />
-
-          <Route
-            path="/profile"
-            element={
-              <PlaceholderPage
-                title="Profile"
-                description="Manage your DevSangam experience."
-              />
-            }
+            path={APP_ROUTES.auth.forgotPassword}
+            element={<ForgotPasswordPage />}
           />
         </Route>
-      </Route>
-    </Routes>
+
+        <Route
+          path={APP_ROUTES.auth.resetPassword}
+          element={<ResetPasswordPage />}
+        />
+
+        {/* Authenticated application */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppShell />}>
+            <Route
+              path={APP_ROUTES.home}
+              element={
+                <PlaceholderPage
+                  title="Dashboard"
+                  description="Your daily spiritual practice."
+                />
+              }
+            />
+
+            <Route
+              path={APP_ROUTES.practice}
+              element={
+                <PlaceholderPage
+                  title="Start Practice"
+                  description="Choose a mantra and begin your Sadhana."
+                />
+              }
+            />
+
+            <Route
+              path={APP_ROUTES.insights}
+              element={
+                <PlaceholderPage
+                  title="Insights & Progress"
+                  description="Track consistency and chanting progress."
+                />
+              }
+            />
+
+            <Route path={APP_ROUTES.library} element={<MantraLibraryPage />} />
+
+            <Route
+              path={APP_ROUTES.libraryDetail}
+              element={<MantraDetailPage />}
+            />
+
+            <Route path={APP_ROUTES.profile} element={<ProfilePage />} />
+          </Route>
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
 

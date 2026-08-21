@@ -1,10 +1,7 @@
-import type { Request, Response } from 'express';
-
 import { UserModel } from '../models/user.model.ts';
-
 import { AppError } from '../utils/app-error.ts';
-
 import { serializeUser } from '../utils/serialize-user.ts';
+import type { Request, Response } from 'express';
 
 export async function getMe(request: Request, response: Response) {
   const userId = request.auth?.userId;

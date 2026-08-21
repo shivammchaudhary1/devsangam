@@ -1,8 +1,6 @@
-import { Navigate, Outlet } from 'react-router';
-
 import { useAuth } from '../hooks/useAuth';
-
 import { AuthLoadingScreen } from './AuthLoadingScreen';
+import { Navigate, Outlet } from 'react-router';
 
 export function GuestRoute() {
   const auth = useAuth();

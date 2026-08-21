@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
-
 import { ChevronDown, Globe2 } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 interface AuthCardProps {
   title: string;

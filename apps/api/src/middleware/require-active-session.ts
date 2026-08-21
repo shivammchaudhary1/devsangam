@@ -1,8 +1,6 @@
-import type { RequestHandler } from 'express';
-
 import { AuthSessionModel } from '../models/auth-session.model.ts';
-
 import { AppError } from '../utils/app-error.ts';
+import type { RequestHandler } from 'express';
 
 export const requireActiveSession: RequestHandler = async (
   request,

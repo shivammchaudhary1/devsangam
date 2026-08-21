@@ -7,17 +7,27 @@
     "dev": "node --env-file-if-exists=.env --watch src/server.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "start": "node --env-file-if-exists=.env dist/server.js"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "node --env-file-if-exists=.env dist/server.js",
+    "seed:mantras": "node --env-file-if-exists=.env src/scripts/seed-mantras.ts",
+    "sync:mantra-indexes": "node --env-file-if-exists=.env src/scripts/sync-mantra-indexes.ts"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^24.13.3",
     "@types/nodemailer": "^8.0.1",
-    "typescript": "^6.0.3"
+    "eslint": "^10.9.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "globals": "^17.11.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0"
   },
   "dependencies": {
+    "@devsangam/types": "^0.1.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",

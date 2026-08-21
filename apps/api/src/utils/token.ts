@@ -1,8 +1,6 @@
-import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
-
-import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
-
 import { AUTH } from '../config/auth.ts';
+import { type JWTPayload,jwtVerify, SignJWT } from 'jose';
+import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 
 type TokenType = 'access' | 'refresh';
 

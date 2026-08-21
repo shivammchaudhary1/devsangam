@@ -1,17 +1,12 @@
-import { useEffect, useMemo, type ReactNode } from 'react';
-
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-
 import { getCurrentUser, logoutUser } from '../api/auth.api';
-
 import {
   AUTH_EXPIRED_EVENT,
   AUTH_QUERY_KEY,
 } from '../constants/auth.constants';
-
-import { AuthContext } from './AuthContext';
-
 import type { AuthUser } from '../types/auth.types';
+import { AuthContext } from './AuthContext';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { type ReactNode,useCallback, useEffect, useMemo } from 'react';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -42,11 +37,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [queryClient]);
 
-  function setUser(user: AuthUser) {
-    queryClient.setQueryData(AUTH_QUERY_KEY, user);
-  }
+  const setUser = useCallback(
+    (user: AuthUser) => {
+      queryClient.setQueryData(AUTH_QUERY_KEY, user);
+    },
+    [queryClient]
+  );
 
-  async function logout() {
+  const logout = useCallback(async () => {
     try {
       await logoutUser();
     } finally {
@@ -60,7 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         predicate: (query) => query.queryKey[0] !== 'auth',
       });
     }
-  }
+  }, [queryClient]);
 
   const user = currentUserQuery.data ?? null;
 
@@ -76,7 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       logout,
     }),
-    [user, currentUserQuery.isPending]
+    [user, currentUserQuery.isPending, setUser, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

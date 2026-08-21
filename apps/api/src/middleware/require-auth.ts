@@ -1,10 +1,7 @@
-import type { RequestHandler } from 'express';
-
 import { AUTH } from '../config/auth.ts';
-
 import { AppError } from '../utils/app-error.ts';
-
 import { verifyAccessToken } from '../utils/token.ts';
+import type { RequestHandler } from 'express';
 
 export const requireAuth: RequestHandler = async (request, _response, next) => {
   const accessToken = request.cookies?.[AUTH.cookies.access] as

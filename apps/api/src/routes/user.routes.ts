@@ -1,19 +1,26 @@
-import { Router } from 'express';
-
+import {
+  addFavoriteMantra,
+  getFavoriteMantras,
+  removeFavoriteMantra,
+} from '../controllers/favorite.controller.ts';
 import { getMe } from '../controllers/user.controller.ts';
-
-import { requireAuth } from '../middleware/require-auth.ts';
-
 import { requireActiveSession } from '../middleware/require-active-session.ts';
+import { requireAuth } from '../middleware/require-auth.ts';
+import { Router } from 'express';
 
 export const userRouter = Router();
 
-userRouter.get(
-  '/me',
+/*
+ * Everything under /users
+ * requires an authenticated,
+ * active user session.
+ */
+userRouter.use(requireAuth, requireActiveSession);
 
-  requireAuth,
+userRouter.get('/me', getMe);
 
-  requireActiveSession,
+userRouter.get('/me/favorites', getFavoriteMantras);
 
-  getMe
-);
+userRouter.put('/me/favorites/:slug', addFavoriteMantra);
+
+userRouter.delete('/me/favorites/:slug', removeFavoriteMantra);
