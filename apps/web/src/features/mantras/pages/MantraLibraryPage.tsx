@@ -1,29 +1,36 @@
 import { useMemo, useState } from 'react';
+
 import { Search } from 'lucide-react';
 
-import { MantraCard } from '../components/MantraCard';
-import { useMantras } from '../hooks/useMantras';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 
-const categories = [
-  'All',
-  'Devotion',
-  'Peace',
-  'Focus',
-  'Healing',
-  'Protection',
-  'Wisdom',
-];
+import { MantraCard } from '../components/MantraCard';
+
+import {
+  DEFAULT_MANTRA_CATEGORY,
+  MANTRA_CATEGORIES,
+  MANTRA_SEARCH_DEBOUNCE_MS,
+  type MantraCategory,
+} from '../constants/mantra.constants';
+
+import { useMantras } from '../hooks/useMantras';
 
 export function MantraLibraryPage() {
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('All');
+
+  const [category, setCategory] = useState<MantraCategory>(
+    DEFAULT_MANTRA_CATEGORY
+  );
+
+  const debouncedSearch = useDebouncedValue(search, MANTRA_SEARCH_DEBOUNCE_MS);
 
   const queryParams = useMemo(
     () => ({
-      search: search.trim() || undefined,
-      category: category === 'All' ? undefined : category,
+      search: debouncedSearch.trim() || undefined,
+
+      category: category === DEFAULT_MANTRA_CATEGORY ? undefined : category,
     }),
-    [search, category]
+    [debouncedSearch, category]
   );
 
   const { data: mantras = [], isLoading, isError } = useMantras(queryParams);
@@ -63,7 +70,7 @@ export function MantraLibraryPage() {
           </div>
 
           <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
-            {categories.map((item) => {
+            {MANTRA_CATEGORIES.map((item) => {
               const active = category === item;
 
               return (
@@ -73,6 +80,7 @@ export function MantraLibraryPage() {
                   onClick={() => setCategory(item)}
                   className={[
                     'shrink-0 rounded-full border px-3.5 py-1.5 text-xs transition',
+
                     active
                       ? 'border-amber-400/60 bg-amber-400/10 text-amber-300'
                       : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/20 hover:text-white',
@@ -87,7 +95,9 @@ export function MantraLibraryPage() {
 
         {isLoading ? (
           <section className="grid gap-4 xl:grid-cols-2">
-            {Array.from({ length: 4 }).map((_, index) => (
+            {Array.from({
+              length: 4,
+            }).map((_, index) => (
               <div
                 key={index}
                 className="h-[250px] animate-pulse rounded-2xl border border-white/10 bg-white/[0.04]"

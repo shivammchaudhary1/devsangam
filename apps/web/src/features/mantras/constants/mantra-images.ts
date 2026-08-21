@@ -1,8 +1,11 @@
-import { appImages } from '@/assets/assets';
+import gayatriImage from '@/assets/Images/mantras/gayatri.png';
+import hareKrishnaImage from '@/assets/Images/mantras/krishna-hare-krishna.png';
+import mahamrityunjayaImage from '@/assets/Images/mantras/shiva-mahamrityunjaya.png';
+import omNamahShivayaImage from '@/assets/Images/mantras/shiva-om-namah-shivaya.png';
 
-export const mantraImages: Record<string, string> = {
-  'gayatri-mantra': appImages.mantras.gayatri,
-  'hare-krishna-mahamantra': appImages.mantras.hareKrishna,
-  'mahamrityunjaya-mantra': appImages.mantras.mahamrityunjaya,
-  'om-namah-shivaya': appImages.mantras.omNamahShivaya,
+export const MANTRA_IMAGES: Record<string, string> = {
+  'gayatri-mantra': gayatriImage,
+  'hare-krishna-mahamantra': hareKrishnaImage,
+  'mahamrityunjaya-mantra': mahamrityunjayaImage,
+  'om-namah-shivaya': omNamahShivayaImage,
 };

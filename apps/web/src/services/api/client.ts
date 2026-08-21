@@ -56,7 +56,7 @@ async function requestOnce(
   try {
     body = await response.json();
   } catch {
-    body = null;
+    // Response has no JSON body.
   }
 
   return {

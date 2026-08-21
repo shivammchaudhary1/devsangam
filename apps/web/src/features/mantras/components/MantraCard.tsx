@@ -1,13 +1,13 @@
 import type { Mantra } from '@devsangam/types';
 
-import { mantraImages } from '../constants/mantra-images';
+import { MANTRA_IMAGES } from '../constants/mantra-images';
 
 type MantraCardProps = {
   mantra: Mantra;
 };
 
 export function MantraCard({ mantra }: MantraCardProps) {
-  const image = mantraImages[mantra.slug];
+  const image = MANTRA_IMAGES[mantra.slug];
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-white/10 bg-[#0d1726] transition hover:-translate-y-0.5 hover:border-amber-400/30">
@@ -17,6 +17,10 @@ export function MantraCard({ mantra }: MantraCardProps) {
             <img
               src={image}
               alt={mantra.title}
+              width={165}
+              height={250}
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
             />
           ) : (

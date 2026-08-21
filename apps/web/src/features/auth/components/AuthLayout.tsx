@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { appImages } from '@/assets/assets';
+import { AUTH_ASSETS } from '../constants/auth-assets';
 import { DevSangamLogo } from '@/components/brand/DevSangamLogo';
 
 interface AuthLayoutProps {
@@ -34,17 +34,20 @@ export function AuthLayout({ children }: AuthLayoutProps) {
           "
         >
           <img
-            src={appImages.authBackground}
+            src={AUTH_ASSETS.background}
             alt=""
             aria-hidden="true"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             className="
-              absolute
-              inset-0
-              h-full
-              w-full
-              object-cover
-              object-center
-            "
+    absolute
+    inset-0
+    h-full
+    w-full
+    object-cover
+    object-center
+  "
           />
 
           {/* Blend image toward form side */}
