@@ -1,73 +1,70 @@
 # devsangam
 
-1. Product direction
-I recommend building one responsive React PWA first, not separate React web + React Native applications.
+1.  Product direction
+    I recommend building one responsive React PWA first, not separate React web + React Native applications.
 
-                       DevSangam
-                           │
-                    React + TypeScript
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-          Desktop UI                Mobile UI
-          Sidebar UI                Bottom Nav
-          Analytics                 Chant-first UX
-              │                         │
-              └────────────┬────────────┘
-                           │
-                 Offline Session Engine
-                           │
-                    IndexedDB / Dexie
-                           │
-                    Express REST API
-                           │
-                     MongoDB Atlas
+                           DevSangam
+                               │
+                        React + TypeScript
+                               │
+                  ┌────────────┴────────────┐
+                  │                         │
+              Desktop UI                Mobile UI
+              Sidebar UI                Bottom Nav
+              Analytics                 Chant-first UX
+                  │                         │
+                  └────────────┬────────────┘
+                               │
+                     Offline Session Engine
+                               │
+                        IndexedDB / Dexie
+                               │
+                        Express REST API
+                               │
+                         MongoDB Atlas
 
-
- This matches the desktop/mobile distinction in the current designs while letting us maintain one frontend codebase. Vite is a good fit for the React client, and vite-plugin-pwa can add service-worker/PWA behavior without requiring us to build a separate mobile application immediately.
+This matches the desktop/mobile distinction in the current designs while letting us maintain one frontend codebase. Vite is a good fit for the React client, and vite-plugin-pwa can add service-worker/PWA behavior without requiring us to build a separate mobile application immediately.
 
 Later, if DevSangam genuinely needs App Store/Play Store-specific native capabilities, we can evaluate React Native. I would not take on that complexity for v1.
 
-
 2. PRD v0.1 — DevSangam Digital Japamala
-Product vision
+   Product vision
 
 DevSangam should be a focused digital Sadhana companion where users can discover mantras, create a daily chanting goal, chant using a digital Japamala, maintain streaks, and understand their spiritual-practice consistency without the interface becoming distracting or gamified excessively.
 
 Main user journey
 
 Landing
-   ↓
+↓
 Register / Login
-   ↓
+↓
 Onboarding
-   ├── Profile
-   ├── Preferred Mantras
-   ├── Goal / Intention
-   └── Reminder Preference
-   ↓
+├── Profile
+├── Preferred Mantras
+├── Goal / Intention
+└── Reminder Preference
+↓
 Dashboard
-   ↓
+↓
 Choose Mantra
-   ↓
+↓
 Choose Target
 108 | 216 | 1008 | Custom
-   ↓
+↓
 Start Session
-   ↓
+↓
 Digital Japamala
-   ↓
+↓
 Tap → Count
-   ↓
+↓
 Complete / Pause / Exit
-   ↓
+↓
 Session saved
-   ↓
+↓
 Insights / Streak updated
 
-
-
 ## MVP screens
+
 The current designs map well to these routes:
 
 /auth/login
@@ -128,11 +125,9 @@ Profile and settings
 
 Profile details, reminders, chanting sound, haptic feedback, theme, language, password/security, logged-in devices and sync state.
 
-
 ## Not in MVP
 
 I would deliberately postpone:
-
 
 Social/community feed
 Guru/follower system
@@ -166,3 +161,5 @@ Recharts
 
 Dexie / IndexedDB
 vite-plugin-pwa
+
+//check
