@@ -1,11 +1,9 @@
-import { Router } from 'express';
-
 import { API_ROUTE_PATHS } from '../constants/routes.constants.ts';
-
 import { authRouter } from './auth.routes.ts';
 import { healthRouter } from './health.routes.ts';
 import { mantraRouter } from './mantra.routes.ts';
 import { userRouter } from './user.routes.ts';
+import { Router } from 'express';
 
 export const allRoutes = Router();
 

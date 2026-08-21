@@ -1,12 +1,8 @@
-import * as React from 'react';
-
-import type { VariantProps } from 'class-variance-authority';
-
-import { Slot } from 'radix-ui';
-
-import { cn } from '@/lib/utils';
-
 import { buttonVariants } from './button-variants';
+import { cn } from '@/lib/utils';
+import type { VariantProps } from 'class-variance-authority';
+import { Slot } from 'radix-ui';
+import * as React from 'react';
 
 function Button({
   className,

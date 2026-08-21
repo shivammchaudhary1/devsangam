@@ -1,6 +1,5 @@
-import type { HydratedDocument } from 'mongoose';
-
 import type { User } from '../models/user.model.ts';
+import type { HydratedDocument } from 'mongoose';
 
 export function serializeUser(user: HydratedDocument<User>) {
   return {

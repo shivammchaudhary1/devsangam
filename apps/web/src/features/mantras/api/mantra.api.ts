@@ -1,10 +1,9 @@
+import { apiRequest } from '@/services/api/client';
 import type {
   Mantra,
   MantraDetailResponse,
   MantraListResponse,
 } from '@devsangam/types';
-
-import { apiRequest } from '@/services/api/client';
 
 export type GetMantrasParams = {
   search?: string;

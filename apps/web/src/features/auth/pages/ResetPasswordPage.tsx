@@ -1,9 +1,16 @@
-import { useState } from 'react';
-
+import { resetPassword } from '../api/auth.api';
+import { AuthCard } from '../components/AuthCard';
+import { AuthLayout } from '../components/AuthLayout';
+import { PasswordInput } from '../components/PasswordInput';
+import { AUTH_EXPIRED_EVENT } from '../constants/auth.constants';
+import {
+  type ResetPasswordFormData,
+  resetPasswordSchema,
+} from '../schemas/reset-password.schema';
+import { Button } from '@/components/ui/button';
+import { isApiError } from '@/services/api/client';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { useMutation } from '@tanstack/react-query';
-
 import {
   ArrowLeft,
   CheckCircle2,
@@ -12,29 +19,9 @@ import {
   LockKeyhole,
   Sparkles,
 } from 'lucide-react';
-
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { Link, useNavigate, useSearchParams } from 'react-router';
-
-import { Button } from '@/components/ui/button';
-
-import { isApiError } from '@/services/api/client';
-
-import { AUTH_EXPIRED_EVENT } from '../constants/auth.constants';
-
-import { resetPassword } from '../api/auth.api';
-
-import { AuthCard } from '../components/AuthCard';
-
-import { AuthLayout } from '../components/AuthLayout';
-
-import { PasswordInput } from '../components/PasswordInput';
-
-import {
-  resetPasswordSchema,
-  type ResetPasswordFormData,
-} from '../schemas/reset-password.schema';
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams();

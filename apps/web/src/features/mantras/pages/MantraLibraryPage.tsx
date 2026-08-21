@@ -1,19 +1,15 @@
-import { useMemo, useState } from 'react';
-
-import { Search } from 'lucide-react';
-
-import { useDebouncedValue } from '@/hooks/useDebouncedValue';
-
 import { MantraCard } from '../components/MantraCard';
-
 import {
   DEFAULT_MANTRA_CATEGORY,
   MANTRA_CATEGORIES,
   MANTRA_SEARCH_DEBOUNCE_MS,
   type MantraCategory,
 } from '../constants/mantra.constants';
-
+import { useFavorites } from '../hooks/useFavorites';
 import { useMantras } from '../hooks/useMantras';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { Search } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 export function MantraLibraryPage() {
   const [search, setSearch] = useState('');
@@ -34,6 +30,13 @@ export function MantraLibraryPage() {
   );
 
   const { data: mantras = [], isLoading, isError } = useMantras(queryParams);
+
+  const { data: favoriteMantras = [] } = useFavorites();
+
+  const favoriteMantraIds = useMemo(
+    () => new Set(favoriteMantras.map((mantra) => mantra._id)),
+    [favoriteMantras]
+  );
 
   return (
     <main className="min-h-screen bg-[#07111f] px-4 pb-16 pt-6 text-white md:px-6 lg:px-8">
@@ -131,7 +134,11 @@ export function MantraLibraryPage() {
         {!isLoading && !isError && mantras.length > 0 ? (
           <section className="grid gap-4 xl:grid-cols-2">
             {mantras.map((mantra) => (
-              <MantraCard key={mantra._id} mantra={mantra} />
+              <MantraCard
+                key={mantra._id}
+                mantra={mantra}
+                isFavorite={favoriteMantraIds.has(mantra._id)}
+              />
             ))}
           </section>
         ) : null}

@@ -2,7 +2,10 @@ export const APP_ROUTES = {
   home: '/',
   practice: '/practice',
   insights: '/insights',
+
   library: '/library',
+  libraryDetail: '/library/:slug',
+
   profile: '/profile',
 
   auth: {
@@ -12,3 +15,7 @@ export const APP_ROUTES = {
     resetPassword: '/auth/reset-password',
   },
 } as const;
+
+export function getMantraDetailRoute(slug: string) {
+  return `/library/${encodeURIComponent(slug)}`;
+}

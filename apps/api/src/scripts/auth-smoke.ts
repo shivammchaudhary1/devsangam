@@ -1,13 +1,11 @@
-import { randomUUID } from 'node:crypto';
-
 import { hashPassword, verifyPassword } from '../utils/password.ts';
-
 import {
   signAccessToken,
   signRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,
 } from '../utils/token.ts';
+import { randomUUID } from 'node:crypto';
 
 async function run() {
   console.log('Testing password hashing...');

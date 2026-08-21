@@ -1,10 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { getMantraBySlug } from '../api/mantra.api';
-
 import { mantraQueryKeys } from '../api/mantra.query-keys';
-
 import { MANTRA_QUERY_STALE_TIME_MS } from '../constants/mantra.constants';
+import { useQuery } from '@tanstack/react-query';
 
 export function useMantra(slug: string | undefined) {
   return useQuery({

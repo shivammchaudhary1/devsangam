@@ -1,6 +1,5 @@
-import { LogOut, User } from 'lucide-react';
-
 import { LogoutButton } from '@/features/auth/components/LogoutButton';
+import { LogOut, User } from 'lucide-react';
 
 export function ProfilePage() {
   return (

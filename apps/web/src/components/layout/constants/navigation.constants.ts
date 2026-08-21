@@ -1,8 +1,8 @@
-import type { LucideIcon } from 'lucide-react';
-
-import { BarChart3, BookOpen, Home, PlayCircle, User } from 'lucide-react';
-
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import type { LucideIcon } from 'lucide-react';
+import {
+ BarChart3, BookOpen, Home, PlayCircle, User 
+} from 'lucide-react';
 
 export type AppNavigationItem = {
   label: string;

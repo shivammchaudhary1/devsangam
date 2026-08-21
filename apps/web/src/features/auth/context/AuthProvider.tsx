@@ -1,17 +1,12 @@
-import { useCallback, useEffect, useMemo, type ReactNode } from 'react';
-
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-
 import { getCurrentUser, logoutUser } from '../api/auth.api';
-
 import {
   AUTH_EXPIRED_EVENT,
   AUTH_QUERY_KEY,
 } from '../constants/auth.constants';
-
 import type { AuthUser } from '../types/auth.types';
-
 import { AuthContext } from './AuthContext';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { type ReactNode,useCallback, useEffect, useMemo } from 'react';
 
 interface AuthProviderProps {
   children: ReactNode;

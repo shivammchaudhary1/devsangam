@@ -2,45 +2,6 @@ interface PlaceholderPageProps {
   title: string;
   description: string;
 }
-// import { Button } from '@/components/ui/button';
-
-// export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
-//   return (
-//     // <section className="mx-auto max-w-7xl p-5 md:p-8">
-//     //   <div className="mb-8">
-//     //     <h1 className="font-display text-3xl text-gold-soft">{title}</h1>
-
-//     //     <p className="mt-2 text-muted-foreground">{description}</p>
-//     //   </div>
-
-//     //   <div className="ds-card p-6">
-//     //     <p className="text-muted-foreground">Phase 1 placeholder</p>
-//     //   </div>
-//     // </section>
-//     <>
-//       <div className="bg-primary p-6 text-primary-foreground">
-//         Tailwind works
-//       </div>
-//       <Button>DevSangam</Button>
-//       <div className="ds-card p-6">Sacred Card</div>
-//       <button className="ds-primary-button px-6">Start Session</button>
-//       <div
-//         className="
-//     ds-japa-ring
-//     h-64
-//     w-64
-//   "
-//         style={
-//           {
-//             '--progress': '0.5turn',
-//           } as React.CSSProperties
-//         }
-//       >
-//         <span className="text-5xl text-gold-soft">54</span>
-//       </div>
-//     </>
-//   );
-// }
 
 export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
   return (

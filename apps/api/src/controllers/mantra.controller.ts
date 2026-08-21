@@ -1,7 +1,6 @@
-import type { Request, Response } from 'express';
-
 import { MantraModel } from '../models/mantra.model.ts';
 import { AppError } from '../utils/app-error.ts';
+import type { Request, Response } from 'express';
 
 export async function listMantras(request: Request, response: Response) {
   const search =

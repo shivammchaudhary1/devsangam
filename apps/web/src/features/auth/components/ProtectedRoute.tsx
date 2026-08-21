@@ -1,8 +1,6 @@
-import { Navigate, Outlet, useLocation } from 'react-router';
-
 import { useAuth } from '../hooks/useAuth';
-
 import { AuthLoadingScreen } from './AuthLoadingScreen';
+import { Navigate, Outlet, useLocation } from 'react-router';
 
 export function ProtectedRoute() {
   const auth = useAuth();

@@ -1,4 +1,4 @@
-import { Schema, model, type InferSchemaType } from 'mongoose';
+import { type InferSchemaType,model, Schema } from 'mongoose';
 
 const authSessionSchema = new Schema(
   {

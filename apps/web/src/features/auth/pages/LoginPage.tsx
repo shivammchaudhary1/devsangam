@@ -1,30 +1,20 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { useMutation } from '@tanstack/react-query';
-
-import { Apple, Loader2, LockKeyhole, Mail, Sparkles } from 'lucide-react';
-
-import { useForm } from 'react-hook-form';
-
-import { Link, useNavigate } from 'react-router';
-
+import { loginUser } from '../api/auth.api';
+import { AuthCard } from '../components/AuthCard';
+import { AuthLayout } from '../components/AuthLayout';
+import { PasswordInput } from '../components/PasswordInput';
+import { useAuth } from '../hooks/useAuth';
+import { type LoginFormData,loginSchema } from '../schemas/login.schema';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-
 import { isApiError } from '@/services/api/client';
-
-import { loginUser } from '../api/auth.api';
-
-import { AuthCard } from '../components/AuthCard';
-
-import { AuthLayout } from '../components/AuthLayout';
-
-import { PasswordInput } from '../components/PasswordInput';
-
-import { useAuth } from '../hooks/useAuth';
-
-import { loginSchema, type LoginFormData } from '../schemas/login.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import {
+ Apple, Loader2, LockKeyhole, Mail, Sparkles 
+} from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router';
 
 export function LoginPage() {
   const navigate = useNavigate();

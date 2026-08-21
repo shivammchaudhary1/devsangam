@@ -1,6 +1,5 @@
-import { apiRequest } from '@/services/api/client';
-
 import type { AuthResponse, AuthUser } from '../types/auth.types';
+import { apiRequest } from '@/services/api/client';
 
 export interface LoginPayload {
   email: string;

@@ -1,11 +1,7 @@
-import { AuthSessionModel } from '../models/auth-session.model.ts';
-
-import { UserModel } from '../models/user.model.ts';
-
 import { AUTH } from '../config/auth.ts';
-
+import { AuthSessionModel } from '../models/auth-session.model.ts';
+import { UserModel } from '../models/user.model.ts';
 import { AppError } from '../utils/app-error.ts';
-
 import {
   hashToken,
   signAccessToken,

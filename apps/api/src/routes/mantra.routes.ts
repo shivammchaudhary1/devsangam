@@ -1,9 +1,8 @@
-import { Router } from 'express';
-
 import {
   getMantraBySlug,
   listMantras,
 } from '../controllers/mantra.controller.ts';
+import { Router } from 'express';
 
 export const mantraRouter = Router();
 

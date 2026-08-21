@@ -1,29 +1,20 @@
-import { useState } from 'react';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-
-import { useMutation } from '@tanstack/react-query';
-
-import { ArrowLeft, CheckCircle2, Loader2, Mail, Send } from 'lucide-react';
-
-import { useForm } from 'react-hook-form';
-
-import { Link } from 'react-router';
-
-import { Button } from '@/components/ui/button';
-
-import { Input } from '@/components/ui/input';
-
 import { forgotPassword } from '../api/auth.api';
-
 import { AuthCard } from '../components/AuthCard';
-
 import { AuthLayout } from '../components/AuthLayout';
-
 import {
-  forgotPasswordSchema,
   type ForgotPasswordFormData,
+  forgotPasswordSchema,
 } from '../schemas/forgot-password.schema';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import {
+ ArrowLeft, CheckCircle2, Loader2, Mail, Send 
+} from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router';
 
 export function ForgotPasswordPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);

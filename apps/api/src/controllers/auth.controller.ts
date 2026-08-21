@@ -1,41 +1,25 @@
-import type { Request, Response } from 'express';
-import type { ParamsDictionary } from 'express-serve-static-core';
-
+import { AUTH } from '../config/auth.ts';
+import { AuthSessionModel } from '../models/auth-session.model.ts';
+import { PasswordResetTokenModel } from '../models/password-reset-token.model.ts';
 import { UserModel } from '../models/user.model.ts';
-
 import {
   createAuthSession,
   revokeAuthSession,
   rotateAuthSession,
 } from '../services/auth-session.service.ts';
-
-import { AppError } from '../utils/app-error.ts';
-
-import { hashPassword, verifyPassword } from '../utils/password.ts';
-
-import { clearAuthCookies, setAuthCookies } from '../utils/auth-cookies.ts';
-
-import { serializeUser } from '../utils/serialize-user.ts';
-
-import { AUTH } from '../config/auth.ts';
-
-import type { RegisterInput } from '../validators/auth/register.schema.ts';
-
-import type { LoginInput } from '../validators/auth/login.schema.ts';
-
-import { AuthSessionModel } from '../models/auth-session.model.ts';
-
-import { PasswordResetTokenModel } from '../models/password-reset-token.model.ts';
-
-import { createPasswordReset } from '../services/password-reset.service.ts';
-
 import { sendPasswordResetEmail } from '../services/email.service.ts';
-
+import { createPasswordReset } from '../services/password-reset.service.ts';
+import { AppError } from '../utils/app-error.ts';
+import { clearAuthCookies, setAuthCookies } from '../utils/auth-cookies.ts';
+import { hashPassword, verifyPassword } from '../utils/password.ts';
+import { serializeUser } from '../utils/serialize-user.ts';
 import { hashToken } from '../utils/token.ts';
-
 import type { ForgotPasswordInput } from '../validators/auth/forgot-password.schema.ts';
-
+import type { LoginInput } from '../validators/auth/login.schema.ts';
+import type { RegisterInput } from '../validators/auth/register.schema.ts';
 import type { ResetPasswordInput } from '../validators/auth/reset-password.schema.ts';
+import type { Request, Response } from 'express';
+import type { ParamsDictionary } from 'express-serve-static-core';
 
 type SessionContextRequest = Pick<Request, 'get' | 'ip'>;
 

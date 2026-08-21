@@ -1,5 +1,4 @@
 import { app } from './app.ts';
-
 import { connectDatabase } from './config/database.ts';
 
 const PORT = Number(process.env.PORT) || 4000;

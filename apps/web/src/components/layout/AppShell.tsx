@@ -1,11 +1,8 @@
-import { Bell, Flame, Settings } from 'lucide-react';
-
-import { NavLink, Outlet } from 'react-router';
-
-import { LogoutButton } from '@/features/auth/components/LogoutButton';
-
-import { APP_NAVIGATION } from './constants/navigation.constants';
 import { LAYOUT_ASSETS } from './constants/layout-assets';
+import { APP_NAVIGATION } from './constants/navigation.constants';
+import { LogoutButton } from '@/features/auth/components/LogoutButton';
+import { Bell, Flame, Settings } from 'lucide-react';
+import { NavLink, Outlet } from 'react-router';
 
 export function AppShell() {
   return (

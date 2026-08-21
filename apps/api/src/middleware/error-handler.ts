@@ -1,6 +1,5 @@
-import type { ErrorRequestHandler } from 'express';
-
 import { AppError } from '../utils/app-error.ts';
+import type { ErrorRequestHandler } from 'express';
 
 function isDuplicateKeyError(error: unknown): error is {
   code: number;
@@ -24,6 +23,8 @@ export const errorHandler: ErrorRequestHandler = (
   response,
   _next
 ) => {
+  void _next;
+
   if (error instanceof AppError) {
     response.status(error.statusCode).json({
       success: false,
