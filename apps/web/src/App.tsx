@@ -3,22 +3,25 @@ import { Route, Routes } from 'react-router';
 import { AppShell } from '@/components/layout/AppShell';
 import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
 
-import { LoginPage } from '@/features/auth/pages/LoginPage';
-
-import { RegisterPage } from '@/features/auth/pages/RegisterPage';
-
 import { GuestRoute } from '@/features/auth/components/GuestRoute';
-
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 
 import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage';
-
+import { LoginPage } from '@/features/auth/pages/LoginPage';
+import { RegisterPage } from '@/features/auth/pages/RegisterPage';
 import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage';
+
+import { MantraLibraryPage } from '@/features/mantras/pages/MantraLibraryPage';
+
+import { ProfilePage } from '@/features/profile/pages/ProfilePage';
 
 function App() {
   return (
     <Routes>
-      {/* Guest-only */}
+      {/* ======================== */}
+      {/* Guest Routes */}
+      {/* ======================== */}
+
       <Route element={<GuestRoute />}>
         <Route path="/auth/login" element={<LoginPage />} />
 
@@ -29,11 +32,13 @@ function App() {
 
       <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
-      {/* Authenticated app */}
+      {/* ======================== */}
+      {/* Authenticated App */}
+      {/* ======================== */}
+
       <Route element={<ProtectedRoute />}>
         <Route element={<AppShell />}>
-          {/* existing app routes */}
-
+          {/* Dashboard */}
           <Route
             path="/"
             element={
@@ -44,6 +49,7 @@ function App() {
             }
           />
 
+          {/* Practice */}
           <Route
             path="/practice"
             element={
@@ -54,6 +60,7 @@ function App() {
             }
           />
 
+          {/* Insights */}
           <Route
             path="/insights"
             element={
@@ -64,25 +71,11 @@ function App() {
             }
           />
 
-          <Route
-            path="/library"
-            element={
-              <PlaceholderPage
-                title="Sadhana Library"
-                description="Explore sacred mantras."
-              />
-            }
-          />
+          {/* Mantra Library */}
+          <Route path="/library" element={<MantraLibraryPage />} />
 
-          <Route
-            path="/profile"
-            element={
-              <PlaceholderPage
-                title="Profile"
-                description="Manage your DevSangam experience."
-              />
-            }
-          />
+          {/* Profile */}
+          <Route path="/profile" element={<ProfilePage />} />
         </Route>
       </Route>
     </Routes>
