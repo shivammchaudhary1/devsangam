@@ -1,12 +1,15 @@
 import { LAYOUT_ASSETS } from './constants/layout-assets';
 import { APP_NAVIGATION } from './constants/navigation.constants';
 import { LogoutButton } from '@/features/auth/components/LogoutButton';
+import { PracticeSyncManager } from '@/features/practice/components/PracticeSyncManager';
 import { Bell, Flame, Settings } from 'lucide-react';
 import { NavLink, Outlet } from 'react-router';
 
 export function AppShell() {
   return (
     <div className="min-h-dvh bg-[#07111f] text-white">
+      <PracticeSyncManager />
+
       <div className="flex min-h-dvh">
         <aside className="sticky top-0 hidden h-dvh w-[300px] shrink-0 overflow-hidden border-r border-amber-400/15 bg-[#070c13] md:flex md:flex-col">
           <img
