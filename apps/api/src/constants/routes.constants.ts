@@ -5,4 +5,5 @@ export const API_ROUTE_PATHS = {
   auth: '/auth',
   users: '/users',
   mantras: '/mantras',
+  practice: '/practice',
 } as const;

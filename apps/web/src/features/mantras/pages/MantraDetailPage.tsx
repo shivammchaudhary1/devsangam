@@ -3,7 +3,7 @@ import { MANTRA_IMAGES } from '../constants/mantra-images';
 import { useFavorites } from '../hooks/useFavorites';
 import { useMantra } from '../hooks/useMantra';
 import { getEstimatedChantMinutes } from '../utils/mantra.utils';
-import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { APP_ROUTES, getPracticeRoute } from '@/app/constants/routes.constants';
 import { ArrowLeft, Clock3, Play, Sparkles } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router';
 
@@ -15,6 +15,7 @@ export function MantraDetailPage() {
   const navigate = useNavigate();
 
   const { data: mantra, isLoading, isError, error } = useMantra(slug);
+
   const { data: favoriteMantras = [] } = useFavorites();
 
   if (isLoading) {
@@ -181,7 +182,7 @@ export function MantraDetailPage() {
               {/* Start practice */}
               <button
                 type="button"
-                onClick={() => navigate(APP_ROUTES.practice)}
+                onClick={() => navigate(getPracticeRoute(mantra.slug))}
                 className="mt-7 inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-amber-300/70 bg-gradient-to-b from-[#f3c45d] to-[#d89627] px-6 text-sm font-semibold text-[#241704] shadow-[0_0_24px_rgba(245,158,11,0.14)] transition hover:brightness-105"
               >
                 <Play size={17} fill="currentColor" />

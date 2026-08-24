@@ -1,0 +1,5 @@
+export const PRACTICE_TARGET_OPTIONS = [108, 216, 1008] as const;
+
+export const MIN_CUSTOM_PRACTICE_TARGET = 1;
+
+export const MAX_CUSTOM_PRACTICE_TARGET = 100000;
