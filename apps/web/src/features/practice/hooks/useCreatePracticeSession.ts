@@ -1,5 +1,6 @@
 import { createPracticeSession } from '../api/practice.api';
 import { practiceQueryKeys } from '../api/practice.query-keys';
+import { insightsQueryKeys } from '@/features/insights/api/insights.query-keys';
 import type { PracticeSession } from '@devsangam/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -14,6 +15,10 @@ export function useCreatePracticeSession() {
 
       void queryClient.invalidateQueries({
         queryKey: practiceQueryKeys.sessionList(),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: insightsQueryKeys.histories(),
       });
     },
   });
