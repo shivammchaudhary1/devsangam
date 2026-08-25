@@ -1,4 +1,5 @@
 import type { InsightsRange } from '@devsangam/types';
+import { CalendarDays } from 'lucide-react';
 import { memo } from 'react';
 
 const INSIGHTS_RANGES: readonly {
@@ -7,19 +8,19 @@ const INSIGHTS_RANGES: readonly {
 }[] = [
   {
     value: '7d',
-    label: '7D',
+    label: '7 Days',
   },
   {
     value: '30d',
-    label: '30D',
+    label: '30 Days',
   },
   {
     value: '90d',
-    label: '90D',
+    label: '90 Days',
   },
   {
     value: 'all',
-    label: 'All',
+    label: 'All Time',
   },
 ];
 
@@ -34,7 +35,11 @@ export const InsightsRangeSelector = memo(function InsightsRangeSelector({
   onChange,
 }: InsightsRangeSelectorProps) {
   return (
-    <div className="inline-flex rounded-xl border border-white/[0.08] bg-[#09121e] p-1">
+    <div className="flex max-w-full items-center gap-1 overflow-x-auto rounded-[9px] border border-white/[0.075] bg-[#0b1119] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.018)]">
+      <div className="hidden size-7 shrink-0 items-center justify-center text-[#7d858f] sm:flex">
+        <CalendarDays size={13} strokeWidth={1.6} />
+      </div>
+
       {INSIGHTS_RANGES.map((range) => {
         const isActive = range.value === value;
 
@@ -45,17 +50,17 @@ export const InsightsRangeSelector = memo(function InsightsRangeSelector({
             aria-pressed={isActive}
             onClick={() => onChange(range.value)}
             className={[
-              'min-w-12 rounded-lg px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.08em] transition sm:min-w-14',
+              'shrink-0 rounded-[6px] px-3 py-2 text-[9px] font-semibold transition-all duration-150',
               isActive
                 ? [
-                    'bg-amber-400/[0.13]',
-                    'text-amber-200',
-                    'shadow-[inset_0_0_0_1px_rgba(251,191,36,0.18)]',
+                    'bg-[#d89a35]/[0.095]',
+                    'text-[#efc875]',
+                    'shadow-[inset_0_0_0_1px_rgba(216,154,53,0.18)]',
                   ].join(' ')
                 : [
-                    'text-slate-500',
-                    'hover:bg-white/[0.04]',
-                    'hover:text-slate-300',
+                    'text-[#747d88]',
+                    'hover:bg-white/[0.025]',
+                    'hover:text-[#b8bec6]',
                   ].join(' '),
             ].join(' ')}
           >

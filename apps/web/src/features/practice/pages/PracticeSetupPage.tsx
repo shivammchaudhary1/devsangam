@@ -155,7 +155,7 @@ export function PracticeSetupPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[65vh] items-center justify-center">
-        <Loader2 className="size-7 animate-spin text-amber-400" />
+        <Loader2 className="size-7 animate-spin text-[#d89a35]" />
       </div>
     );
   }
@@ -163,7 +163,7 @@ export function PracticeSetupPage() {
   if (isError || !mantras.length) {
     return (
       <div className="mx-auto flex min-h-[65vh] max-w-xl items-center justify-center px-4">
-        <div className="w-full rounded-2xl border border-red-400/20 bg-red-400/[0.04] p-6 text-center">
+        <div className="w-full rounded-[12px] border border-red-400/20 bg-red-400/[0.035] p-6 text-center">
           <h1 className="font-serif text-xl text-red-100">
             Practice unavailable
           </h1>
@@ -177,31 +177,41 @@ export function PracticeSetupPage() {
   }
 
   return (
-    <main className="min-h-full bg-[#07111f] px-3 pb-28 pt-5 text-white sm:px-5 md:pb-10 lg:px-8 lg:py-8">
-      <div className="mx-auto w-full max-w-[900px]">
-        <header className="mb-5 lg:mb-6">
-          <div className="flex items-center gap-2 text-amber-400">
-            <Sparkles size={15} strokeWidth={1.8} />
+    <main className="relative min-h-full overflow-hidden bg-[var(--ds-obsidian)] px-3 pb-28 pt-5 text-[var(--ds-cream)] sm:px-5 md:pb-10 lg:px-7 lg:py-6 xl:px-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div className="absolute left-[24%] top-[-220px] size-[480px] rounded-full bg-[#d89a35]/[0.025] blur-[120px]" />
 
-            <span className="text-[11px] font-semibold uppercase tracking-[0.19em]">
+        <div className="absolute bottom-[-220px] right-[-140px] size-[420px] rounded-full border border-[#d89a35]/[0.025]" />
+      </div>
+
+      <div className="relative z-10 mx-auto w-full max-w-[940px]">
+        <header className="mb-5 border-b border-white/[0.065] pb-5 lg:mb-6">
+          <div className="flex items-center gap-2">
+            <Sparkles size={12} strokeWidth={1.7} className="text-[#d89a35]" />
+
+            <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-[#c58a32]">
               Start Practice
             </span>
           </div>
 
-          <h1 className="mt-2 font-serif text-2xl font-medium tracking-wide text-[#f5e8c0] sm:text-3xl">
+          <h1 className="mt-2 font-serif text-[25px] font-medium tracking-[0.015em] text-[#eee5d8] sm:text-[29px]">
             Begin Your Sadhana
           </h1>
 
-          <p className="mt-1.5 text-xs leading-5 text-slate-500 sm:text-sm">
-            Choose a mantra, set your target, and begin your chanting practice.
+          <p className="mt-1.5 max-w-2xl text-[11px] leading-5 text-[#737b86] sm:text-xs">
+            Choose a mantra, set your intention, and enter your chanting
+            practice.
           </p>
         </header>
 
         {resumableSession ? (
-          <section className="mb-4 overflow-hidden rounded-2xl border border-amber-400/30 bg-[linear-gradient(135deg,rgba(245,158,11,0.10),rgba(11,20,33,0.95)_42%,rgba(11,20,33,1))] shadow-[0_0_30px_rgba(245,158,11,0.06)]">
+          <section className="relative mb-4 overflow-hidden rounded-[12px] border border-[#d89a35]/25 bg-[linear-gradient(135deg,rgba(216,154,53,0.085),rgba(13,19,28,0.98)_38%,#0a1018)] shadow-[0_14px_34px_rgba(0,0,0,0.22),0_0_26px_rgba(216,154,53,0.04)]">
             <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
               <div className="flex min-w-0 flex-1 items-center gap-3">
-                <div className="relative size-14 shrink-0 overflow-hidden rounded-xl border border-amber-400/20 bg-[#08111d]">
+                <div className="relative size-14 shrink-0 overflow-hidden rounded-[10px] border border-[#d89a35]/18 bg-[#080d14]">
                   {resumableMantra && MANTRA_IMAGES[resumableMantra.slug] ? (
                     <img
                       src={MANTRA_IMAGES[resumableMantra.slug]}
@@ -211,7 +221,7 @@ export function PracticeSetupPage() {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <RotateCcw className="size-5 text-amber-400/70" />
+                      <RotateCcw className="size-5 text-[#d89a35]/70" />
                     </div>
                   )}
                 </div>
@@ -219,21 +229,21 @@ export function PracticeSetupPage() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     {resumableSession.status === 'paused' ? (
-                      <Pause className="size-3.5 text-amber-400" />
+                      <Pause className="size-3.5 text-[#d89a35]" />
                     ) : (
-                      <Play className="size-3.5 text-amber-400" />
+                      <Play className="size-3.5 text-[#d89a35]" />
                     )}
 
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-amber-400">
+                    <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-[#c88b32]">
                       Continue Sadhana
                     </p>
                   </div>
 
-                  <h2 className="mt-1 truncate font-serif text-sm text-[#f0dfad] sm:text-base">
+                  <h2 className="mt-1 truncate font-serif text-sm font-medium text-[#e7d7b7] sm:text-[15px]">
                     {resumableMantra?.title ?? resumableSession.mantraSlug}
                   </h2>
 
-                  <p className="mt-1 text-[10px] text-slate-500">
+                  <p className="mt-1 text-[10px] text-[#68717c]">
                     Your unfinished practice is ready to continue.
                   </p>
                 </div>
@@ -265,7 +275,7 @@ export function PracticeSetupPage() {
               <button
                 type="button"
                 onClick={handleResumePractice}
-                className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-amber-300/70 bg-gradient-to-b from-[#f3c45d] to-[#d89627] px-4 text-xs font-semibold text-[#241704] shadow-[0_0_18px_rgba(245,158,11,0.12)] transition hover:brightness-105"
+                className="ds-gold-button inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-[8px] px-4 text-[10px] font-semibold"
               >
                 <Play size={14} fill="currentColor" />
                 Resume
@@ -274,19 +284,19 @@ export function PracticeSetupPage() {
           </section>
         ) : null}
 
-        <section className="rounded-2xl border border-white/[0.09] bg-[#0b1421] p-3 shadow-[0_18px_70px_rgba(0,0,0,0.22)] sm:p-4 lg:p-5">
+        <section className="relative overflow-hidden rounded-[13px] border border-white/[0.075] bg-[linear-gradient(145deg,rgba(255,255,255,0.022),transparent_34%),#0d131c] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.24)] sm:p-4 lg:p-5">
           <div>
             <div className="mb-3 flex items-center gap-2">
-              <div className="flex size-6 items-center justify-center rounded-full border border-amber-400/25 bg-amber-400/[0.07] text-[10px] font-semibold text-amber-300">
+              <div className="flex size-6 items-center justify-center rounded-full border border-[#d89a35]/25 bg-[#d89a35]/[0.065] text-[9px] font-semibold text-[#e2ac4c] shadow-[0_0_16px_rgba(216,154,53,0.035)]">
                 1
               </div>
 
               <div>
-                <h2 className="font-serif text-sm font-medium text-[#f0dfad] sm:text-base">
+                <h2 className="font-serif text-sm font-medium text-[#ddd4c7] sm:text-[15px]">
                   Choose Your Mantra
                 </h2>
 
-                <p className="text-[10px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-[#626b76]">
                   Select a mantra to begin your practice
                 </p>
               </div>
@@ -305,23 +315,23 @@ export function PracticeSetupPage() {
                     onClick={() => setSelectedMantraSlug(mantra.slug)}
                     aria-pressed={isSelected}
                     className={[
-                      'group w-full rounded-xl border text-left transition-all duration-200',
+                      'group w-full min-w-0 overflow-hidden rounded-[10px] border text-left transition-all duration-200',
                       isSelected
                         ? [
-                            'border-amber-400/70',
-                            'bg-gradient-to-r from-amber-400/[0.10] via-amber-400/[0.055] to-transparent',
-                            'shadow-[0_0_24px_rgba(245,158,11,0.10)]',
+                            'border-[#d89a35]/55',
+                            'bg-[linear-gradient(90deg,rgba(216,154,53,0.095),rgba(216,154,53,0.038)_62%,transparent)]',
+                            'shadow-[0_0_22px_rgba(216,154,53,0.055),inset_0_1px_0_rgba(255,255,255,0.025)]',
                           ].join(' ')
                         : [
-                            'border-white/[0.08]',
-                            'bg-white/[0.025]',
-                            'hover:border-white/[0.14]',
-                            'hover:bg-white/[0.04]',
+                            'border-white/[0.065]',
+                            'bg-white/[0.016]',
+                            'hover:border-white/[0.11]',
+                            'hover:bg-white/[0.026]',
                           ].join(' '),
                     ].join(' ')}
                   >
-                    <div className="flex items-center gap-3 p-2.5 sm:p-3">
-                      <div className="relative size-[54px] shrink-0 overflow-hidden rounded-lg border border-white/[0.08] bg-[#080f18] sm:size-[60px]">
+                    <div className="flex min-w-0 items-center gap-2.5 p-2.5 min-[400px]:gap-3 sm:p-3">
+                      <div className="relative size-12 shrink-0 overflow-hidden rounded-[8px] border border-white/[0.075] bg-[#080d14] min-[400px]:size-[54px] sm:size-[58px]">
                         {image ? (
                           <img
                             src={image}
@@ -332,38 +342,38 @@ export function PracticeSetupPage() {
                             className="h-full w-full object-cover"
                           />
                         ) : (
-                          <div className="h-full w-full bg-white/[0.03]" />
+                          <div className="h-full w-full bg-white/[0.02]" />
                         )}
 
                         <div
                           aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"
                         />
                       </div>
 
-                      <div className="min-w-0 flex-1">
-                        <div className="flex min-w-0 items-center gap-2">
+                      <div className="min-w-0 flex-1 overflow-hidden">
+                        <div className="flex w-full min-w-0 items-center gap-2 overflow-hidden">
                           <h3
                             className={[
                               'truncate font-serif text-sm font-medium sm:text-[15px]',
-                              isSelected ? 'text-[#f4dfac]' : 'text-slate-200',
+                              isSelected ? 'text-[#ebcf91]' : 'text-[#d9d5cf]',
                             ].join(' ')}
                           >
                             {mantra.title}
                           </h3>
 
                           {mantra.deity ? (
-                            <span className="hidden shrink-0 rounded-full border border-white/[0.08] px-2 py-0.5 text-[9px] text-slate-500 sm:inline-flex">
+                            <span className="hidden shrink-0 rounded-full border border-white/[0.07] px-2 py-0.5 text-[8px] text-[#626b76] sm:inline-flex">
                               {mantra.deity}
                             </span>
                           ) : null}
                         </div>
 
-                        <p className="mt-1 truncate font-serif text-[11px] text-amber-100/70 sm:text-xs">
+                        <p className="font-devanagari mt-1 truncate text-[11px] text-[#b99a65] sm:text-xs">
                           {mantra.sanskrit}
                         </p>
 
-                        <p className="mt-1 truncate text-[10px] text-slate-500 sm:text-[11px]">
+                        <p className="mt-1 truncate text-[9px] text-[#626b76] sm:text-[10px]">
                           {mantra.transliteration}
                         </p>
                       </div>
@@ -372,8 +382,8 @@ export function PracticeSetupPage() {
                         className={[
                           'flex size-6 shrink-0 items-center justify-center rounded-full border transition',
                           isSelected
-                            ? 'border-amber-300 bg-amber-400 text-[#291a04]'
-                            : 'border-slate-600 bg-transparent text-transparent',
+                            ? 'border-[#e7b353]/60 bg-[linear-gradient(145deg,#dda13e,#b86e22)] text-[#1c1207] shadow-[0_0_12px_rgba(216,154,53,0.1)]'
+                            : 'border-white/[0.14] bg-transparent text-transparent',
                         ].join(' ')}
                       >
                         {isSelected ? (
@@ -389,26 +399,26 @@ export function PracticeSetupPage() {
             </div>
           </div>
 
-          <div className="my-4 border-t border-white/[0.07]" />
+          <div className="my-5 h-px bg-[linear-gradient(90deg,transparent,rgba(148,163,184,0.12)_15%,rgba(216,154,53,0.13)_50%,rgba(148,163,184,0.12)_85%,transparent)]" />
 
           <div>
             <div className="mb-3 flex items-center gap-2">
-              <div className="flex size-6 items-center justify-center rounded-full border border-amber-400/25 bg-amber-400/[0.07] text-[10px] font-semibold text-amber-300">
+              <div className="flex size-6 items-center justify-center rounded-full border border-[#d89a35]/25 bg-[#d89a35]/[0.065] text-[9px] font-semibold text-[#e2ac4c] shadow-[0_0_16px_rgba(216,154,53,0.035)]">
                 2
               </div>
 
               <div>
-                <h2 className="font-serif text-sm font-medium text-[#f0dfad] sm:text-base">
+                <h2 className="font-serif text-sm font-medium text-[#ddd4c7] sm:text-[15px]">
                   Set Your Target
                 </h2>
 
-                <p className="text-[10px] text-slate-500">
+                <p className="mt-0.5 text-[9px] text-[#626b76]">
                   Choose your chant count
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 gap-2 min-[420px]:grid-cols-4">
               {PRACTICE_TARGET_OPTIONS.map((target) => {
                 const isSelected = !isCustomTarget && selectedTarget === target;
 
@@ -419,19 +429,20 @@ export function PracticeSetupPage() {
                     onClick={() => handlePresetTarget(target)}
                     aria-pressed={isSelected}
                     className={[
-                      'min-h-[58px] rounded-xl border px-2 py-2.5 text-center transition-all',
+                      'min-h-[58px] rounded-[9px] border px-2 py-2.5 text-center transition-all',
                       isSelected
                         ? [
-                            'border-amber-400/70',
-                            'bg-amber-400/[0.09]',
-                            'text-[#f4d77f]',
-                            'shadow-[0_0_18px_rgba(245,158,11,0.07)]',
+                            'border-[#d89a35]/55',
+                            'bg-[#d89a35]/[0.075]',
+                            'text-[#e9be69]',
+                            'shadow-[0_0_16px_rgba(216,154,53,0.045)]',
                           ].join(' ')
                         : [
-                            'border-white/[0.08]',
-                            'bg-white/[0.025]',
-                            'text-slate-400',
-                            'hover:border-white/[0.14]',
+                            'border-white/[0.065]',
+                            'bg-white/[0.016]',
+                            'text-[#8b939e]',
+                            'hover:border-white/[0.11]',
+                            'hover:bg-white/[0.025]',
                           ].join(' '),
                     ].join(' ')}
                   >
@@ -455,18 +466,20 @@ export function PracticeSetupPage() {
                 onClick={handleCustomTarget}
                 aria-pressed={isCustomTarget}
                 className={[
-                  'min-h-[58px] rounded-xl border px-2 py-2.5 text-center transition-all',
+                  'min-h-[58px] rounded-[9px] border px-2 py-2.5 text-center transition-all',
                   isCustomTarget
                     ? [
-                        'border-amber-400/70',
-                        'bg-amber-400/[0.09]',
-                        'text-[#f4d77f]',
+                        'border-[#d89a35]/55',
+                        'bg-[#d89a35]/[0.075]',
+                        'text-[#e9be69]',
+                        'shadow-[0_0_16px_rgba(216,154,53,0.045)]',
                       ].join(' ')
                     : [
-                        'border-white/[0.08]',
-                        'bg-white/[0.025]',
-                        'text-slate-400',
-                        'hover:border-white/[0.14]',
+                        'border-white/[0.065]',
+                        'bg-white/[0.016]',
+                        'text-[#8b939e]',
+                        'hover:border-white/[0.11]',
+                        'hover:bg-white/[0.025]',
                       ].join(' '),
                 ].join(' ')}
               >
@@ -489,12 +502,13 @@ export function PracticeSetupPage() {
                   value={customTarget}
                   onChange={(event) => setCustomTarget(event.target.value)}
                   placeholder="Enter chant count"
-                  className="h-10 w-full rounded-xl border border-white/[0.09] bg-[#08111d] px-3 text-xs text-slate-200 outline-none transition placeholder:text-slate-600 focus:border-amber-400/50"
+                  className="ds-input h-10 w-full rounded-[9px] px-3 text-xs outline-none"
                 />
 
                 {!isValidCustomTarget ? (
                   <p className="mt-1.5 text-[10px] text-red-300/80">
-                    Enter a whole number between 1 and 100000.
+                    Enter a whole number between {MIN_CUSTOM_PRACTICE_TARGET}{' '}
+                    and {MAX_CUSTOM_PRACTICE_TARGET}.
                   </p>
                 ) : null}
               </div>
@@ -502,36 +516,36 @@ export function PracticeSetupPage() {
           </div>
 
           {selectedMantra ? (
-            <div className="mt-4 grid grid-cols-[1fr_auto_auto] items-center gap-3 rounded-xl border border-white/[0.07] bg-[#08111c] px-3 py-3">
+            <div className="mt-4 grid grid-cols-1 gap-3 rounded-[10px] border border-white/[0.06] bg-[#090f17] px-3 py-3 min-[420px]:grid-cols-[1fr_auto_auto] min-[420px]:items-center">
               <div className="min-w-0">
-                <p className="text-[9px] uppercase tracking-[0.15em] text-slate-600">
+                <p className="text-[8px] uppercase tracking-[0.15em] text-[#59616c]">
                   Selected
                 </p>
 
-                <p className="mt-1 truncate font-serif text-xs text-slate-200 sm:text-sm">
+                <p className="mt-1 truncate font-serif text-xs text-[#d9d5cf] sm:text-sm">
                   {selectedMantra.title}
                 </p>
               </div>
 
-              <div className="border-l border-white/[0.07] pl-3 text-right">
-                <p className="text-[9px] uppercase tracking-[0.12em] text-slate-600">
+              <div className="border-t border-white/[0.06] pt-2 min-[420px]:border-l min-[420px]:border-t-0 min-[420px]:pl-3 min-[420px]:pt-0 min-[420px]:text-right">
+                <p className="text-[8px] uppercase tracking-[0.12em] text-[#59616c]">
                   Target
                 </p>
 
-                <p className="mt-1 font-serif text-sm text-[#e7c76e]">
+                <p className="mt-1 font-serif text-sm text-[#e0b55f]">
                   {Number.isFinite(targetCount) && targetCount > 0
                     ? targetCount
                     : '—'}
                 </p>
               </div>
 
-              <div className="border-l border-white/[0.07] pl-3 text-right">
-                <p className="flex items-center justify-end gap-1 text-[9px] uppercase tracking-[0.12em] text-slate-600">
+              <div className="border-t border-white/[0.06] pt-2 min-[420px]:border-l min-[420px]:border-t-0 min-[420px]:pl-3 min-[420px]:pt-0 min-[420px]:text-right">
+                <p className="flex items-center gap-1 text-[8px] uppercase tracking-[0.12em] text-[#59616c] min-[420px]:justify-end">
                   <Clock3 size={10} />
                   Time
                 </p>
 
-                <p className="mt-1 text-[11px] text-slate-300">
+                <p className="mt-1 text-[10px] text-[#a7a9ab]">
                   {estimatedMinutes ? `~${estimatedMinutes} min` : 'Varies'}
                 </p>
               </div>
@@ -539,35 +553,37 @@ export function PracticeSetupPage() {
           ) : null}
 
           {createSession.isError ? (
-            <p className="mt-3 rounded-xl border border-red-400/20 bg-red-400/[0.05] px-3 py-2.5 text-xs text-red-200">
+            <p className="mt-3 rounded-[9px] border border-red-400/20 bg-red-400/[0.04] px-3 py-2.5 text-xs text-red-200">
               Unable to start your practice. Please try again.
             </p>
           ) : null}
 
-          <button
-            type="button"
-            onClick={handleStartPractice}
-            disabled={
-              !selectedMantra ||
-              createSession.isPending ||
-              (isCustomTarget && !isValidCustomTarget)
-            }
-            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-300/70 bg-gradient-to-b from-[#f3c45d] to-[#d89627] px-5 text-sm font-semibold text-[#241704] shadow-[0_0_24px_rgba(245,158,11,0.14)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:brightness-100"
-          >
-            {createSession.isPending ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                Preparing Session...
-              </>
-            ) : (
-              <>
-                Start Session
-                <ArrowRight size={16} strokeWidth={2} />
-              </>
-            )}
-          </button>
+          <div className="mt-4 flex justify-end">
+            <button
+              type="button"
+              onClick={handleStartPractice}
+              disabled={
+                !selectedMantra ||
+                createSession.isPending ||
+                (isCustomTarget && !isValidCustomTarget)
+              }
+              className="ds-gold-button inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[9px] px-5 text-[11px] font-semibold sm:w-auto sm:min-w-[190px]"
+            >
+              {createSession.isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Preparing Session...
+                </>
+              ) : (
+                <>
+                  Start Session
+                  <ArrowRight size={16} strokeWidth={2} />
+                </>
+              )}
+            </button>
+          </div>
 
-          <p className="mt-2.5 text-center text-[9px] leading-4 text-slate-600">
+          <p className="mt-2.5 text-center text-[8px] leading-4 text-[#59616c]">
             Find a quiet space. Breathe. Chant. Transform.
           </p>
         </section>
@@ -578,12 +594,12 @@ export function PracticeSetupPage() {
 
 function ResumeStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-white/[0.07] bg-black/10 px-2 py-2 text-center">
-      <p className="text-[7px] uppercase tracking-[0.12em] text-slate-600">
+    <div className="rounded-[8px] border border-white/[0.055] bg-black/10 px-2 py-2 text-center">
+      <p className="text-[7px] uppercase tracking-[0.12em] text-[#59616c]">
         {label}
       </p>
 
-      <p className="mt-1 truncate text-[10px] font-medium text-[#e7c76e]">
+      <p className="mt-1 truncate text-[10px] font-medium text-[#d8aa52]">
         {value}
       </p>
     </div>

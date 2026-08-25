@@ -1,8 +1,10 @@
 import { InsightMetricCard } from '../components/InsightMetricCard';
 import { InsightsRangeSelector } from '../components/InsightsRangeSelector';
 import { MantraBreakdownPanel } from '../components/MantraBreakdownPanel';
+import { MobileInsightsOverview } from '../components/MobileInsightsOverview';
 import { PracticeActivityChart } from '../components/PracticeActivityChart';
 import { PracticeHistoryPanel } from '../components/PracticeHistoryPanel';
+import { StreakCalendar } from '../components/StreakCalendar';
 import { useInsightsOverview } from '../hooks/useInsightsOverview';
 import {
   formatInsightsDuration,
@@ -35,6 +37,10 @@ export function InsightsPage() {
     range,
   });
 
+  const { data: weeklyInsights } = useInsightsOverview({
+    range: '7d',
+  });
+
   const handleRangeChange = useCallback((nextRange: InsightsRange) => {
     setRange(nextRange);
   }, []);
@@ -44,46 +50,45 @@ export function InsightsPage() {
   }, [refetch]);
 
   return (
-    <div className="relative min-h-full overflow-hidden px-4 py-6 sm:px-6 lg:px-8 lg:py-8 xl:px-10">
+    <div className="relative min-h-full overflow-hidden bg-[var(--ds-obsidian)] px-4 py-5 sm:px-5 lg:px-7 lg:py-6 xl:px-8">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
       >
-        <div className="absolute left-[18%] top-[-180px] size-[460px] rounded-full bg-amber-400/[0.025] blur-[110px]" />
+        <div className="absolute left-[34%] top-[-220px] size-[520px] rounded-full bg-[#d89a35]/[0.025] blur-[120px]" />
 
-        <div className="absolute right-[-180px] top-[220px] size-[460px] rounded-full border border-amber-400/[0.035]" />
+        <div className="absolute right-[-220px] top-[260px] size-[480px] rounded-full border border-[#d89a35]/[0.025]" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1180px]">
-        <header className="flex flex-col gap-5 border-b border-white/[0.07] pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <div className="relative z-10 mx-auto w-full max-w-[1220px]">
+        <header className="flex flex-col gap-4 border-b border-white/[0.065] pb-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <Sparkles
-                size={14}
+                size={12}
                 strokeWidth={1.7}
-                className="text-amber-400"
+                className="text-[#d89a35]"
               />
 
-              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-400/80">
+              <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-[#c58a32]">
                 Your Sadhana Journey
               </p>
             </div>
 
-            <h1 className="mt-2 font-serif text-3xl font-medium tracking-wide text-[#e7ca75] sm:text-4xl">
+            <h1 className="mt-2 font-serif text-[26px] font-medium tracking-[0.015em] text-[#eee5d8] sm:text-[30px]">
               Insights & Progress
             </h1>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Reflect on your practice, consistency, and chanting progress over
-              time.
+            <p className="mt-1.5 max-w-2xl text-[11px] leading-5 text-[#737b86] sm:text-xs">
+              Track your chanting journey and grow with every mantra.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex max-w-full items-center gap-2 md:self-auto">
             {isFetching && !isLoading ? (
               <LoaderCircle
-                size={15}
-                className="animate-spin text-amber-400/70"
+                size={14}
+                className="shrink-0 animate-spin text-[#d89a35]/70"
               />
             ) : null}
 
@@ -104,95 +109,120 @@ export function InsightsPage() {
           />
         ) : (
           <>
-            <div className="mt-6 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                  Overview
-                </p>
+            <MobileInsightsOverview
+              insights={insights}
+              weeklyActivity={
+                weeklyInsights?.dailyActivity ??
+                insights.dailyActivity.slice(-7)
+              }
+            />
 
-                <p className="mt-1 text-xs text-slate-600">
-                  {getInsightsRangeLabel(range)}
-                </p>
+            <div className="hidden md:block">
+              <div className="mt-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-[#69717c]">
+                    Overview
+                  </p>
+
+                  <p className="mt-1 text-[9px] text-[#535c67]">
+                    {getInsightsRangeLabel(range)}
+                  </p>
+                </div>
+
+                <div className="hidden items-center gap-2 text-[8px] text-[#5e6671] sm:flex">
+                  <span className="size-1.5 rounded-full bg-[#4da779]" />
+
+                  <span>Synced with completed practice</span>
+                </div>
               </div>
 
-              <div className="hidden items-center gap-2 text-[10px] text-slate-600 sm:flex">
-                <span className="size-1.5 rounded-full bg-emerald-400" />
+              <section className="mt-3 grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+                <InsightMetricCard
+                  label="Current Streak"
+                  value={`${formatInsightsNumber(
+                    insights.summary.currentStreakDays
+                  )} ${
+                    insights.summary.currentStreakDays === 1 ? 'day' : 'days'
+                  }`}
+                  description="Your active chain of completed practice days."
+                  icon={Flame}
+                  emphasized
+                />
 
-                <span>Synced with your completed practice</span>
+                <InsightMetricCard
+                  label="Malas Completed"
+                  value={formatInsightsNumber(insights.summary.totalMalas)}
+                  description="Full sets of 108 repetitions completed."
+                  icon={Trophy}
+                  emphasized
+                />
+
+                <InsightMetricCard
+                  label="Total Chants"
+                  value={formatInsightsNumber(insights.summary.totalChants)}
+                  description="Completed mantra repetitions in this period."
+                  icon={Sparkles}
+                />
+
+                <InsightMetricCard
+                  label="Sessions"
+                  value={formatInsightsNumber(
+                    insights.summary.totalCompletedSessions
+                  )}
+                  description="Completed Sadhana sessions."
+                  icon={BarChart3}
+                />
+
+                <InsightMetricCard
+                  label="Time Chanted"
+                  value={formatInsightsDuration(
+                    insights.summary.totalPracticeSeconds
+                  )}
+                  description="Active time spent in completed practice."
+                  icon={Clock3}
+                />
+
+                <InsightMetricCard
+                  label="Best Streak"
+                  value={`${formatInsightsNumber(
+                    insights.summary.longestStreakDays
+                  )} ${
+                    insights.summary.longestStreakDays === 1 ? 'day' : 'days'
+                  }`}
+                  description="Your longest consecutive practice streak."
+                  icon={Trophy}
+                />
+              </section>
+
+              <section className="mt-4 grid gap-3 xl:grid-cols-[0.72fr_1.35fr_0.78fr]">
+                <StreakCalendar
+                  currentStreakDays={insights.summary.currentStreakDays}
+                  longestStreakDays={insights.summary.longestStreakDays}
+                />
+
+                <PracticeActivityChart
+                  activity={insights.dailyActivity}
+                  range={range}
+                />
+
+                <MantraBreakdownPanel
+                  breakdown={insights.mantraBreakdown}
+                  totalChants={insights.summary.totalChants}
+                />
+              </section>
+
+              <PracticeHistoryPanel />
+
+              <div className="mt-7 hidden items-center gap-4 pb-2 lg:flex">
+                <div className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(216,154,53,0.24))]" />
+
+                <p className="font-serif text-[10px] tracking-[0.05em] text-[#a97a38]">
+                  Consistency in chanting transforms practice into discipline.
+                </p>
+
+                <div className="h-px flex-1 bg-[linear-gradient(90deg,rgba(216,154,53,0.24),transparent)]" />
               </div>
             </div>
-
-            <section className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-3 xl:gap-4">
-              <InsightMetricCard
-                label="Total Chants"
-                value={formatInsightsNumber(insights.summary.totalChants)}
-                description="Completed mantra repetitions in this period."
-                icon={Sparkles}
-                emphasized
-              />
-
-              <InsightMetricCard
-                label="Sessions"
-                value={formatInsightsNumber(
-                  insights.summary.totalCompletedSessions
-                )}
-                description="Sadhana sessions completed successfully."
-                icon={BarChart3}
-              />
-
-              <InsightMetricCard
-                label="Practice Time"
-                value={formatInsightsDuration(
-                  insights.summary.totalPracticeSeconds
-                )}
-                description="Active time devoted to your completed practice."
-                icon={Clock3}
-              />
-
-              <InsightMetricCard
-                label="Completed Malas"
-                value={formatInsightsNumber(insights.summary.totalMalas)}
-                description="Full sets of 108 repetitions completed."
-                icon={Trophy}
-              />
-
-              <InsightMetricCard
-                label="Current Streak"
-                value={`${formatInsightsNumber(
-                  insights.summary.currentStreakDays
-                )} ${
-                  insights.summary.currentStreakDays === 1 ? 'day' : 'days'
-                }`}
-                description="Your currently active chain of practice days."
-                icon={Flame}
-                emphasized
-              />
-
-              <InsightMetricCard
-                label="Longest Streak"
-                value={`${formatInsightsNumber(
-                  insights.summary.longestStreakDays
-                )} ${
-                  insights.summary.longestStreakDays === 1 ? 'day' : 'days'
-                }`}
-                description="Your longest consecutive Sadhana streak."
-                icon={Trophy}
-              />
-            </section>
-
-            <section className="mt-6 grid gap-4 lg:grid-cols-[1.45fr_0.85fr]">
-              <PracticeActivityChart
-                activity={insights.dailyActivity}
-                range={range}
-              />
-
-              <MantraBreakdownPanel
-                breakdown={insights.mantraBreakdown}
-                totalChants={insights.summary.totalChants}
-              />
-            </section>
-
-            <PracticeHistoryPanel />
           </>
         )}
       </div>
@@ -202,28 +232,30 @@ export function InsightsPage() {
 
 function InsightsLoadingState() {
   return (
-    <div className="mt-8">
-      <div className="flex items-center gap-2 text-xs text-slate-500">
-        <LoaderCircle size={15} className="animate-spin text-amber-400" />
+    <div className="mt-6">
+      <div className="flex items-center gap-2 text-[10px] text-[#69717c]">
+        <LoaderCircle size={14} className="animate-spin text-[#d89a35]" />
 
         <span>Gathering your practice insights...</span>
       </div>
 
-      <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-3">
+      <div className="mt-4 grid grid-cols-2 gap-2.5 lg:grid-cols-3 xl:grid-cols-6">
         {Array.from({
           length: 6,
         }).map((_, index) => (
           <div
             key={index}
-            className="h-36 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.025]"
+            className="h-[118px] animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]"
           />
         ))}
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-[1.45fr_0.85fr]">
-        <div className="h-72 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.025]" />
+      <div className="mt-4 grid gap-3 xl:grid-cols-[0.72fr_1.35fr_0.78fr]">
+        <div className="h-72 animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]" />
 
-        <div className="h-72 animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.025]" />
+        <div className="h-72 animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]" />
+
+        <div className="h-72 animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]" />
       </div>
     </div>
   );
@@ -231,25 +263,24 @@ function InsightsLoadingState() {
 
 type InsightsErrorStateProps = {
   message: string;
-
   onRetry: () => void;
 };
 
 function InsightsErrorState({ message, onRetry }: InsightsErrorStateProps) {
   return (
-    <div className="mt-8 rounded-2xl border border-red-400/15 bg-red-400/[0.035] px-5 py-8 text-center">
-      <p className="font-serif text-lg text-slate-200">Insights unavailable</p>
+    <div className="mt-6 rounded-[11px] border border-red-400/15 bg-red-400/[0.028] px-5 py-8 text-center">
+      <p className="font-serif text-lg text-[#ded8cf]">Insights unavailable</p>
 
-      <p className="mx-auto mt-2 max-w-lg text-xs leading-6 text-slate-500">
+      <p className="mx-auto mt-2 max-w-lg text-[10px] leading-5 text-[#737b86]">
         {message}
       </p>
 
       <button
         type="button"
         onClick={onRetry}
-        className="mt-5 inline-flex items-center gap-2 rounded-xl border border-amber-400/20 bg-amber-400/[0.08] px-4 py-2.5 text-xs font-medium text-amber-200 transition hover:bg-amber-400/[0.12]"
+        className="mt-4 inline-flex items-center gap-2 rounded-[8px] border border-[#d89a35]/20 bg-[#d89a35]/[0.065] px-3.5 py-2.5 text-[10px] font-medium text-[#efc875] transition hover:bg-[#d89a35]/[0.1]"
       >
-        <RotateCcw size={14} />
+        <RotateCcw size={13} />
         Try again
       </button>
     </div>
