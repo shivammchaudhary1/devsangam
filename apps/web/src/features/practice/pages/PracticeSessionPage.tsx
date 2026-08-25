@@ -12,12 +12,16 @@ import { PracticeSessionHeader } from '../components/PracticeSessionHeader';
 import { usePracticeAudio } from '../hooks/usePracticeAudio';
 import { usePracticeSession } from '../hooks/usePracticeSession';
 import { usePracticeSessionRuntime } from '../hooks/usePracticeSessionRuntime';
+import {
+  readPracticePreferences,
+  writePracticePreferences,
+} from '../storage/practice-preferences.storage';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
 import { useMantra } from '@/features/mantras/hooks/useMantra';
 import type { Mantra, PracticeSession } from '@devsangam/types';
 import { Sparkles } from 'lucide-react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 
 export function PracticeSessionPage() {
@@ -89,9 +93,18 @@ function ActivePracticeSession({
 }: ActivePracticeSessionProps) {
   const auth = useAuth();
 
+  const preferenceUserId = auth.user?.id;
+
+  const [storedPreferences] = useState(() =>
+    readPracticePreferences(preferenceUserId)
+  );
+
   const defaultSoundEnabled = auth.user?.preferences.soundEnabled ?? true;
 
-  const defaultHapticEnabled = auth.user?.preferences.hapticEnabled ?? true;
+  const defaultHapticEnabled =
+    storedPreferences.hapticEnabled ??
+    auth.user?.preferences.hapticEnabled ??
+    true;
 
   const {
     omEnabled,
@@ -114,6 +127,8 @@ function ActivePracticeSession({
     changeToneVolume,
   } = usePracticeAudio({
     defaultSoundEnabled,
+
+    preferenceUserId,
   });
 
   const {
@@ -157,6 +172,16 @@ function ActivePracticeSession({
   const handleOmToggle = useCallback(() => {
     toggleOm(!isPaused);
   }, [isPaused, toggleOm]);
+
+  const handlePersistentHapticToggle = useCallback(() => {
+    const nextValue = !hapticEnabled;
+
+    writePracticePreferences(preferenceUserId, {
+      hapticEnabled: nextValue,
+    });
+
+    handleHapticToggle();
+  }, [handleHapticToggle, hapticEnabled, preferenceUserId]);
 
   const image = MANTRA_IMAGES[mantra.slug];
 
@@ -284,7 +309,7 @@ function ActivePracticeSession({
               isPaused={isPaused}
               isBusy={isBusy}
               isUpdating={isUpdatePending}
-              onHapticToggle={handleHapticToggle}
+              onHapticToggle={handlePersistentHapticToggle}
               onPauseToggle={handlePauseClick}
               onReset={handleResetClick}
             />

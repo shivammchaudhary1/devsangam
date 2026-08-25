@@ -1,4 +1,8 @@
 import { PRACTICE_AUDIO } from '../constants/practice-audio.constants';
+import {
+  readPracticePreferences,
+  writePracticePreferences,
+} from '../storage/practice-preferences.storage';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const DEFAULT_OM_VOLUME = 0.35;
@@ -11,52 +15,45 @@ const MIN_GAIN = 0.001;
 
 type UsePracticeAudioOptions = {
   defaultSoundEnabled: boolean;
+
+  preferenceUserId?: string;
 };
 
 export function usePracticeAudio({
   defaultSoundEnabled,
+  preferenceUserId,
 }: UsePracticeAudioOptions) {
-  /*
-   * User-facing audio state.
-   */
-  const [omEnabled, setOmEnabled] = useState(() => defaultSoundEnabled);
+  const [initialPreferences] = useState(() =>
+    readPracticePreferences(preferenceUserId)
+  );
 
-  const [omVolume, setOmVolume] = useState(DEFAULT_OM_VOLUME);
+  const [omEnabled, setOmEnabled] = useState(
+    () => initialPreferences.omEnabled ?? defaultSoundEnabled
+  );
 
-  const [toneEnabled, setToneEnabled] = useState(() => defaultSoundEnabled);
+  const [omVolume, setOmVolume] = useState(
+    () => initialPreferences.omVolume ?? DEFAULT_OM_VOLUME
+  );
 
-  const [toneVolume, setToneVolume] = useState(DEFAULT_TONE_VOLUME);
+  const [toneEnabled, setToneEnabled] = useState(
+    () => initialPreferences.toneEnabled ?? defaultSoundEnabled
+  );
 
-  /*
-   * Long-running Om audio element.
-   */
+  const [toneVolume, setToneVolume] = useState(
+    () => initialPreferences.toneVolume ?? DEFAULT_TONE_VOLUME
+  );
+
   const omAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  /*
-   * Tracks whether Om has already successfully
-   * started during this mounted practice session.
-   */
   const omStartedRef = useRef(false);
 
-  /*
-   * One reusable Web Audio context for all
-   * short chant confirmation tones.
-   */
   const toneAudioContextRef = useRef<AudioContext | null>(null);
 
-  /*
-   * Create exactly one Om audio element for
-   * this mounted practice session.
-   */
   useEffect(() => {
     const audio = new Audio(PRACTICE_AUDIO.om);
 
     audio.preload = 'auto';
 
-    /*
-     * The recording can continue for practices
-     * longer than the source audio duration.
-     */
     audio.loop = true;
 
     audio.volume = DEFAULT_OM_VOLUME;
@@ -82,10 +79,6 @@ export function usePracticeAudio({
     };
   }, []);
 
-  /*
-   * Apply Om slider changes immediately
-   * without restarting playback.
-   */
   useEffect(() => {
     const audio = omAudioRef.current;
 
@@ -96,12 +89,6 @@ export function usePracticeAudio({
     audio.volume = omVolume;
   }, [omVolume]);
 
-  /*
-   * Start Om only if it has never started.
-   *
-   * Calling this on every chant is safe because
-   * subsequent calls become no-ops.
-   */
   const startOm = useCallback(() => {
     if (!omEnabled) {
       return;
@@ -119,24 +106,13 @@ export function usePracticeAudio({
 
     audio.volume = omVolume;
 
-    /*
-     * Mark started before play() resolves so very
-     * rapid chant taps do not repeatedly call play().
-     */
     omStartedRef.current = true;
 
     void audio.play().catch(() => {
-      /*
-       * Allow another user interaction to try
-       * starting the audio if the browser rejected it.
-       */
       omStartedRef.current = false;
     });
   }, [omEnabled, omVolume]);
 
-  /*
-   * Pause Om while preserving currentTime.
-   */
   const pauseOm = useCallback(() => {
     const audio = omAudioRef.current;
 
@@ -147,12 +123,6 @@ export function usePracticeAudio({
     audio.pause();
   }, []);
 
-  /*
-   * Resume Om only if it had previously started.
-   *
-   * This is used after Pause/Resume, Reset,
-   * or enabling Om again.
-   */
   const resumeOm = useCallback(() => {
     if (!omEnabled) {
       return;
@@ -171,18 +141,10 @@ export function usePracticeAudio({
     audio.volume = omVolume;
 
     void audio.play().catch(() => {
-      /*
-       * Keep omStartedRef true because the recording
-       * had already started earlier. A later user
-       * interaction can attempt resume again.
-       */
+      // Optional audio.
     });
   }, [omEnabled, omVolume]);
 
-  /*
-   * Stop Om permanently for the current practice
-   * and reset playback to 0:00.
-   */
   const stopOm = useCallback(() => {
     const audio = omAudioRef.current;
 
@@ -195,9 +157,6 @@ export function usePracticeAudio({
     omStartedRef.current = false;
   }, []);
 
-  /*
-   * Short independent per-chant confirmation tone.
-   */
   const playTapTone = useCallback(() => {
     if (!toneEnabled) {
       return;
@@ -255,7 +214,7 @@ export function usePracticeAudio({
           .resume()
           .then(createTone)
           .catch(() => {
-            // Tap tone is optional.
+            // Optional audio.
           });
 
         return;
@@ -263,28 +222,19 @@ export function usePracticeAudio({
 
       createTone();
     } catch {
-      // Tap tone is optional.
+      // Optional audio.
     }
   }, [toneEnabled, toneVolume]);
 
-  /*
-   * Toggle Om independently.
-   *
-   * If Om is turned off:
-   * → pause and preserve playback position.
-   *
-   * If Om is turned back on:
-   * → resume only when the caller allows it
-   *   and Om had already started.
-   *
-   * This lets the practice page prevent audio from
-   * resuming while the whole session is paused.
-   */
   const toggleOm = useCallback(
     (canResume: boolean) => {
       const nextValue = !omEnabled;
 
       setOmEnabled(nextValue);
+
+      writePracticePreferences(preferenceUserId, {
+        omEnabled: nextValue,
+      });
 
       if (!nextValue) {
         pauseOm();
@@ -305,31 +255,49 @@ export function usePracticeAudio({
       audio.volume = omVolume;
 
       void audio.play().catch(() => {
-        // Om audio is optional.
+        // Optional audio.
       });
     },
-    [omEnabled, omVolume, pauseOm]
+    [omEnabled, omVolume, pauseOm, preferenceUserId]
   );
 
   const toggleTone = useCallback(() => {
-    setToneEnabled((current) => !current);
-  }, []);
+    setToneEnabled((current) => {
+      const nextValue = !current;
 
-  /*
-   * Volume setters accept the 0–100 value
-   * coming directly from the range slider.
-   */
-  const changeOmVolume = useCallback((value: number) => {
-    const normalizedVolume = normalizeVolumePercentage(value);
+      writePracticePreferences(preferenceUserId, {
+        toneEnabled: nextValue,
+      });
 
-    setOmVolume(normalizedVolume);
-  }, []);
+      return nextValue;
+    });
+  }, [preferenceUserId]);
 
-  const changeToneVolume = useCallback((value: number) => {
-    const normalizedVolume = normalizeVolumePercentage(value);
+  const changeOmVolume = useCallback(
+    (value: number) => {
+      const normalizedVolume = normalizeVolumePercentage(value);
 
-    setToneVolume(normalizedVolume);
-  }, []);
+      setOmVolume(normalizedVolume);
+
+      writePracticePreferences(preferenceUserId, {
+        omVolume: normalizedVolume,
+      });
+    },
+    [preferenceUserId]
+  );
+
+  const changeToneVolume = useCallback(
+    (value: number) => {
+      const normalizedVolume = normalizeVolumePercentage(value);
+
+      setToneVolume(normalizedVolume);
+
+      writePracticePreferences(preferenceUserId, {
+        toneVolume: normalizedVolume,
+      });
+    },
+    [preferenceUserId]
+  );
 
   return {
     omEnabled,
