@@ -1,187 +1,184 @@
-/* DevSangam design tokens — aligned to the approved dark/amber UI direction.
-:root {
-  --background: #0c0d12;
-  --foreground: #f8fafc;
+/*
+ * DevSangam visual foundation
+ *
+ * Reference direction:
+ * - near-black blue/graphite surfaces
+ * - warm antique gold
+ * - subtle layered elevation
+ * - restrained illumination
+ * - low-contrast borders
+ * - dark-first spiritual atmosphere
+ */
 
-  --card: #161922;
-  --card-foreground: #f8fafc;
-  --popover: #161922;
-  --popover-foreground: #f8fafc;
-
-  --primary: #f59e0b;
-  --primary-foreground: #0c0d12;
-  --secondary: #222736;
-  --secondary-foreground: #f8fafc;
-  --muted: #222736;
-  --muted-foreground: #94a3b8;
-  --accent: #d4af37;
-  --accent-foreground: #0c0d12;
-
-  --border: #2e3648;
-  --input: #222736;
-  --ring: #f59e0b;
-
-  --success: #10b981;
-  --warning: #f59e0b;
-  --destructive: #ef4444;
-  --destructive-foreground: #fff7ed;
-
-  --gold: #d4af37;
-  --gold-soft: #e5c07b;
-  --amber: #f59e0b;
-  --saffron-soft: rgb(245 158 11 / 0.12);
-
-  --sidebar: #11141c;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #f59e0b;
-  --sidebar-primary-foreground: #0c0d12;
-  --sidebar-accent: rgb(245 158 11 / 0.12);
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #2e3648;
-  --sidebar-ring: #f59e0b;
-
-  --radius: 0.875rem;
-  --shadow-card: 0 18px 50px rgb(0 0 0 / 0.28);
-  --shadow-gold:
-    0 0 0 1px rgb(245 158 11 / 0.35), 0 0 28px rgb(245 158 11 / 0.18);
-  --shadow-gold-strong:
-    0 0 0 1px rgb(245 158 11 / 0.55), 0 0 42px rgb(245 158 11 / 0.32);
-}
-
-/* Optional warm-light theme for future use. The product should ship dark-first. 
-.light {
-  --background: #f7f2e8;
-  --foreground: #1a1712;
-  --card: #fffaf0;
-  --card-foreground: #1a1712;
-  --popover: #fffaf0;
-  --popover-foreground: #1a1712;
-  --secondary: #eee5d5;
-  --secondary-foreground: #1a1712;
-  --muted: #eee5d5;
-  --muted-foreground: #6b6257;
-  --border: #d9cdbb;
-  --input: #f0e8da;
-  --sidebar: #f3eadb;
-  --sidebar-foreground: #1a1712;
-  --sidebar-border: #d9cdbb;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
-  --color-amber-brand: var(--amber);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Cinzel', Georgia, serif;
-  --font-devanagari: 'Noto Serif Devanagari', serif;
-
-  --radius-sm: calc(var(--radius) - 0.35rem);
-  --radius-md: calc(var(--radius) - 0.15rem);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 0.35rem);
-  --radius-2xl: calc(var(--radius) + 0.75rem);
-}
-
-*/
-
-:root {
-  --ds-obsidian: #0c0d12;
-  --ds-sidebar: #101218;
-  --ds-charcoal: #161922;
-  --ds-elevated: #1b1f2a;
-  --ds-surface: #222736;
-  --ds-border: #2e3648;
-
-  --ds-saffron: #f59e0b;
-  --ds-gold: #d4af37;
-  --ds-soft-gold: #e5c07b;
-
-  --ds-cream: #f8fafc;
-  --ds-muted: #94a3b8;
-
-  --ds-success: #10b981;
-  --ds-danger: #ef4444;
-
-  --ds-saffron-soft: rgb(245 158 11 / 0.1);
-  --ds-gold-soft: rgb(212 175 55 / 0.1);
-
-  --ds-shadow-card: 0 18px 60px rgb(0 0 0 / 0.28);
-
-  --ds-shadow-gold: 0 0 32px rgb(245 158 11 / 0.14);
-
-  --ds-shadow-gold-strong: 0 0 48px rgb(245 158 11 / 0.22);
-}
-
+:root,
 .dark {
-  --background: #0c0d12;
-  --foreground: #f8fafc;
+  /* ======================================================
+     CORE APPLICATION COLORS
+     ====================================================== */
 
-  --card: #161922;
-  --card-foreground: #f8fafc;
+  --background: #070b11;
+  --foreground: #f4eee2;
 
-  --popover: #161922;
-  --popover-foreground: #f8fafc;
+  --card: #0d131c;
+  --card-foreground: #f4eee2;
 
-  --primary: #f59e0b;
-  --primary-foreground: #0c0d12;
+  --popover: #0c121a;
+  --popover-foreground: #f4eee2;
 
-  --secondary: #222736;
-  --secondary-foreground: #f8fafc;
+  --primary: #d89a35;
+  --primary-foreground: #090b0e;
 
-  --muted: #1b1f2a;
-  --muted-foreground: #94a3b8;
+  --secondary: #121a25;
+  --secondary-foreground: #e8e1d6;
 
-  --accent: #222736;
-  --accent-foreground: #f8fafc;
+  --muted: #111821;
+  --muted-foreground: #858b94;
 
-  --destructive: #ef4444;
+  --accent: #18202b;
+  --accent-foreground: #f4eee2;
 
-  --border: #2e3648;
-  --input: #222736;
-  --ring: #f59e0b;
+  --destructive: #e05757;
 
-  --sidebar: #101218;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #f59e0b;
-  --sidebar-primary-foreground: #0c0d12;
-  --sidebar-accent: #1b1f2a;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #252b39;
-  --sidebar-ring: #f59e0b;
+  --border: #252d37;
+  --input: #121922;
+  --ring: #d89a35;
 
-  --chart-1: #f59e0b;
-  --chart-2: #d4af37;
-  --chart-3: #e5c07b;
-  --chart-4: #10b981;
-  --chart-5: #94a3b8;
+  /* ======================================================
+     CHARTS
+     ====================================================== */
+
+  --chart-1: #dda13e;
+  --chart-2: #bd7d29;
+  --chart-3: #efc875;
+  --chart-4: #8c632d;
+  --chart-5: #68717d;
+
+  /* ======================================================
+     SIDEBAR
+     ====================================================== */
+
+  --sidebar: #080d14;
+  --sidebar-foreground: #ece6dc;
+
+  --sidebar-primary: #d89a35;
+  --sidebar-primary-foreground: #090b0e;
+
+  --sidebar-accent: #121922;
+  --sidebar-accent-foreground: #f4eee2;
+
+  --sidebar-border: #202832;
+  --sidebar-ring: #d89a35;
+
+  --radius: 0.75rem;
+
+  /* ======================================================
+     DEVSANGAM BRAND TOKENS
+     ====================================================== */
+
+  --ds-ink: #05080d;
+  --ds-obsidian: #070b11;
+  --ds-night: #090f17;
+  --ds-sidebar: #080d14;
+
+  --ds-charcoal: #0d131c;
+  --ds-elevated: #101720;
+  --ds-surface: #141c27;
+  --ds-surface-soft: #18212c;
+
+  --ds-border: #252d37;
+  --ds-border-soft: rgb(148 163 184 / 0.1);
+  --ds-border-gold: rgb(216 154 53 / 0.28);
+
+  --ds-amber: #d89a35;
+  --ds-amber-bright: #edae47;
+  --ds-gold: #c98b32;
+  --ds-soft-gold: #edc777;
+  --ds-pale-gold: #f2d697;
+  --ds-bronze: #89571f;
+
+  --ds-cream: #f4eee2;
+  --ds-text: #d8d5d0;
+  --ds-muted: #858b94;
+  --ds-muted-soft: #626a74;
+  --ds-faint: #424a55;
+
+  --ds-success: #4da779;
+  --ds-danger: #d95858;
+
+  /* ======================================================
+     TRANSLUCENT BRAND COLORS
+     ====================================================== */
+
+  --ds-amber-03: rgb(216 154 53 / 0.03);
+  --ds-amber-05: rgb(216 154 53 / 0.05);
+  --ds-amber-08: rgb(216 154 53 / 0.08);
+  --ds-amber-10: rgb(216 154 53 / 0.1);
+  --ds-amber-14: rgb(216 154 53 / 0.14);
+  --ds-amber-18: rgb(216 154 53 / 0.18);
+  --ds-amber-24: rgb(216 154 53 / 0.24);
+  --ds-amber-32: rgb(216 154 53 / 0.32);
+
+  --ds-white-02: rgb(255 255 255 / 0.02);
+  --ds-white-03: rgb(255 255 255 / 0.03);
+  --ds-white-04: rgb(255 255 255 / 0.04);
+  --ds-white-06: rgb(255 255 255 / 0.06);
+  --ds-white-08: rgb(255 255 255 / 0.08);
+  --ds-white-10: rgb(255 255 255 / 0.1);
+
+  /* ======================================================
+     SURFACE GRADIENTS
+     ====================================================== */
+
+  --ds-gradient-page:
+    radial-gradient(
+      circle at 72% -12%,
+      rgb(216 154 53 / 0.055),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 5% 82%,
+      rgb(122 79 31 / 0.035),
+      transparent 30rem
+    ),
+    linear-gradient(145deg, #070b11 0%, #080d14 52%, #070b11 100%);
+
+  --ds-gradient-panel:
+    linear-gradient(145deg, rgb(255 255 255 / 0.025), transparent 34%),
+    linear-gradient(180deg, #101720 0%, #0c121a 100%);
+
+  --ds-gradient-panel-soft:
+    linear-gradient(155deg, rgb(255 255 255 / 0.018), transparent 42%), #0c121a;
+
+  --ds-gradient-gold: linear-gradient(
+    135deg,
+    #f1c76e 0%,
+    #dda13e 36%,
+    #bd7828 76%,
+    #8f581f 100%
+  );
+
+  --ds-gradient-gold-text: linear-gradient(
+    135deg,
+    #f4d995 0%,
+    #efc875 38%,
+    #d89a35 72%,
+    #b87327 100%
+  );
+
+  /* ======================================================
+     SHADOWS
+     ====================================================== */
+
+  --ds-shadow-card: 0 14px 34px rgb(0 0 0 / 0.24), 0 2px 8px rgb(0 0 0 / 0.18);
+
+  --ds-shadow-card-deep:
+    0 24px 70px rgb(0 0 0 / 0.34), 0 4px 14px rgb(0 0 0 / 0.22);
+
+  --ds-shadow-gold: 0 0 24px rgb(216 154 53 / 0.11);
+
+  --ds-shadow-gold-strong: 0 0 36px rgb(216 154 53 / 0.2);
+
+  --ds-shadow-gold-inset:
+    inset 0 1px 0 rgb(244 217 149 / 0.12),
+    inset 0 0 18px rgb(216 154 53 / 0.025);
 }
