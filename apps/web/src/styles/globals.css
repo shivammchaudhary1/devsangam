@@ -5,34 +5,45 @@
 
   html {
     min-width: 320px;
+
     background: var(--ds-obsidian);
+
     color-scheme: dark;
+
+    scroll-behavior: smooth;
+
+    scrollbar-gutter: stable;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
   }
 
   body {
     margin: 0;
+
     min-width: 320px;
     min-height: 100vh;
+
     overflow-x: hidden;
 
-    background:
-      radial-gradient(
-        circle at 15% -10%,
-        rgb(245 158 11 / 0.07),
-        transparent 32rem
-      ),
-      radial-gradient(
-        circle at 95% 105%,
-        rgb(212 175 55 / 0.045),
-        transparent 36rem
-      ),
-      var(--ds-obsidian);
+    background: var(--ds-gradient-page);
 
     color: var(--ds-cream);
 
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 400;
+
+    line-height: 1.5;
 
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
     text-rendering: optimizeLegibility;
   }
 
@@ -43,12 +54,38 @@
     font: inherit;
   }
 
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:not(:disabled),
+  a[href] {
+    cursor: pointer;
+  }
+
+  img,
+  svg {
+    display: block;
+  }
+
   h1,
   h2,
   h3,
   h4,
   .font-display {
     font-family: 'Cinzel', Georgia, serif;
+
+    text-wrap: balance;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
 
   .font-devanagari {
@@ -56,7 +93,49 @@
   }
 
   ::selection {
-    background: rgb(245 158 11 / 0.3);
-    color: #f8fafc;
+    background: rgb(216 154 53 / 0.3);
+    color: #fff8e8;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(216 154 53 / 0.72);
+    outline-offset: 3px;
+  }
+
+  /*
+   * Refined dark scrollbars.
+   *
+   * Firefox
+   */
+  * {
+    scrollbar-color: rgb(216 154 53 / 0.28) rgb(255 255 255 / 0.025);
+
+    scrollbar-width: thin;
+  }
+
+  /*
+   * Chromium / Safari
+   */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgb(255 255 255 / 0.018);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+
+    border-radius: 999px;
+
+    background: linear-gradient(rgb(216 154 53 / 0.28), rgb(216 154 53 / 0.28))
+      padding-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(rgb(216 154 53 / 0.42), rgb(216 154 53 / 0.42))
+      padding-box;
   }
 }

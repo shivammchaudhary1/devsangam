@@ -1,10 +1,15 @@
 import { updatePracticeSession } from '../api/practice.api';
 import { practiceQueryKeys } from '../api/practice.query-keys';
-import type {PracticeSession,UpdatePracticeSessionRequest,} from '@devsangam/types';
+import { insightsQueryKeys } from '@/features/insights/api/insights.query-keys';
+import type {
+  PracticeSession,
+  UpdatePracticeSessionRequest,
+} from '@devsangam/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type UpdatePracticeSessionVariables = {
   sessionId: string;
+
   payload: UpdatePracticeSessionRequest;
 };
 
@@ -20,6 +25,10 @@ export function useUpdatePracticeSession() {
 
       void queryClient.invalidateQueries({
         queryKey: practiceQueryKeys.sessionList(),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: insightsQueryKeys.histories(),
       });
     },
   });

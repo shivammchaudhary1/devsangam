@@ -16,6 +16,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
 import { useMantra } from '@/features/mantras/hooks/useMantra';
 import type { Mantra, PracticeSession } from '@devsangam/types';
+import { Sparkles } from 'lucide-react';
 import { useCallback } from 'react';
 import { useParams } from 'react-router';
 
@@ -153,10 +154,6 @@ function ActivePracticeSession({
     playTapTone,
   });
 
-  /*
-   * Om may be toggled back on only when the
-   * overall Sadhana is not paused.
-   */
   const handleOmToggle = useCallback(() => {
     toggleOm(!isPaused);
   }, [isPaused, toggleOm]);
@@ -167,10 +164,6 @@ function ActivePracticeSession({
     return <PracticeSessionLoading />;
   }
 
-  /*
-   * Local completion can happen before the server
-   * has successfully received the completion event.
-   */
   if (localStatus === 'completed') {
     const localCompletedSession: PracticeSession = {
       ...session,
@@ -198,74 +191,115 @@ function ActivePracticeSession({
   }
 
   return (
-    <main className="relative min-h-full overflow-hidden bg-[#07111f] px-3 pb-28 pt-4 text-white sm:px-5 md:pb-8 lg:px-8 lg:py-6">
+    <main className="relative min-h-full overflow-hidden bg-[var(--ds-obsidian)] px-3 pb-28 pt-4 text-[var(--ds-cream)] sm:px-5 md:pb-8 lg:px-7 lg:py-5 xl:px-8">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
       >
-        <div className="absolute left-1/2 top-[32%] size-[520px] -translate-x-1/2 rounded-full bg-amber-400/[0.025] blur-[100px]" />
+        <div className="absolute left-1/2 top-[31%] size-[540px] -translate-x-1/2 rounded-full bg-[#d89a35]/[0.035] blur-[115px]" />
 
-        <div className="absolute right-[-180px] top-[18%] size-[420px] rounded-full border border-amber-400/[0.04]" />
+        <div className="absolute left-[8%] top-[9%] size-[260px] rounded-full bg-[#7b4a1f]/[0.025] blur-[95px]" />
+
+        <div className="absolute right-[-190px] top-[16%] size-[430px] rounded-full border border-[#d89a35]/[0.028]" />
+
+        <div className="absolute bottom-[-240px] left-[-120px] size-[440px] rounded-full border border-white/[0.025]" />
 
         {image ? (
-          <img
-            src={image}
-            alt=""
-            aria-hidden="true"
-            className="absolute -right-20 bottom-0 hidden h-[420px] w-[300px] object-cover opacity-[0.04] blur-[1px] xl:block"
-          />
+          <>
+            <img
+              src={image}
+              alt=""
+              aria-hidden="true"
+              className="absolute -right-24 bottom-[-30px] hidden h-[460px] w-[330px] object-cover opacity-[0.035] blur-[1.5px] xl:block"
+            />
+
+            <div className="absolute -right-20 bottom-0 hidden h-[480px] w-[340px] bg-[linear-gradient(90deg,var(--ds-obsidian),transparent_38%,transparent)] xl:block" />
+          </>
         ) : null}
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[780px]">
-        <PracticeSessionHeader
-          mantra={mantra}
-          currentMalaRound={currentMalaRound}
-          totalMalaRounds={totalMalaRounds}
-          isOffline={isOffline}
-          isBusy={isBusy}
-          onExit={handleExitClick}
-        />
+      <div className="relative z-10 mx-auto w-full max-w-[820px]">
+        <div className="mb-3 flex items-center justify-center gap-2">
+          <Sparkles size={11} strokeWidth={1.7} className="text-[#c88b32]" />
 
-        <PracticeMalaCounter
-          count={count}
-          target={target}
-          progress={progress}
-          isPaused={isPaused}
-          isOffline={isOffline}
-          onChant={handleChantClick}
-        />
+          <p className="text-[8px] font-semibold uppercase tracking-[0.18em] text-[#8b6735]">
+            Digital Japamala
+          </p>
+        </div>
 
-        <PracticeProgressSummary
-          target={target}
-          remaining={remaining}
-          currentMalaRound={currentMalaRound}
-          totalMalaRounds={totalMalaRounds}
-          malaProgressCount={malaProgressCount}
-          elapsedSeconds={elapsedSeconds}
-          syncMessage={syncMessage}
-        />
+        <section className="relative overflow-hidden rounded-[14px] border border-white/[0.07] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_32%),rgba(10,16,24,0.76)] px-3 pb-4 pt-3 shadow-[0_24px_60px_rgba(0,0,0,0.24)] backdrop-blur-sm sm:px-4 sm:pb-5 sm:pt-4">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-[12%] top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(216,154,53,0.24),transparent)]"
+          />
 
-        <PracticeAudioControls
-          omEnabled={omEnabled}
-          omVolume={omVolume}
-          toneEnabled={toneEnabled}
-          toneVolume={toneVolume}
-          onOmToggle={handleOmToggle}
-          onToneToggle={toggleTone}
-          onOmVolumeChange={changeOmVolume}
-          onToneVolumeChange={changeToneVolume}
-        />
+          <PracticeSessionHeader
+            mantra={mantra}
+            currentMalaRound={currentMalaRound}
+            totalMalaRounds={totalMalaRounds}
+            isOffline={isOffline}
+            isBusy={isBusy}
+            onExit={handleExitClick}
+          />
 
-        <PracticeSessionControls
-          hapticEnabled={hapticEnabled}
-          isPaused={isPaused}
-          isBusy={isBusy}
-          isUpdating={isUpdatePending}
-          onHapticToggle={handleHapticToggle}
-          onPauseToggle={handlePauseClick}
-          onReset={handleResetClick}
-        />
+          <div className="mt-3 sm:mt-4">
+            <PracticeMalaCounter
+              count={count}
+              target={target}
+              progress={progress}
+              isPaused={isPaused}
+              isOffline={isOffline}
+              onChant={handleChantClick}
+            />
+          </div>
+
+          <div className="mt-3 sm:mt-4">
+            <PracticeProgressSummary
+              target={target}
+              remaining={remaining}
+              currentMalaRound={currentMalaRound}
+              totalMalaRounds={totalMalaRounds}
+              malaProgressCount={malaProgressCount}
+              elapsedSeconds={elapsedSeconds}
+              syncMessage={syncMessage}
+            />
+          </div>
+
+          <div className="my-4 h-px bg-[linear-gradient(90deg,transparent,rgba(148,163,184,0.10)_18%,rgba(216,154,53,0.12)_50%,rgba(148,163,184,0.10)_82%,transparent)]" />
+
+          <div className="grid gap-3 lg:grid-cols-2">
+            <PracticeAudioControls
+              omEnabled={omEnabled}
+              omVolume={omVolume}
+              toneEnabled={toneEnabled}
+              toneVolume={toneVolume}
+              onOmToggle={handleOmToggle}
+              onToneToggle={toggleTone}
+              onOmVolumeChange={changeOmVolume}
+              onToneVolumeChange={changeToneVolume}
+            />
+
+            <PracticeSessionControls
+              hapticEnabled={hapticEnabled}
+              isPaused={isPaused}
+              isBusy={isBusy}
+              isUpdating={isUpdatePending}
+              onHapticToggle={handleHapticToggle}
+              onPauseToggle={handlePauseClick}
+              onReset={handleResetClick}
+            />
+          </div>
+        </section>
+
+        <div className="mt-3 flex items-center justify-center gap-3 px-4 text-center">
+          <div className="h-px w-10 bg-[linear-gradient(90deg,transparent,rgba(216,154,53,0.2))]" />
+
+          <p className="font-serif text-[8px] tracking-[0.04em] text-[#7b684a]">
+            One chant. One breath. One point of focus.
+          </p>
+
+          <div className="h-px w-10 bg-[linear-gradient(90deg,rgba(216,154,53,0.2),transparent)]" />
+        </div>
       </div>
     </main>
   );

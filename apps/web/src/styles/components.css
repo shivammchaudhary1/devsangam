@@ -1,280 +1,401 @@
-/* @layer components {
-  .ds-card {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.018), transparent 45%), var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-card);
-  }
-
-  .ds-card-interactive {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-  }
-
-  .ds-card-interactive:hover {
-    border-color: rgb(245 158 11 / 0.45);
-    transform: translateY(-1px);
-  }
-
-  .ds-card-interactive[data-selected="true"] {
-    border-color: var(--primary);
-    background:
-      linear-gradient(135deg, rgb(245 158 11 / 0.1), transparent 55%),
-      var(--card);
-    box-shadow: var(--shadow-gold);
-  }
-
-  .ds-primary-button {
-    min-height: 2.75rem;
-    border: 1px solid rgb(229 192 123 / 0.7);
-    border-radius: calc(var(--radius) - 0.15rem);
-    background: linear-gradient(135deg, #f7b531 0%, var(--primary) 48%, #d97706 100%);
-    color: var(--primary-foreground);
-    font-weight: 700;
-    box-shadow: 0 8px 24px rgb(245 158 11 / 0.2), inset 0 1px 0 rgb(255 255 255 / 0.28);
-    transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
-  }
-
-  .ds-primary-button:hover {
-    filter: brightness(1.06);
-    box-shadow: 0 10px 32px rgb(245 158 11 / 0.3), inset 0 1px 0 rgb(255 255 255 / 0.3);
-  }
-
-  .ds-primary-button:active {
-    transform: translateY(1px) scale(0.99);
-  }
-
-  .ds-input {
-    min-height: 2.75rem;
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: calc(var(--radius) - 0.2rem);
-    background: rgb(34 39 54 / 0.72);
-    color: var(--foreground);
-    padding: 0.7rem 0.85rem;
-    transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
-  }
-
-  .ds-input::placeholder {
-    color: color-mix(in srgb, var(--muted-foreground) 76%, transparent);
-  }
-
-  .ds-input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgb(245 158 11 / 0.12);
-    background: var(--secondary);
-    outline: none;
-  }
-
-  .ds-sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    min-height: 2.75rem;
-    padding: 0.65rem 0.8rem;
-    border: 1px solid transparent;
-    border-radius: calc(var(--radius) - 0.2rem);
-    color: var(--muted-foreground);
-    transition: 150ms ease;
-  }
-
-  .ds-sidebar-item:hover {
-    color: var(--foreground);
-    background: rgb(255 255 255 / 0.025);
-  }
-
-  .ds-sidebar-item[data-active="true"] {
-    color: var(--foreground);
-    border-color: rgb(245 158 11 / 0.42);
-    background: linear-gradient(90deg, rgb(245 158 11 / 0.16), rgb(245 158 11 / 0.05));
-    box-shadow: inset 3px 0 0 var(--primary), 0 0 22px rgb(245 158 11 / 0.08);
-  }
-
-  .ds-stat {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.02), transparent), var(--card);
-    padding: 1rem;
-  }
-
-  .ds-stat-value {
-    color: var(--gold-soft);
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
-  }
-
-  .ds-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: rgb(34 39 54 / 0.7);
-    color: var(--muted-foreground);
-    padding: 0.35rem 0.7rem;
-    font-size: 0.8rem;
-  }
-
-  .ds-pill[data-selected="true"] {
-    color: var(--gold-soft);
-    border-color: rgb(245 158 11 / 0.55);
-    background: var(--saffron-soft);
-  }
-
-  .ds-japa-ring {
-    --progress: 0turn;
+@layer components {
+  /*
+   * Page canvas.
+   *
+   * Does not impose spacing/layout.
+   */
+  .ds-page {
     position: relative;
-    display: grid;
-    aspect-ratio: 1;
-    place-items: center;
-    border-radius: 999px;
-    background:
-      radial-gradient(circle, rgb(12 13 18 / 0.98) 0 54%, transparent 55%),
-      conic-gradient(var(--primary) var(--progress), rgb(46 54 72 / 0.8) 0);
-    box-shadow: var(--shadow-gold-strong), inset 0 0 55px rgb(245 158 11 / 0.06);
+
+    min-height: 100%;
+
+    color: var(--ds-cream);
+
     isolation: isolate;
   }
 
-  .ds-japa-ring::before {
-    content: "";
+  /*
+   * Primary elevated panel.
+   *
+   * Used for larger dashboard cards,
+   * dialogs and major content sections.
+   */
+  .ds-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    border: 1px solid var(--ds-border-soft);
+    border-radius: 0.9rem;
+
+    background: var(--ds-gradient-panel);
+
+    box-shadow: var(--ds-shadow-card), var(--ds-shadow-gold-inset);
+  }
+
+  .ds-panel::before {
+    content: '';
+
     position: absolute;
-    inset: 8%;
-    border: 1px solid rgb(229 192 123 / 0.28);
+    inset: 0;
+
+    pointer-events: none;
+
     border-radius: inherit;
+
     background:
-      radial-gradient(circle at center, rgb(245 158 11 / 0.03), transparent 58%),
-      repeating-radial-gradient(circle at center, transparent 0 11px, rgb(229 192 123 / 0.035) 12px 13px);
-    z-index: -1;
+      linear-gradient(120deg, rgb(255 255 255 / 0.022), transparent 28%),
+      radial-gradient(
+        circle at 90% 0%,
+        rgb(216 154 53 / 0.035),
+        transparent 32%
+      );
   }
 
-  .ds-mobile-bottom-nav {
-    background: color-mix(in srgb, var(--background) 88%, transparent);
-    border-top: 1px solid var(--border);
-    backdrop-filter: blur(18px);
+  /*
+   * Lower-emphasis nested surface.
+   */
+  .ds-panel-soft {
+    position: relative;
+
+    border: 1px solid rgb(148 163 184 / 0.075);
+    border-radius: 0.8rem;
+
+    background: var(--ds-gradient-panel-soft);
+
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.018);
   }
 
-  .ds-gold-divider {
+  /*
+   * Reference-style card.
+   *
+   * Compact, crisp and less rounded
+   * than the original DevSangam cards.
+   */
+  .ds-dashboard-card {
+    position: relative;
+
+    border: 1px solid rgb(148 163 184 / 0.1);
+    border-radius: 0.7rem;
+
+    background:
+      linear-gradient(145deg, rgb(255 255 255 / 0.022), transparent 42%),
+      linear-gradient(180deg, #101720 0%, #0c121a 100%);
+
+    box-shadow:
+      0 12px 28px rgb(0 0 0 / 0.22),
+      inset 0 1px 0 rgb(255 255 255 / 0.025);
+
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+  }
+
+  .ds-dashboard-card:hover {
+    border-color: rgb(216 154 53 / 0.18);
+
+    box-shadow:
+      0 16px 34px rgb(0 0 0 / 0.26),
+      0 0 24px rgb(216 154 53 / 0.035),
+      inset 0 1px 0 rgb(255 255 255 / 0.035);
+  }
+
+  /*
+   * Gold gradient typography.
+   */
+  .ds-gold-text {
+    background: var(--ds-gradient-gold-text);
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+  }
+
+  /*
+   * Warm subtle divider.
+   */
+  .ds-gold-line {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgb(212 175 55 / 0.6), transparent);
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(216 154 53 / 0.22) 18%,
+      rgb(239 200 117 / 0.52) 50%,
+      rgb(216 154 53 / 0.22) 82%,
+      transparent
+    );
   }
-} */
-.ds-page {
-  min-height: 100%;
-  color: var(--ds-cream);
-}
 
-.ds-panel {
-  border: 1px solid rgb(46 54 72 / 0.85);
-  border-radius: 1.5rem;
+  /*
+   * Primary gold action.
+   */
+  .ds-gold-button {
+    border: 1px solid rgb(239 200 117 / 0.4);
 
-  background:
-    linear-gradient(145deg, rgb(255 255 255 / 0.025), transparent 45%),
-    rgb(22 25 34 / 0.92);
+    background: var(--ds-gradient-gold);
 
-  box-shadow:
-    var(--ds-shadow-card),
-    inset 0 1px 0 rgb(255 255 255 / 0.025);
-}
+    color: #090b0e;
 
-.ds-panel-soft {
-  border: 1px solid rgb(46 54 72 / 0.65);
-  border-radius: 1.25rem;
-  background: rgb(27 31 42 / 0.7);
-}
+    font-weight: 700;
 
-.ds-gold-text {
-  background: linear-gradient(
-    135deg,
-    #f8ddb1,
-    #e5c07b 40%,
-    #d4af37 75%,
-    #f59e0b
-  );
+    box-shadow:
+      0 8px 22px rgb(216 154 53 / 0.14),
+      inset 0 1px 0 rgb(255 246 220 / 0.3);
 
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease,
+      filter 160ms ease;
+  }
 
-.ds-gold-line {
-  height: 1px;
+  .ds-gold-button:hover {
+    transform: translateY(-1px);
 
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgb(245 158 11 / 0.65),
-    rgb(212 175 55 / 0.35),
-    transparent
-  );
-}
+    filter: brightness(1.055);
 
-.ds-gold-button {
-  border: 1px solid rgb(245 158 11 / 0.55);
+    box-shadow:
+      0 11px 30px rgb(216 154 53 / 0.2),
+      inset 0 1px 0 rgb(255 246 220 / 0.34);
+  }
 
-  background: linear-gradient(135deg, #f59e0b, #d4af37);
+  .ds-gold-button:active {
+    transform: translateY(0) scale(0.99);
+  }
 
-  color: #0c0d12;
+  .ds-gold-button:disabled {
+    cursor: not-allowed;
 
-  box-shadow:
-    0 10px 28px rgb(245 158 11 / 0.16),
-    inset 0 1px 0 rgb(255 255 255 / 0.25);
+    filter: saturate(0.55);
 
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    filter 180ms ease;
-}
+    opacity: 0.48;
+  }
 
-.ds-gold-button:hover {
-  transform: translateY(-1px);
+  /*
+   * Secondary dark action.
+   */
+  .ds-secondary-button {
+    border: 1px solid rgb(148 163 184 / 0.11);
 
-  filter: brightness(1.05);
+    background:
+      linear-gradient(
+        180deg,
+        rgb(255 255 255 / 0.035),
+        rgb(255 255 255 / 0.012)
+      ),
+      #0d131c;
 
-  box-shadow:
-    0 14px 36px rgb(245 158 11 / 0.23),
-    inset 0 1px 0 rgb(255 255 255 / 0.25);
-}
+    color: var(--ds-text);
 
-.ds-gold-button:active {
-  transform: translateY(0);
-}
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.025);
 
-.ds-input {
-  border-color: rgb(46 54 72 / 0.95);
-  background: rgb(12 13 18 / 0.62);
-  color: var(--ds-cream);
+    transition:
+      border-color 160ms ease,
+      background 160ms ease,
+      color 160ms ease,
+      transform 160ms ease;
+  }
 
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
-}
+  .ds-secondary-button:hover {
+    border-color: rgb(216 154 53 / 0.2);
 
-.ds-input:hover {
-  border-color: rgb(148 163 184 / 0.32);
-}
+    background:
+      linear-gradient(180deg, rgb(216 154 53 / 0.055), rgb(216 154 53 / 0.018)),
+      #0d131c;
 
-.ds-input:focus,
-.ds-input:focus-visible {
-  border-color: rgb(245 158 11 / 0.62);
+    color: var(--ds-pale-gold);
+  }
 
-  box-shadow:
-    0 0 0 3px rgb(245 158 11 / 0.08),
-    0 0 24px rgb(245 158 11 / 0.07);
-}
+  .ds-secondary-button:active {
+    transform: scale(0.99);
+  }
 
-.ds-eyebrow {
-  color: var(--ds-gold);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.19em;
-  text-transform: uppercase;
-}
+  /*
+   * Form controls.
+   */
+  .ds-input {
+    border-color: rgb(148 163 184 / 0.13);
 
-.ds-sacred-glow {
-  box-shadow:
-    0 0 0 1px rgb(245 158 11 / 0.12),
-    0 0 50px rgb(245 158 11 / 0.1);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.018), transparent),
+      rgb(7 11 17 / 0.82);
+
+    color: var(--ds-cream);
+
+    box-shadow: inset 0 1px 4px rgb(0 0 0 / 0.16);
+
+    transition:
+      border-color 170ms ease,
+      box-shadow 170ms ease,
+      background 170ms ease;
+  }
+
+  .ds-input::placeholder {
+    color: var(--ds-muted-soft);
+  }
+
+  .ds-input:hover {
+    border-color: rgb(148 163 184 / 0.22);
+  }
+
+  .ds-input:focus,
+  .ds-input:focus-visible {
+    border-color: rgb(216 154 53 / 0.48);
+
+    background:
+      linear-gradient(180deg, rgb(216 154 53 / 0.018), transparent),
+      rgb(7 11 17 / 0.92);
+
+    box-shadow:
+      0 0 0 3px rgb(216 154 53 / 0.065),
+      0 0 22px rgb(216 154 53 / 0.045),
+      inset 0 1px 4px rgb(0 0 0 / 0.16);
+
+    outline: none;
+  }
+
+  /*
+   * Small uppercase dashboard label.
+   */
+  .ds-eyebrow {
+    color: var(--ds-gold);
+
+    font-size: 0.625rem;
+    font-weight: 700;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+  }
+
+  /*
+   * Small status / filter pill.
+   */
+  .ds-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.35rem;
+
+    border: 1px solid rgb(148 163 184 / 0.1);
+    border-radius: 0.5rem;
+
+    background: rgb(255 255 255 / 0.018);
+
+    color: var(--ds-muted);
+
+    transition:
+      color 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .ds-pill:hover {
+    border-color: rgb(148 163 184 / 0.18);
+
+    color: var(--ds-text);
+  }
+
+  .ds-pill[data-selected='true'] {
+    border-color: rgb(216 154 53 / 0.3);
+
+    background: linear-gradient(
+      180deg,
+      rgb(216 154 53 / 0.12),
+      rgb(216 154 53 / 0.045)
+    );
+
+    color: var(--ds-pale-gold);
+
+    box-shadow:
+      inset 0 0 0 1px rgb(216 154 53 / 0.025),
+      0 0 16px rgb(216 154 53 / 0.035);
+  }
+
+  /*
+   * Reference-like numerical styling.
+   */
+  .ds-stat-value {
+    color: var(--ds-soft-gold);
+
+    font-family: 'Cinzel', Georgia, serif;
+
+    font-variant-numeric: tabular-nums;
+
+    font-weight: 600;
+
+    letter-spacing: -0.02em;
+  }
+
+  /*
+   * Muted section heading.
+   */
+  .ds-section-title {
+    color: var(--ds-text);
+
+    font-family: 'Cinzel', Georgia, serif;
+
+    font-weight: 500;
+
+    letter-spacing: 0.01em;
+  }
+
+  /*
+   * Sacred glow utility.
+   *
+   * Keep restrained; reference uses
+   * small warm pools of light rather
+   * than large neon halos.
+   */
+  .ds-sacred-glow {
+    box-shadow:
+      0 0 0 1px rgb(216 154 53 / 0.1),
+      0 0 30px rgb(216 154 53 / 0.075);
+  }
+
+  .ds-sacred-glow-strong {
+    box-shadow:
+      0 0 0 1px rgb(216 154 53 / 0.18),
+      0 0 42px rgb(216 154 53 / 0.14);
+  }
+
+  /*
+   * Fine ornamental frame useful for
+   * spiritual hero elements later.
+   */
+  .ds-sacred-frame {
+    position: relative;
+
+    border: 1px solid rgb(216 154 53 / 0.18);
+
+    background:
+      radial-gradient(
+        circle at center,
+        rgb(216 154 53 / 0.035),
+        transparent 64%
+      ),
+      #0a1018;
+
+    box-shadow:
+      inset 0 0 24px rgb(216 154 53 / 0.025),
+      0 12px 34px rgb(0 0 0 / 0.24);
+  }
+
+  .ds-sacred-frame::before {
+    content: '';
+
+    position: absolute;
+    inset: 4px;
+
+    pointer-events: none;
+
+    border: 1px solid rgb(216 154 53 / 0.07);
+
+    border-radius: inherit;
+  }
 }

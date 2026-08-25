@@ -3,7 +3,7 @@ import {
   MALA_SIZE,
 } from '../utils/practice-session.utils';
 import { PracticeStat } from './PracticeStat';
-import { Clock3 } from 'lucide-react';
+import { Clock3, RefreshCcw } from 'lucide-react';
 import { memo } from 'react';
 
 type PracticeProgressSummaryProps = {
@@ -38,7 +38,7 @@ export const PracticeProgressSummary = memo(function PracticeProgressSummary({
 
   return (
     <>
-      <section className="mx-auto mt-5 grid max-w-xl grid-cols-3 gap-2 sm:gap-3">
+      <section className="mx-auto grid max-w-xl grid-cols-3 gap-2 sm:gap-3">
         <PracticeStat label="Target" value={target.toString()} />
 
         <PracticeStat label="Remaining" value={remaining.toString()} />
@@ -49,46 +49,66 @@ export const PracticeProgressSummary = memo(function PracticeProgressSummary({
         />
       </section>
 
-      <section className="mx-auto mt-3 max-w-xl rounded-xl border border-white/[0.07] bg-[#09121e] px-3 py-3">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-[9px] uppercase tracking-[0.15em] text-slate-600">
-              Current mala progress
+      <section className="mx-auto mt-3 max-w-xl rounded-[10px] border border-white/[0.06] bg-[#090f17] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:px-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="shrink-0">
+            <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-[#5f6772]">
+              Current Mala
             </p>
 
-            <p className="mt-1 text-xs text-slate-300">
+            <p className="mt-1 font-serif text-[11px] text-[#c8b58c]">
               {malaProgressCount} / {MALA_SIZE}
             </p>
           </div>
 
-          <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-white/[0.05]">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-[#b87a20] to-[#f0c45c] transition-[width] duration-200"
-              style={{
-                width: `${malaProgressPercentage}%`,
-              }}
-            />
+          <div className="min-w-0 flex-1">
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.035]">
+              <div
+                className="h-full rounded-full bg-[linear-gradient(90deg,#8f581f,#c98b32_48%,#efc875)] shadow-[0_0_8px_rgba(216,154,53,0.12)] transition-[width] duration-200"
+                style={{
+                  width: `${malaProgressPercentage}%`,
+                }}
+              />
+            </div>
+
+            <div className="mt-1.5 flex items-center justify-between">
+              <span className="text-[7px] text-[#4e5661]">0</span>
+
+              <span className="text-[7px] font-medium text-[#8d7043]">
+                {Math.round(malaProgressPercentage)}%
+              </span>
+
+              <span className="text-[7px] text-[#4e5661]">{MALA_SIZE}</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto mt-3 flex max-w-[200px] items-center justify-center gap-2 rounded-xl border border-white/[0.07] bg-[#09121e] px-4 py-2.5">
-        <Clock3 size={14} className="text-amber-400/70" />
+      <section className="mx-auto mt-3 flex max-w-[210px] items-center justify-center gap-2.5 rounded-[10px] border border-white/[0.06] bg-[#090f17] px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)]">
+        <div className="flex size-7 items-center justify-center rounded-[7px] border border-[#d89a35]/12 bg-[#d89a35]/[0.035]">
+          <Clock3 size={13} strokeWidth={1.6} className="text-[#b88133]" />
+        </div>
 
-        <div className="text-center">
-          <p className="text-[8px] uppercase tracking-[0.15em] text-slate-600">
+        <div className="text-left">
+          <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-[#5f6772]">
             Elapsed Time
           </p>
 
-          <p className="mt-0.5 font-mono text-sm text-slate-200">
+          <p className="mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[#d9d3ca]">
             {formatPracticeDuration(elapsedSeconds)}
           </p>
         </div>
       </section>
 
       {syncMessage ? (
-        <div className="mx-auto mt-3 max-w-xl rounded-xl border border-amber-400/15 bg-amber-400/[0.04] px-3 py-2 text-center text-[10px] leading-5 text-amber-100/60">
-          {syncMessage}
+        <div className="mx-auto mt-3 flex max-w-xl items-start justify-center gap-2 rounded-[9px] border border-[#d89a35]/12 bg-[#d89a35]/[0.03] px-3 py-2 text-center">
+          <RefreshCcw
+            size={11}
+            strokeWidth={1.7}
+            className="mt-1 shrink-0 text-[#a77732]"
+          />
+
+          <p className="text-[8px] leading-5 text-[#806e55]">{syncMessage}</p>
         </div>
       ) : null}
     </>
