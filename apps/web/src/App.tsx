@@ -1,4 +1,5 @@
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { PwaUpdateManager } from '@/components/pwa/PwaUpdateManager';
 import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
 import { RouteLoadingFallback } from '@/components/shared/RouteLoadingFallback';
 import { GuestRoute } from '@/features/auth/components/GuestRoute';
@@ -74,57 +75,67 @@ const InsightsPage = lazy(() =>
 
 function App() {
   return (
-    <Suspense fallback={<RouteLoadingFallback />}>
-      <Routes>
-        <Route element={<GuestRoute />}>
-          <Route path={APP_ROUTES.auth.login} element={<LoginPage />} />
+    <>
+      <PwaUpdateManager />
 
-          <Route path={APP_ROUTES.auth.register} element={<RegisterPage />} />
+      <Suspense fallback={<RouteLoadingFallback />}>
+        <Routes>
+          <Route element={<GuestRoute />}>
+            <Route path={APP_ROUTES.auth.login} element={<LoginPage />} />
+
+            <Route path={APP_ROUTES.auth.register} element={<RegisterPage />} />
+
+            <Route
+              path={APP_ROUTES.auth.forgotPassword}
+              element={<ForgotPasswordPage />}
+            />
+          </Route>
 
           <Route
-            path={APP_ROUTES.auth.forgotPassword}
-            element={<ForgotPasswordPage />}
+            path={APP_ROUTES.auth.resetPassword}
+            element={<ResetPasswordPage />}
           />
-        </Route>
 
-        <Route
-          path={APP_ROUTES.auth.resetPassword}
-          element={<ResetPasswordPage />}
-        />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppShell />}>
+              <Route
+                path={APP_ROUTES.home}
+                element={
+                  <PlaceholderPage
+                    title="Dashboard"
+                    description="Your daily spiritual practice."
+                  />
+                }
+              />
 
-        <Route element={<ProtectedRoute />}>
-          <Route element={<AppShell />}>
-            <Route
-              path={APP_ROUTES.home}
-              element={
-                <PlaceholderPage
-                  title="Dashboard"
-                  description="Your daily spiritual practice."
-                />
-              }
-            />
+              <Route
+                path={APP_ROUTES.practice}
+                element={<PracticeSetupPage />}
+              />
 
-            <Route path={APP_ROUTES.practice} element={<PracticeSetupPage />} />
+              <Route
+                path={APP_ROUTES.practiceSession}
+                element={<PracticeSessionPage />}
+              />
 
-            <Route
-              path={APP_ROUTES.practiceSession}
-              element={<PracticeSessionPage />}
-            />
+              <Route path={APP_ROUTES.insights} element={<InsightsPage />} />
 
-            <Route path={APP_ROUTES.insights} element={<InsightsPage />} />
+              <Route
+                path={APP_ROUTES.library}
+                element={<MantraLibraryPage />}
+              />
 
-            <Route path={APP_ROUTES.library} element={<MantraLibraryPage />} />
+              <Route
+                path={APP_ROUTES.libraryDetail}
+                element={<MantraDetailPage />}
+              />
 
-            <Route
-              path={APP_ROUTES.libraryDetail}
-              element={<MantraDetailPage />}
-            />
-
-            <Route path={APP_ROUTES.profile} element={<ProfilePage />} />
+              <Route path={APP_ROUTES.profile} element={<ProfilePage />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Suspense>
+        </Routes>
+      </Suspense>
+    </>
   );
 }
 

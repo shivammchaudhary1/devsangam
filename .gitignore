@@ -56,3 +56,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Vite PWA development output
+apps/web/dev-dist/
