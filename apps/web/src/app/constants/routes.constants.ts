@@ -1,18 +1,27 @@
 export const APP_ROUTES = {
   home: '/',
+
   practice: '/practice',
+
   practiceSession: '/practice/:mantraSlug/session/:sessionId',
+
   insights: '/insights',
 
   library: '/library',
+
   libraryDetail: '/library/:slug',
 
   profile: '/profile',
 
+  settings: '/settings',
+
   auth: {
     login: '/auth/login',
+
     register: '/auth/register',
+
     forgotPassword: '/auth/forgot-password',
+
     resetPassword: '/auth/reset-password',
   },
 } as const;

@@ -18,6 +18,11 @@ export interface UpdateCurrentUserPayload {
   preferences?: Partial<AuthUser['preferences']>;
 }
 
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export interface ForgotPasswordResponse {
   success: true;
 
@@ -31,6 +36,14 @@ export interface ResetPasswordResponse {
 
   data: {
     passwordReset: boolean;
+  };
+}
+
+export interface ChangePasswordResponse {
+  success: true;
+
+  data: {
+    passwordChanged: boolean;
   };
 }
 
@@ -78,6 +91,14 @@ export async function updateCurrentUser(
   });
 
   return response.data.user;
+}
+
+export function changeCurrentUserPassword(payload: ChangePasswordPayload) {
+  return apiRequest<ChangePasswordResponse>('/users/me/password', {
+    method: 'PATCH',
+
+    body: JSON.stringify(payload),
+  });
 }
 
 export function forgotPassword(email: string) {

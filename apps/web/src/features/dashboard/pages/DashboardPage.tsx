@@ -102,7 +102,20 @@ export function DashboardPage() {
 
   const weeklyActivity = overview?.dailyActivity ?? [];
 
+  /*
+   * Insights is the authoritative
+   * source for practice streaks.
+   *
+   * The authenticated user object
+   * contains legacy cached streak
+   * fields that are not updated by
+   * practice completion.
+   */
+  const currentStreak = overview?.summary.currentStreakDays ?? 0;
+
   const overallProgress = getWeeklyConsistency(weeklyActivity);
+
+  const overviewUnavailable = isOverviewLoading || isOverviewError;
 
   return (
     <main className="relative min-h-full overflow-hidden bg-[var(--ds-obsidian)] px-4 pb-28 pt-5 text-[var(--ds-cream)] md:px-6 md:pb-8 md:pt-6 lg:px-8">
@@ -114,14 +127,26 @@ export function DashboardPage() {
           timezone={timezone}
         />
 
-        <MobileStreakBar currentStreak={user?.streak.current ?? 0} />
+        <MobileStreakBar
+          currentStreak={currentStreak}
+          unavailable={overviewUnavailable}
+        />
 
         <section className="mt-5 hidden grid-cols-3 gap-3 md:grid">
-          <DailyStreakCard currentStreak={user?.streak.current ?? 0} />
+          <DailyStreakCard
+            currentStreak={currentStreak}
+            unavailable={overviewUnavailable}
+          />
 
-          <TodaysPracticeCard activity={todayActivity} />
+          <TodaysPracticeCard
+            activity={todayActivity}
+            unavailable={overviewUnavailable}
+          />
 
-          <OverallProgressCard progress={overallProgress} />
+          <OverallProgressCard
+            progress={overallProgress}
+            unavailable={overviewUnavailable}
+          />
         </section>
 
         <section className="mt-3 grid items-start gap-3 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
@@ -138,7 +163,10 @@ export function DashboardPage() {
 
           <div className="space-y-3">
             <div className="md:hidden">
-              <MobileTodaySummary activity={todayActivity} />
+              <MobileTodaySummary
+                activity={todayActivity}
+                unavailable={overviewUnavailable}
+              />
             </div>
 
             <RecentSessionsCard
@@ -219,9 +247,10 @@ function DesktopDashboardHeader({
 
 type MobileStreakBarProps = {
   currentStreak: number;
+  unavailable: boolean;
 };
 
-function MobileStreakBar({ currentStreak }: MobileStreakBarProps) {
+function MobileStreakBar({ currentStreak, unavailable }: MobileStreakBarProps) {
   return (
     <section className="flex min-h-[48px] items-center justify-between rounded-[9px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] px-4 shadow-[var(--ds-shadow-card)] md:hidden">
       <div className="flex items-center gap-2.5">
@@ -232,7 +261,7 @@ function MobileStreakBar({ currentStreak }: MobileStreakBarProps) {
         />
 
         <span className="font-serif text-[19px] text-[var(--ds-soft-gold)]">
-          {currentStreak}
+          {unavailable ? '—' : currentStreak}
         </span>
 
         <span className="text-[11px] text-[var(--ds-muted)]">Day Streak</span>
@@ -247,9 +276,10 @@ function MobileStreakBar({ currentStreak }: MobileStreakBarProps) {
 
 type DailyStreakCardProps = {
   currentStreak: number;
+  unavailable: boolean;
 };
 
-function DailyStreakCard({ currentStreak }: DailyStreakCardProps) {
+function DailyStreakCard({ currentStreak, unavailable }: DailyStreakCardProps) {
   return (
     <article className="relative h-[142px] overflow-hidden rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] px-4 py-4 shadow-[var(--ds-shadow-card)]">
       <div
@@ -269,7 +299,7 @@ function DailyStreakCard({ currentStreak }: DailyStreakCardProps) {
         />
 
         <span className="font-serif text-[32px] leading-none text-[var(--ds-soft-gold)]">
-          {currentStreak}
+          {unavailable ? '—' : currentStreak}
         </span>
       </div>
 
@@ -286,10 +316,16 @@ function DailyStreakCard({ currentStreak }: DailyStreakCardProps) {
 
 type TodaysPracticeCardProps = {
   activity: DailyPracticeActivity | null;
+  unavailable: boolean;
 };
 
-function TodaysPracticeCard({ activity }: TodaysPracticeCardProps) {
-  const minutes = Math.round((activity?.activeDurationSeconds ?? 0) / 60);
+function TodaysPracticeCard({
+  activity,
+  unavailable,
+}: TodaysPracticeCardProps) {
+  const hasPractice = Boolean(
+    activity && (activity.chants > 0 || activity.activeDurationSeconds > 0)
+  );
 
   return (
     <article className="h-[142px] rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] px-4 py-4 shadow-[var(--ds-shadow-card)]">
@@ -300,25 +336,35 @@ function TodaysPracticeCard({ activity }: TodaysPracticeCardProps) {
       <div className="mt-4 grid grid-cols-3 divide-x divide-white/[0.055]">
         <PracticeMetric
           icon={<Clock3 size={16} strokeWidth={1.6} />}
-          value={formatNumber(minutes)}
+          value={
+            unavailable
+              ? '—'
+              : formatMinutesMetric(activity?.activeDurationSeconds ?? 0)
+          }
           label="Minutes"
         />
 
         <PracticeMetric
           icon={<Sparkles size={16} strokeWidth={1.6} />}
-          value={formatNumber(activity?.chants ?? 0)}
+          value={unavailable ? '—' : formatNumber(activity?.chants ?? 0)}
           label="Chants"
         />
 
         <PracticeMetric
           icon={<Target size={16} strokeWidth={1.6} />}
-          value={formatNumber(activity?.completedMalas ?? 0)}
+          value={
+            unavailable ? '—' : formatNumber(activity?.completedMalas ?? 0)
+          }
           label="Malas"
         />
       </div>
 
       <p className="mt-4 text-center text-[10px] font-medium text-[var(--ds-gold)]">
-        Great start to your day!
+        {unavailable
+          ? 'Practice data unavailable.'
+          : hasPractice
+            ? 'Great start to your day!'
+            : 'Your next Sadhana begins here.'}
       </p>
     </article>
   );
@@ -346,9 +392,13 @@ function PracticeMetric({ icon, value, label }: PracticeMetricProps) {
 
 type OverallProgressCardProps = {
   progress: number;
+  unavailable: boolean;
 };
 
-function OverallProgressCard({ progress }: OverallProgressCardProps) {
+function OverallProgressCard({
+  progress,
+  unavailable,
+}: OverallProgressCardProps) {
   return (
     <article className="h-[142px] rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] px-4 py-4 shadow-[var(--ds-shadow-card)]">
       <p className="text-center text-[11px] font-medium text-[var(--ds-muted)]">
@@ -356,7 +406,11 @@ function OverallProgressCard({ progress }: OverallProgressCardProps) {
       </p>
 
       <div className="mt-2.5 flex justify-center">
-        <ProgressRing progress={progress} size={78} value={`${progress}%`} />
+        <ProgressRing
+          progress={unavailable ? 0 : progress}
+          size={78}
+          value={unavailable ? '—' : `${progress}%`}
+        />
       </div>
 
       <p className="mt-2 text-center text-[9px] text-[var(--ds-muted-soft)]">
@@ -368,11 +422,13 @@ function OverallProgressCard({ progress }: OverallProgressCardProps) {
 
 type MobileTodaySummaryProps = {
   activity: DailyPracticeActivity | null;
+  unavailable: boolean;
 };
 
-function MobileTodaySummary({ activity }: MobileTodaySummaryProps) {
-  const minutes = Math.round((activity?.activeDurationSeconds ?? 0) / 60);
-
+function MobileTodaySummary({
+  activity,
+  unavailable,
+}: MobileTodaySummaryProps) {
   return (
     <article className="rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
       <div className="border-b border-white/[0.055] px-4 py-3">
@@ -384,19 +440,25 @@ function MobileTodaySummary({ activity }: MobileTodaySummaryProps) {
       <div className="grid grid-cols-3 divide-x divide-white/[0.055] px-3 py-4">
         <PracticeMetric
           icon={<Clock3 size={15} strokeWidth={1.6} />}
-          value={formatNumber(minutes)}
+          value={
+            unavailable
+              ? '—'
+              : formatMinutesMetric(activity?.activeDurationSeconds ?? 0)
+          }
           label="Minutes"
         />
 
         <PracticeMetric
           icon={<Sparkles size={15} strokeWidth={1.6} />}
-          value={formatNumber(activity?.chants ?? 0)}
+          value={unavailable ? '—' : formatNumber(activity?.chants ?? 0)}
           label="Chants"
         />
 
         <PracticeMetric
           icon={<Target size={15} strokeWidth={1.6} />}
-          value={formatNumber(activity?.completedMalas ?? 0)}
+          value={
+            unavailable ? '—' : formatNumber(activity?.completedMalas ?? 0)
+          }
           label="Malas"
         />
       </div>
@@ -587,11 +649,6 @@ function RecentSessionRow({ session, mantra }: RecentSessionRowProps) {
             />
           </div>
         )}
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-black/10"
-        />
       </div>
 
       <div className="min-w-0 flex-1">
@@ -633,10 +690,8 @@ function WeeklyPracticeCard({
   isLoading,
   isError,
 }: WeeklyPracticeCardProps) {
-  const maxMinutes = Math.max(
-    ...activity.map((entry) =>
-      Math.max(0, Math.round(entry.activeDurationSeconds / 60))
-    ),
+  const maxSeconds = Math.max(
+    ...activity.map((entry) => Math.max(0, entry.activeDurationSeconds)),
     1
   );
 
@@ -657,13 +712,9 @@ function WeeklyPracticeCard({
           <DashboardMessage>
             Weekly activity could not be refreshed.
           </DashboardMessage>
-        ) : activity.length === 0 ? (
-          <DashboardMessage>
-            Weekly activity will appear after you practice.
-          </DashboardMessage>
         ) : (
           <div className="relative h-[135px]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[24px] flex flex-col justify-between">
+            <div className="pointer-events-none absolute inset-x-0 bottom-[24px] top-0 flex flex-col justify-between">
               {[0, 1, 2, 3].map((line) => (
                 <div key={line} className="border-t border-white/[0.035]" />
               ))}
@@ -671,12 +722,12 @@ function WeeklyPracticeCard({
 
             <div className="relative flex h-full items-end justify-between gap-2">
               {activity.map((entry) => {
-                const minutes = Math.round(entry.activeDurationSeconds / 60);
+                const seconds = entry.activeDurationSeconds;
 
                 const barHeight =
-                  minutes === 0
+                  seconds === 0
                     ? 2
-                    : Math.max(8, Math.round((minutes / maxMinutes) * 98));
+                    : Math.max(8, Math.round((seconds / maxSeconds) * 98));
 
                 return (
                   <div
@@ -687,9 +738,9 @@ function WeeklyPracticeCard({
                       className="w-full max-w-[22px] rounded-t-[3px] bg-[linear-gradient(180deg,var(--ds-soft-gold)_0%,var(--ds-amber)_48%,var(--ds-bronze)_100%)] shadow-[0_0_10px_rgba(216,154,53,0.08)]"
                       style={{
                         height: `${barHeight}px`,
-                        opacity: minutes > 0 ? 0.9 : 0.22,
+                        opacity: seconds > 0 ? 0.9 : 0.22,
                       }}
-                      title={`${minutes} minutes`}
+                      title={formatPracticeDuration(seconds)}
                     />
 
                     <span className="mt-2 text-[9px] text-[var(--ds-muted)]">
@@ -928,6 +979,50 @@ function getWeeklyConsistency(activity: DailyPracticeActivity[]) {
   return Math.min(100, Math.round((activeDays / WEEK_LENGTH) * 100));
 }
 
+function formatMinutesMetric(totalSeconds: number) {
+  if (totalSeconds <= 0) {
+    return '0';
+  }
+
+  if (totalSeconds < 60) {
+    return '<1';
+  }
+
+  return String(Math.floor(totalSeconds / 60));
+}
+
+function formatPracticeDuration(totalSeconds: number) {
+  if (totalSeconds <= 0) {
+    return 'No practice';
+  }
+
+  if (totalSeconds < 60) {
+    return `${totalSeconds}s`;
+  }
+
+  const minutes = Math.floor(totalSeconds / 60);
+
+  const seconds = totalSeconds % 60;
+
+  if (minutes < 60) {
+    if (seconds === 0) {
+      return `${minutes}m`;
+    }
+
+    return `${minutes}m ${seconds}s`;
+  }
+
+  const hours = Math.floor(minutes / 60);
+
+  const remainingMinutes = minutes % 60;
+
+  if (remainingMinutes === 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h ${remainingMinutes}m`;
+}
+
 function formatNumber(value: number) {
   return new Intl.NumberFormat('en-US').format(Math.max(0, Math.round(value)));
 }
@@ -975,7 +1070,7 @@ function getDateKey(date: Date, timezone: string) {
       return `${year}-${month}-${day}`;
     }
   } catch {
-    // Use the device-local date below.
+    // Use local date below.
   }
 
   const year = date.getFullYear();
@@ -988,7 +1083,15 @@ function getDateKey(date: Date, timezone: string) {
 }
 
 function formatDurationCompact(totalSeconds: number) {
-  const minutes = Math.max(0, Math.round(totalSeconds / 60));
+  if (totalSeconds <= 0) {
+    return '0m';
+  }
+
+  if (totalSeconds < 60) {
+    return '<1m';
+  }
+
+  const minutes = Math.floor(totalSeconds / 60);
 
   if (minutes < 60) {
     return `${minutes}m`;
@@ -1060,14 +1163,16 @@ function buildDistributionEntries(
 
   const primaryEntries = sorted.slice(0, 3);
 
-  const entries: DistributionEntry[] = primaryEntries.map((item) => {
+  const entries = primaryEntries.map((item): DistributionEntry => {
     const mantra = mantras.find(
       (candidate) => candidate.slug === item.mantraSlug
     );
 
     return {
       label: mantra?.title ?? formatMantraSlug(item.mantraSlug),
+
       chants: item.totalChants,
+
       percentage: Math.round((item.totalChants / totalChants) * 100),
     };
   });
@@ -1079,7 +1184,9 @@ function buildDistributionEntries(
   if (otherChants > 0) {
     entries.push({
       label: 'Other Mantras',
+
       chants: otherChants,
+
       percentage: Math.round((otherChants / totalChants) * 100),
     });
   }

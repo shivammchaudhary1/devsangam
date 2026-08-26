@@ -72,6 +72,12 @@ const ProfilePage = lazy(() =>
   }))
 );
 
+const SettingsPage = lazy(() =>
+  import('@/features/settings/pages/SettingsPage').then((module) => ({
+    default: module.SettingsPage,
+  }))
+);
+
 const InsightsPage = lazy(() =>
   import('@/features/insights/pages/InsightsPage').then((module) => ({
     default: module.InsightsPage,
@@ -128,6 +134,8 @@ function App() {
               />
 
               <Route path={APP_ROUTES.profile} element={<ProfilePage />} />
+
+              <Route path={APP_ROUTES.settings} element={<SettingsPage />} />
             </Route>
           </Route>
         </Routes>
