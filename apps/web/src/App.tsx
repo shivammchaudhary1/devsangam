@@ -1,6 +1,5 @@
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import { PwaUpdateManager } from '@/components/pwa/PwaUpdateManager';
-import { PlaceholderPage } from '@/components/shared/PlaceholderPage';
 import { RouteLoadingFallback } from '@/components/shared/RouteLoadingFallback';
 import { GuestRoute } from '@/features/auth/components/GuestRoute';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
@@ -10,6 +9,12 @@ import { Route, Routes } from 'react-router';
 const AppShell = lazy(() =>
   import('@/components/layout/AppShell').then((module) => ({
     default: module.AppShell,
+  }))
+);
+
+const DashboardPage = lazy(() =>
+  import('@/features/dashboard/pages/DashboardPage').then((module) => ({
+    default: module.DashboardPage,
   }))
 );
 
@@ -98,15 +103,7 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route element={<AppShell />}>
-              <Route
-                path={APP_ROUTES.home}
-                element={
-                  <PlaceholderPage
-                    title="Dashboard"
-                    description="Your daily spiritual practice."
-                  />
-                }
-              />
+              <Route path={APP_ROUTES.home} element={<DashboardPage />} />
 
               <Route
                 path={APP_ROUTES.practice}

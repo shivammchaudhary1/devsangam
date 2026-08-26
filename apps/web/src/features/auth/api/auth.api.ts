@@ -12,6 +12,28 @@ export interface RegisterPayload {
   password: string;
 }
 
+export interface UpdateCurrentUserPayload {
+  name?: string;
+
+  preferences?: Partial<AuthUser['preferences']>;
+}
+
+export interface ForgotPasswordResponse {
+  success: true;
+
+  data: {
+    message: string;
+  };
+}
+
+export interface ResetPasswordResponse {
+  success: true;
+
+  data: {
+    passwordReset: boolean;
+  };
+}
+
 export function loginUser(payload: LoginPayload) {
   return apiRequest<AuthResponse>('/auth/login', {
     method: 'POST',
@@ -46,6 +68,18 @@ export async function getCurrentUser(): Promise<AuthUser> {
   return response.data.user;
 }
 
+export async function updateCurrentUser(
+  payload: UpdateCurrentUserPayload
+): Promise<AuthUser> {
+  const response = await apiRequest<AuthResponse>('/users/me', {
+    method: 'PATCH',
+
+    body: JSON.stringify(payload),
+  });
+
+  return response.data.user;
+}
+
 export function forgotPassword(email: string) {
   return apiRequest<ForgotPasswordResponse>('/auth/forgot-password', {
     method: 'POST',
@@ -69,20 +103,4 @@ export function resetPassword(token: string, password: string) {
       password,
     }),
   });
-}
-
-export interface ForgotPasswordResponse {
-  success: true;
-
-  data: {
-    message: string;
-  };
-}
-
-export interface ResetPasswordResponse {
-  success: true;
-
-  data: {
-    passwordReset: boolean;
-  };
 }
