@@ -1,15 +1,17 @@
 @import 'tailwindcss';
 
-@import '@fontsource/plus-jakarta-sans/400.css';
-@import '@fontsource/plus-jakarta-sans/500.css';
-@import '@fontsource/plus-jakarta-sans/600.css';
-@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/latin-400.css';
+@import '@fontsource/plus-jakarta-sans/latin-500.css';
+@import '@fontsource/plus-jakarta-sans/latin-600.css';
+@import '@fontsource/plus-jakarta-sans/latin-700.css';
 
-@import '@fontsource/cinzel/500.css';
-@import '@fontsource/cinzel/600.css';
+@import '@fontsource/cinzel/latin-500.css';
+@import '@fontsource/cinzel/latin-600.css';
+@import '@fontsource/cinzel/latin-700.css';
 
-@import '@fontsource/noto-serif-devanagari/400.css';
-@import '@fontsource/noto-serif-devanagari/600.css';
+@import '@fontsource/noto-serif-devanagari/devanagari-400.css';
+@import '@fontsource/noto-serif-devanagari/devanagari-500.css';
+@import '@fontsource/noto-serif-devanagari/devanagari-600.css';
 
 @import './styles/theme.css';
 @import './styles/globals.css';

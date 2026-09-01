@@ -12,12 +12,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
 
-      includeAssets: [
-        'icons.svg',
-        'pwa-192x192.png',
-        'pwa-512x512.png',
-        'pwa-maskable-512x512.png',
-      ],
+      includeManifestIcons: false,
 
       manifest: {
         id: '/',
@@ -124,7 +119,7 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
 });
