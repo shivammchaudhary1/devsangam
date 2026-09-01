@@ -11,10 +11,11 @@
     "lint:fix": "eslint . --fix",
     "start": "node --env-file-if-exists=.env dist/server.js",
     "seed:mantras": "node --env-file-if-exists=.env src/scripts/seed-mantras.ts",
-    "sync:mantra-indexes": "node --env-file-if-exists=.env src/scripts/sync-mantra-indexes.ts"
+    "sync:mantra-indexes": "node --env-file-if-exists=.env src/scripts/sync-mantra-indexes.ts",
+    "sync:indexes": "node --env-file-if-exists=.env src/scripts/sync-indexes.ts"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
+    "@eslint/js": "^10.9.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",

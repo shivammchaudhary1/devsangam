@@ -163,3 +163,51 @@ Dexie / IndexedDB
 vite-plugin-pwa
 
 //check
+
+
+
+
+
+| Metric           |   Earlier Phase 8 |               Current |
+| ---------------- | ----------------: | --------------------: |
+| Production build |            ~50 MB |            **~15 MB** |
+| PWA precache     |        12,654 KiB |      **3,094.81 KiB** |
+| PWA entries      |              113+ |                **81** |
+| Om audio         |           38.9 MB |          **11.66 MB** |
+| Logo             |            491 KB |             **27 KB** |
+| Fonts            | 48 files / 812 KB | **20 files / 600 KB** |
+| Main CSS         |         206.91 KB |         **160.37 KB** |
+| CSS gzip         |          44.82 KB |          **25.89 KB** |
+| Total JS         |                 — |            **809 KB** |
+
+
+| Step      | Work                                                                                       | Status                           |
+| --------- | ------------------------------------------------------------------------------------------ | -------------------------------- |
+| 8.01–8.24 | Architecture foundation, page refactors, shared utilities, Toast, loading/state foundation | DONE                             |
+| 8.25      | Remaining PNG investigation                                                                | DONE                             |
+| 8.26      | Old PNG cleanup                                                                            | DONE                             |
+| 8.27      | Logo optimization + favicon                                                                | DONE                             |
+| 8.28      | Om audio inspection                                                                        | DONE                             |
+| 8.29      | Om audio optimization                                                                      | DONE                             |
+| 8.30      | Audio loading behavior                                                                     | DONE                             |
+| 8.31      | PWA cache optimization                                                                     | DONE                             |
+| 8.32      | Font optimization                                                                          | DONE                             |
+| **8.33**  | **JavaScript bundle optimization**                                                         | **IN PROGRESS — audit complete** |
+| 8.34      | React render-performance audit                                                             | NOT STARTED                      |
+| 8.35      | TanStack Query optimization                                                                | NOT STARTED                      |
+| 8.36      | Remaining loading-state migrations                                                         | NOT STARTED                      |
+| 8.37      | API performance audit                                                                      | NOT STARTED                      |
+| 8.38      | MongoDB index optimization                                                                 | NOT STARTED                      |
+| 8.39      | Mongoose `lean()` / projections                                                            | NOT STARTED                      |
+| 8.40      | Mantra endpoint optimization                                                               | NOT STARTED                      |
+| 8.41      | HTTP/server optimization                                                                   | NOT STARTED                      |
+| 8.42      | Full performance rebaseline                                                                | NOT STARTED                      |
+| 8.43      | Extended profile foundation                                                                | NOT STARTED                      |
+| 8.44      | Extended profile schema/types                                                              | NOT STARTED                      |
+| 8.45      | Extended profile API                                                                       | NOT STARTED                      |
+| 8.46      | Profile photo/S3 architecture                                                              | NOT STARTED                      |
+| 8.47      | Extended profile UI                                                                        | NOT STARTED                      |
+| 8.48      | Profile/privacy review                                                                     | NOT STARTED                      |
+| 8.49      | Full regression QA                                                                         | NOT STARTED                      |
+| 8.50      | Final lint/typecheck/build/diff                                                            | NOT STARTED                      |
+| 8.51      | Final commit, push, merge, production deploy                                               | NOT STARTED                      |

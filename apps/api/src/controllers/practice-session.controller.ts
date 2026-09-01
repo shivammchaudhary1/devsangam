@@ -115,7 +115,8 @@ export async function createPracticeSession(
     .select('-__v')
     .sort({
       updatedAt: -1,
-    });
+    })
+    .lean();
 
   if (existingSession) {
     response.status(200).json({
@@ -148,7 +149,9 @@ export async function createPracticeSession(
   const mantra = await MantraModel.findOne({
     slug: normalizedSlug,
     isPublished: true,
-  }).select('_id slug');
+  })
+    .select('_id slug')
+    .lean();
 
   if (!mantra) {
     throw new AppError(404, 'MANTRA_NOT_FOUND', 'Mantra not found.');
@@ -186,7 +189,8 @@ export async function getPracticeSessions(
     .select('-__v')
     .sort({
       createdAt: -1,
-    });
+    })
+    .lean();
 
   response.status(200).json({
     success: true,
