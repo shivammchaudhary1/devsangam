@@ -59,3 +59,7 @@ dist-ssr
 
 # Vite PWA development output
 apps/web/dev-dist/
+
+
+#todo
+todo.md

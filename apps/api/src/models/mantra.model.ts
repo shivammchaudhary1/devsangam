@@ -1,4 +1,4 @@
-import { type InferSchemaType,model, Schema } from 'mongoose';
+import { type InferSchemaType, model, Schema } from 'mongoose';
 
 const mantraSchema = new Schema(
   {
@@ -85,6 +85,11 @@ const mantraSchema = new Schema(
     timestamps: true,
   }
 );
+
+mantraSchema.index({
+  isPublished: 1,
+  title: 1,
+});
 
 mantraSchema.index(
   {

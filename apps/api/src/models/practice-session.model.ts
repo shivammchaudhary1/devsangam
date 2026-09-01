@@ -109,17 +109,22 @@ practiceSessionSchema.index({
   createdAt: -1,
 });
 
-/*
- * Phase 5 analytics index.
- *
- * Insights starts by filtering completed
- * sessions for one user and then uses
- * completedAt for date analytics.
- */
 practiceSessionSchema.index({
   userId: 1,
   status: 1,
   completedAt: -1,
+});
+
+practiceSessionSchema.index({
+  userId: 1,
+  status: 1,
+  updatedAt: -1,
+});
+
+practiceSessionSchema.index({
+  userId: 1,
+  startedAt: -1,
+  _id: -1,
 });
 
 export type PracticeSessionDocument = InferSchemaType<

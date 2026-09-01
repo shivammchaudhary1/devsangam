@@ -1,4 +1,4 @@
-import authBackgroundImage from '@/assets/Images/background-image.png';
+import authBackgroundImage from '@/assets/Images/background-image.webp';
 
 export const AUTH_ASSETS = {
   background: authBackgroundImage,
