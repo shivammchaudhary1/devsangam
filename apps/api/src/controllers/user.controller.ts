@@ -1,6 +1,10 @@
 import { AuthSessionModel } from '../models/auth-session.model.ts';
 import { PasswordResetTokenModel } from '../models/password-reset-token.model.ts';
 import { UserModel } from '../models/user.model.ts';
+import {
+  deleteProfileAvatar,
+  uploadProfileAvatar,
+} from '../services/avatar.service.ts';
 import { AppError } from '../utils/app-error.ts';
 import { hashPassword, verifyPassword } from '../utils/password.ts';
 import { serializeUser } from '../utils/serialize-user.ts';
@@ -63,10 +67,6 @@ export async function updateMe(request: Request, response: Response) {
     user.name = input.name;
   }
 
-  if (input.avatar !== undefined) {
-    user.avatar = input.avatar;
-  }
-
   if (input.bio !== undefined) {
     user.bio = input.bio;
   }
@@ -112,6 +112,86 @@ export async function updateMe(request: Request, response: Response) {
   }
 
   await user.save();
+
+  response.json({
+    success: true,
+
+    data: {
+      user: serializeUser(user),
+    },
+  });
+}
+
+export async function uploadMyAvatar(request: Request, response: Response) {
+  const userId = getAuthenticatedUserId(request);
+
+  if (!request.file) {
+    throw new AppError(400, 'AVATAR_REQUIRED', 'A profile photo is required.');
+  }
+
+  const user = await UserModel.findById(userId).select('+avatarPublicId');
+
+  if (!user) {
+    throw new AppError(
+      401,
+      'USER_NOT_FOUND',
+      'Authenticated user no longer exists.'
+    );
+  }
+
+  const uploadedAvatar = await uploadProfileAvatar({
+    userId,
+
+    buffer: request.file.buffer,
+  });
+
+  user.avatar = uploadedAvatar.avatarUrl;
+  user.avatarPublicId = uploadedAvatar.publicId;
+
+  await user.save();
+
+  response.json({
+    success: true,
+
+    data: {
+      user: serializeUser(user),
+    },
+  });
+}
+
+export async function deleteMyAvatar(request: Request, response: Response) {
+  const userId = getAuthenticatedUserId(request);
+
+  const user = await UserModel.findById(userId).select('+avatarPublicId');
+
+  if (!user) {
+    throw new AppError(
+      401,
+      'USER_NOT_FOUND',
+      'Authenticated user no longer exists.'
+    );
+  }
+
+  const avatarPublicId = user.avatarPublicId;
+
+  user.avatar = null;
+  user.avatarPublicId = null;
+
+  await user.save();
+
+  /*
+   * Database state is authoritative.
+   * If Cloudinary deletion temporarily
+   * fails, do not restore a removed avatar
+   * to the user's profile.
+   */
+  if (avatarPublicId) {
+    try {
+      await deleteProfileAvatar(avatarPublicId);
+    } catch (error) {
+      console.error('Cloudinary avatar cleanup failed:', error);
+    }
+  }
 
   response.json({
     success: true,

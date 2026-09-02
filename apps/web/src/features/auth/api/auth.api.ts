@@ -19,8 +19,6 @@ export interface RegisterPayload {
 export interface UpdateCurrentUserPayload {
   name?: string;
 
-  avatar?: string | null;
-
   bio?: string | null;
 
   intention?: ProfileIntention | null;
@@ -98,6 +96,28 @@ export async function updateCurrentUser(
     method: 'PATCH',
 
     body: JSON.stringify(payload),
+  });
+
+  return response.data.user;
+}
+
+export async function uploadCurrentUserAvatar(file: File): Promise<AuthUser> {
+  const formData = new FormData();
+
+  formData.append('avatar', file);
+
+  const response = await apiRequest<AuthResponse>('/users/me/avatar', {
+    method: 'POST',
+
+    body: formData,
+  });
+
+  return response.data.user;
+}
+
+export async function deleteCurrentUserAvatar(): Promise<AuthUser> {
+  const response = await apiRequest<AuthResponse>('/users/me/avatar', {
+    method: 'DELETE',
   });
 
   return response.data.user;

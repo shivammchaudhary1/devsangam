@@ -64,13 +64,6 @@ export const updateProfileSchema = z
       .max(80, 'Name is too long.')
       .optional(),
 
-    avatar: z
-      .union([
-        z.string().trim().url('Avatar must be a valid URL.').max(500),
-        z.null(),
-      ])
-      .optional(),
-
     bio: z
       .union([
         z.string().trim().max(240, 'Bio cannot exceed 240 characters.'),
@@ -85,7 +78,6 @@ export const updateProfileSchema = z
   .refine(
     (input) =>
       input.name !== undefined ||
-      input.avatar !== undefined ||
       input.bio !== undefined ||
       input.intention !== undefined ||
       input.preferences !== undefined,

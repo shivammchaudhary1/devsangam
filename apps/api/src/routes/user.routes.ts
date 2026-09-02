@@ -5,9 +5,12 @@ import {
 } from '../controllers/favorite.controller.ts';
 import {
   changePassword,
+  deleteMyAvatar,
   getMe,
   updateMe,
+  uploadMyAvatar,
 } from '../controllers/user.controller.ts';
+import { uploadAvatarFile } from '../middleware/avatar-upload.ts';
 import { requireActiveSession } from '../middleware/require-active-session.ts';
 import { requireAuth } from '../middleware/require-auth.ts';
 import { validateBody } from '../middleware/validate-body.ts';
@@ -23,9 +26,21 @@ userRouter.get('/me', getMe);
 
 userRouter.patch('/me', validateBody(updateProfileSchema), updateMe);
 
+userRouter.post(
+  '/me/avatar',
+
+  uploadAvatarFile,
+
+  uploadMyAvatar
+);
+
+userRouter.delete('/me/avatar', deleteMyAvatar);
+
 userRouter.patch(
   '/me/password',
+
   validateBody(changePasswordSchema),
+
   changePassword
 );
 

@@ -30,6 +30,14 @@ const userSchema = new Schema(
       maxlength: 500,
     },
 
+    avatarPublicId: {
+      type: String,
+      default: null,
+      trim: true,
+      maxlength: 500,
+      select: false,
+    },
+
     bio: {
       type: String,
       default: null,

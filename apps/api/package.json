@@ -15,10 +15,11 @@
     "sync:indexes": "node --env-file-if-exists=.env src/scripts/sync-indexes.ts"
   },
   "devDependencies": {
-    "@eslint/js": "^10.9.0",
+    "@eslint/js": "^10.0.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/multer": "^2.2.0",
     "@types/node": "^24.13.3",
     "@types/nodemailer": "^8.0.1",
     "eslint": "^10.9.0",
@@ -29,11 +30,13 @@
   },
   "dependencies": {
     "@devsangam/types": "^0.1.0",
+    "cloudinary": "^2.11.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jose": "^6.2.9",
     "mongoose": "^9.9.3",
+    "multer": "^2.3.0",
     "nodemailer": "^9.0.5",
     "zod": "^4.4.3"
   }

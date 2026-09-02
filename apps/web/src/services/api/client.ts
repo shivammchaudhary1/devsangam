@@ -35,6 +35,19 @@ interface RequestResult {
   body: unknown;
 }
 
+function createRequestHeaders(options: RequestInit) {
+  const headers = new Headers(options.headers);
+
+  const isFormData =
+    typeof FormData !== 'undefined' && options.body instanceof FormData;
+
+  if (!isFormData && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  return headers;
+}
+
 async function requestOnce(
   path: string,
   options: RequestInit
@@ -44,11 +57,7 @@ async function requestOnce(
 
     credentials: 'include',
 
-    headers: {
-      'Content-Type': 'application/json',
-
-      ...options.headers,
-    },
+    headers: createRequestHeaders(options),
   });
 
   let body: unknown = null;
@@ -66,8 +75,8 @@ async function requestOnce(
 }
 
 /*
- * Prevent five concurrent 401s
- * from producing five refresh calls.
+ * Prevent concurrent 401 responses from
+ * producing multiple refresh requests.
  */
 let refreshPromise: Promise<boolean> | null = null;
 
@@ -130,8 +139,9 @@ export async function apiRequest<T>(
 
     if (refreshed) {
       /*
-       * Retry original request
-       * once with fresh cookies.
+       * FormData remains reusable here,
+       * so the original request can safely
+       * be attempted once more.
        */
       result = await requestOnce(path, requestOptions);
     } else {
