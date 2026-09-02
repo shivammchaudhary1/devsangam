@@ -8,25 +8,57 @@ interface PasswordResetEmailInput {
 
 let transporter: Transporter | null = null;
 
+function getRequiredEnv(name: string) {
+  const value = process.env[name]?.trim();
+
+  if (!value) {
+    throw new Error(`${name} is not configured.`);
+  }
+
+  return value;
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
 function getTransporter() {
   if (transporter) {
     return transporter;
   }
 
-  const user = process.env.GMAIL_USER;
+  const host = getRequiredEnv('EMAIL_HOST');
 
-  const pass = process.env.GMAIL_APP_PASSWORD;
+  const portValue = getRequiredEnv('EMAIL_PORT');
 
-  if (!user || !pass) {
-    throw new Error('Gmail email configuration is incomplete.');
+  const port = Number(portValue);
+
+  if (!Number.isInteger(port) || port <= 0) {
+    throw new Error('EMAIL_PORT must be a valid port number.');
   }
 
+  const user = getRequiredEnv('EMAIL_USER');
+
+  const password = getRequiredEnv('EMAIL_PASSWORD');
+
   transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host,
+
+    port,
+
+    secure: port === 465,
+
+    requireTLS: port === 587,
 
     auth: {
       user,
-      pass,
+
+      pass: password,
     },
   });
 
@@ -46,13 +78,14 @@ export async function sendPasswordResetEmail({
 }: PasswordResetEmailInput) {
   const mailer = getTransporter();
 
-  const gmailUser = process.env.GMAIL_USER;
+  const fromName = process.env.EMAIL_FROM_NAME?.trim() || 'DevSangam';
 
-  if (!gmailUser) {
-    throw new Error('GMAIL_USER is not configured.');
-  }
+  const fromAddress =
+    process.env.EMAIL_FROM_ADDRESS?.trim() || getRequiredEnv('EMAIL_USER');
 
-  const fromName = process.env.EMAIL_FROM_NAME ?? 'DevSangam';
+  const safeName = escapeHtml(name);
+
+  const safeResetUrl = escapeHtml(resetUrl);
 
   const subject = 'Reset your DevSangam password';
 
@@ -173,7 +206,7 @@ Chant. Connect. Transform.
                     line-height: 1.7;
                   "
                 >
-                  Namaste ${name},
+                  Namaste ${safeName},
                   <br /><br />
 
                   We received a request
@@ -188,7 +221,7 @@ Chant. Connect. Transform.
                   "
                 >
                   <a
-                    href="${resetUrl}"
+                    href="${safeResetUrl}"
                     style="
                       display: inline-block;
                       padding: 14px 28px;
@@ -243,7 +276,7 @@ Chant. Connect. Transform.
     from: {
       name: fromName,
 
-      address: gmailUser,
+      address: fromAddress,
     },
 
     to: email,

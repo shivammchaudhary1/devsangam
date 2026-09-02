@@ -9,8 +9,13 @@ import { usePracticeSessions } from '../hooks/usePracticeSessions';
 import { getPracticeEstimatedMinutes } from '../utils/practice.utils';
 import { getResumablePracticeSession } from '../utils/resumable-practice.utils';
 import { getPracticeSessionRoute } from '@/app/constants/routes.constants';
+import { MANTRA_SEARCH_DEBOUNCE_MS } from '@/features/mantras/constants/mantra.constants';
 import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
+import { useFavorites } from '@/features/mantras/hooks/useFavorites';
+import { useMantra } from '@/features/mantras/hooks/useMantra';
 import { useMantras } from '@/features/mantras/hooks/useMantras';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import type { Mantra } from '@devsangam/types';
 import {
   ArrowRight,
   Check,
@@ -20,10 +25,13 @@ import {
   Pause,
   Play,
   RotateCcw,
+  Search,
   Sparkles,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
+
+const PRACTICE_MANTRA_LIMIT = 5;
 
 export function PracticeSetupPage() {
   const navigate = useNavigate();
@@ -32,11 +40,38 @@ export function PracticeSetupPage() {
 
   const mantraFromQuery = searchParams.get('mantra');
 
-  const { data: mantras = [], isLoading, isError } = useMantras();
+  const hasRequestedMantra = Boolean(mantraFromQuery);
+
+  const [mantraSearch, setMantraSearch] = useState('');
+
+  const debouncedMantraSearch = useDebouncedValue(
+    mantraSearch,
+    MANTRA_SEARCH_DEBOUNCE_MS
+  );
+
+  const requestedMantraQuery = useMantra(mantraFromQuery ?? undefined);
+
+  const browseMantrasQuery = useMantras(
+    {
+      search: debouncedMantraSearch.trim() || undefined,
+    },
+    {
+      enabled: !hasRequestedMantra,
+    }
+  );
+
+  const { data: favoriteMantras = [] } = useFavorites();
 
   const { data: serverSessions = [] } = usePracticeSessions();
 
   const { data: localSessions = [] } = useLocalPracticeSessions();
+
+  const resumableSession = useMemo(
+    () => getResumablePracticeSession(serverSessions, localSessions),
+    [serverSessions, localSessions]
+  );
+
+  const resumableMantraQuery = useMantra(resumableSession?.mantraSlug);
 
   const createSession = useCreatePracticeSession();
 
@@ -50,45 +85,80 @@ export function PracticeSetupPage() {
 
   const [customTarget, setCustomTarget] = useState('');
 
+  const browseMantras = useMemo(() => {
+    const availableMantras = browseMantrasQuery.data ?? [];
+
+    const newestMantras = [...availableMantras].sort(
+      (first, second) =>
+        new Date(second.createdAt).getTime() -
+        new Date(first.createdAt).getTime()
+    );
+
+    if (debouncedMantraSearch.trim()) {
+      return newestMantras.slice(0, PRACTICE_MANTRA_LIMIT);
+    }
+
+    if (!favoriteMantras.length) {
+      return newestMantras.slice(0, PRACTICE_MANTRA_LIMIT);
+    }
+
+    const preferredAndNewest = [...favoriteMantras, ...newestMantras];
+
+    const uniqueMantras = new Map<string, Mantra>();
+
+    for (const mantra of preferredAndNewest) {
+      if (!uniqueMantras.has(mantra.slug)) {
+        uniqueMantras.set(mantra.slug, mantra);
+      }
+    }
+
+    return Array.from(uniqueMantras.values()).slice(0, PRACTICE_MANTRA_LIMIT);
+  }, [browseMantrasQuery.data, debouncedMantraSearch, favoriteMantras]);
+
+  const selectableMantras = useMemo(() => {
+    if (hasRequestedMantra) {
+      return requestedMantraQuery.data ? [requestedMantraQuery.data] : [];
+    }
+
+    return browseMantras;
+  }, [browseMantras, hasRequestedMantra, requestedMantraQuery.data]);
+
   const resolvedSelectedMantraSlug = useMemo(() => {
     if (
       selectedMantraSlug &&
-      mantras.some((mantra) => mantra.slug === selectedMantraSlug)
+      selectableMantras.some((mantra) => mantra.slug === selectedMantraSlug)
     ) {
       return selectedMantraSlug;
     }
 
     if (
       mantraFromQuery &&
-      mantras.some((mantra) => mantra.slug === mantraFromQuery)
+      selectableMantras.some((mantra) => mantra.slug === mantraFromQuery)
     ) {
       return mantraFromQuery;
     }
 
-    return mantras[0]?.slug ?? '';
-  }, [mantras, mantraFromQuery, selectedMantraSlug]);
+    return selectableMantras[0]?.slug ?? '';
+  }, [mantraFromQuery, selectableMantras, selectedMantraSlug]);
 
   const selectedMantra = useMemo(
     () =>
-      mantras.find((mantra) => mantra.slug === resolvedSelectedMantraSlug) ??
-      null,
-    [mantras, resolvedSelectedMantraSlug]
+      selectableMantras.find(
+        (mantra) => mantra.slug === resolvedSelectedMantraSlug
+      ) ?? null,
+    [resolvedSelectedMantraSlug, selectableMantras]
   );
 
-  const resumableSession = useMemo(
-    () => getResumablePracticeSession(serverSessions, localSessions),
-    [serverSessions, localSessions]
-  );
+  const resumableMantra =
+    resumableMantraQuery.data ??
+    selectableMantras.find(
+      (mantra) => mantra.slug === resumableSession?.mantraSlug
+    ) ??
+    null;
 
-  const resumableMantra = useMemo(
-    () =>
-      resumableSession
-        ? (mantras.find(
-            (mantra) => mantra.slug === resumableSession.mantraSlug
-          ) ?? null)
-        : null,
-    [mantras, resumableSession]
-  );
+  const resumableImage = resumableMantra
+    ? getMantraImage(resumableMantra)
+    : null;
 
   const customTargetNumber = Number(customTarget);
 
@@ -103,6 +173,14 @@ export function PracticeSetupPage() {
     targetCount,
     selectedMantra?.estimatedSecondsPerChant ?? null
   );
+
+  const isMantraLoading = hasRequestedMantra
+    ? requestedMantraQuery.isLoading
+    : browseMantrasQuery.isLoading;
+
+  const isMantraError = hasRequestedMantra
+    ? requestedMantraQuery.isError
+    : browseMantrasQuery.isError;
 
   function handlePresetTarget(target: number) {
     setIsCustomTarget(false);
@@ -152,7 +230,7 @@ export function PracticeSetupPage() {
     }
   }
 
-  if (isLoading) {
+  if (isMantraLoading) {
     return (
       <div className="flex min-h-[65vh] items-center justify-center">
         <Loader2 className="size-7 animate-spin text-[#d89a35]" />
@@ -160,7 +238,7 @@ export function PracticeSetupPage() {
     );
   }
 
-  if (isError || !mantras.length) {
+  if (isMantraError || (hasRequestedMantra && !requestedMantraQuery.data)) {
     return (
       <div className="mx-auto flex min-h-[65vh] max-w-xl items-center justify-center px-4">
         <div className="w-full rounded-[12px] border border-red-400/20 bg-red-400/[0.035] p-6 text-center">
@@ -169,7 +247,7 @@ export function PracticeSetupPage() {
           </h1>
 
           <p className="mt-2 text-sm leading-6 text-red-100/60">
-            We could not load the mantra library. Please try again.
+            We could not load the requested mantra. Please try again.
           </p>
         </div>
       </div>
@@ -202,8 +280,9 @@ export function PracticeSetupPage() {
           </h1>
 
           <p className="mt-1.5 max-w-2xl text-[11px] leading-5 text-[#737b86] sm:text-xs">
-            Choose a mantra, set your intention, and enter your chanting
-            practice.
+            {hasRequestedMantra
+              ? 'Set your target and begin practice with your selected mantra.'
+              : 'Choose a mantra, set your intention, and enter your chanting practice.'}
           </p>
         </header>
 
@@ -212,11 +291,13 @@ export function PracticeSetupPage() {
             <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
               <div className="flex min-w-0 flex-1 items-center gap-3">
                 <div className="relative size-14 shrink-0 overflow-hidden rounded-[10px] border border-[#d89a35]/18 bg-[#080d14]">
-                  {resumableMantra && MANTRA_IMAGES[resumableMantra.slug] ? (
+                  {resumableImage ? (
                     <img
-                      src={MANTRA_IMAGES[resumableMantra.slug]}
+                      src={resumableImage}
                       alt=""
                       aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -293,110 +374,158 @@ export function PracticeSetupPage() {
 
               <div>
                 <h2 className="font-serif text-sm font-medium text-[#ddd4c7] sm:text-[15px]">
-                  Choose Your Mantra
+                  {hasRequestedMantra
+                    ? 'Selected Mantra'
+                    : 'Choose Your Mantra'}
                 </h2>
 
                 <p className="mt-0.5 text-[9px] text-[#626b76]">
-                  Select a mantra to begin your practice
+                  {hasRequestedMantra
+                    ? 'Your selected mantra is ready for practice'
+                    : 'Favorites are shown first, followed by recently added mantras'}
                 </p>
               </div>
             </div>
 
-            <div className="grid gap-2">
-              {mantras.map((mantra) => {
-                const isSelected = mantra.slug === resolvedSelectedMantraSlug;
+            {!hasRequestedMantra ? (
+              <div className="relative mb-3">
+                <Search
+                  aria-hidden="true"
+                  size={14}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#626b76]"
+                />
 
-                const image = MANTRA_IMAGES[mantra.slug];
+                <input
+                  type="search"
+                  value={mantraSearch}
+                  onChange={(event) => setMantraSearch(event.target.value)}
+                  placeholder="Search mantra, deity, meaning..."
+                  className="ds-input h-10 w-full rounded-[9px] pl-9 pr-3 text-xs outline-none"
+                />
+              </div>
+            ) : null}
 
-                return (
-                  <button
-                    key={mantra._id}
-                    type="button"
-                    onClick={() => setSelectedMantraSlug(mantra.slug)}
-                    aria-pressed={isSelected}
-                    className={[
-                      'group w-full min-w-0 overflow-hidden rounded-[10px] border text-left transition-all duration-200',
-                      isSelected
-                        ? [
-                            'border-[#d89a35]/55',
-                            'bg-[linear-gradient(90deg,rgba(216,154,53,0.095),rgba(216,154,53,0.038)_62%,transparent)]',
-                            'shadow-[0_0_22px_rgba(216,154,53,0.055),inset_0_1px_0_rgba(255,255,255,0.025)]',
-                          ].join(' ')
-                        : [
-                            'border-white/[0.065]',
-                            'bg-white/[0.016]',
-                            'hover:border-white/[0.11]',
-                            'hover:bg-white/[0.026]',
-                          ].join(' '),
-                    ].join(' ')}
-                  >
-                    <div className="flex min-w-0 items-center gap-2.5 p-2.5 min-[400px]:gap-3 sm:p-3">
-                      <div className="relative size-12 shrink-0 overflow-hidden rounded-[8px] border border-white/[0.075] bg-[#080d14] min-[400px]:size-[54px] sm:size-[58px]">
-                        {image ? (
-                          <img
-                            src={image}
-                            alt=""
+            {selectableMantras.length ? (
+              <div className="grid gap-2">
+                {selectableMantras.map((mantra) => {
+                  const isSelected = mantra.slug === resolvedSelectedMantraSlug;
+
+                  const image = getMantraImage(mantra);
+
+                  return (
+                    <button
+                      key={mantra._id}
+                      type="button"
+                      onClick={() => setSelectedMantraSlug(mantra.slug)}
+                      aria-pressed={isSelected}
+                      className={[
+                        'group w-full min-w-0 overflow-hidden rounded-[10px] border text-left transition-all duration-200',
+
+                        isSelected
+                          ? [
+                              'border-[#d89a35]/55',
+                              'bg-[linear-gradient(90deg,rgba(216,154,53,0.095),rgba(216,154,53,0.038)_62%,transparent)]',
+                              'shadow-[0_0_22px_rgba(216,154,53,0.055),inset_0_1px_0_rgba(255,255,255,0.025)]',
+                            ].join(' ')
+                          : [
+                              'border-white/[0.065]',
+                              'bg-white/[0.016]',
+                              'hover:border-white/[0.11]',
+                              'hover:bg-white/[0.026]',
+                            ].join(' '),
+                      ].join(' ')}
+                    >
+                      <div className="flex min-w-0 items-center gap-2.5 p-2.5 min-[400px]:gap-3 sm:p-3">
+                        <div className="relative size-12 shrink-0 overflow-hidden rounded-[8px] border border-white/[0.075] bg-[#080d14] min-[400px]:size-[54px] sm:size-[58px]">
+                          {image ? (
+                            <img
+                              src={image}
+                              alt=""
+                              aria-hidden="true"
+                              loading="lazy"
+                              decoding="async"
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full bg-white/[0.02]" />
+                          )}
+
+                          <div
                             aria-hidden="true"
-                            loading="lazy"
-                            decoding="async"
-                            className="h-full w-full object-cover"
+                            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"
                           />
-                        ) : (
-                          <div className="h-full w-full bg-white/[0.02]" />
-                        )}
-
-                        <div
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"
-                        />
-                      </div>
-
-                      <div className="min-w-0 flex-1 overflow-hidden">
-                        <div className="flex w-full min-w-0 items-center gap-2 overflow-hidden">
-                          <h3
-                            className={[
-                              'truncate font-serif text-sm font-medium sm:text-[15px]',
-                              isSelected ? 'text-[#ebcf91]' : 'text-[#d9d5cf]',
-                            ].join(' ')}
-                          >
-                            {mantra.title}
-                          </h3>
-
-                          {mantra.deity ? (
-                            <span className="hidden shrink-0 rounded-full border border-white/[0.07] px-2 py-0.5 text-[8px] text-[#626b76] sm:inline-flex">
-                              {mantra.deity}
-                            </span>
-                          ) : null}
                         </div>
 
-                        <p className="font-devanagari mt-1 truncate text-[11px] text-[#b99a65] sm:text-xs">
-                          {mantra.sanskrit}
-                        </p>
+                        <div className="min-w-0 flex-1 overflow-hidden">
+                          <div className="flex w-full min-w-0 items-center gap-2 overflow-hidden">
+                            <h3
+                              className={[
+                                'truncate font-serif text-sm font-medium sm:text-[15px]',
 
-                        <p className="mt-1 truncate text-[9px] text-[#626b76] sm:text-[10px]">
-                          {mantra.transliteration}
-                        </p>
-                      </div>
+                                isSelected
+                                  ? 'text-[#ebcf91]'
+                                  : 'text-[#d9d5cf]',
+                              ].join(' ')}
+                            >
+                              {mantra.title}
+                            </h3>
 
-                      <div
-                        className={[
-                          'flex size-6 shrink-0 items-center justify-center rounded-full border transition',
-                          isSelected
-                            ? 'border-[#e7b353]/60 bg-[linear-gradient(145deg,#dda13e,#b86e22)] text-[#1c1207] shadow-[0_0_12px_rgba(216,154,53,0.1)]'
-                            : 'border-white/[0.14] bg-transparent text-transparent',
-                        ].join(' ')}
-                      >
-                        {isSelected ? (
-                          <Check size={14} strokeWidth={2.4} />
-                        ) : (
-                          <Circle size={12} />
-                        )}
+                            {mantra.deity ? (
+                              <span className="hidden shrink-0 rounded-full border border-white/[0.07] px-2 py-0.5 text-[8px] text-[#626b76] sm:inline-flex">
+                                {mantra.deity}
+                              </span>
+                            ) : null}
+                          </div>
+
+                          <p className="font-devanagari mt-1 truncate text-[11px] text-[#b99a65] sm:text-xs">
+                            {mantra.sanskrit}
+                          </p>
+
+                          <p className="mt-1 truncate text-[9px] text-[#626b76] sm:text-[10px]">
+                            {mantra.transliteration}
+                          </p>
+                        </div>
+
+                        <div
+                          className={[
+                            'flex size-6 shrink-0 items-center justify-center rounded-full border transition',
+
+                            isSelected
+                              ? 'border-[#e7b353]/60 bg-[linear-gradient(145deg,#dda13e,#b86e22)] text-[#1c1207] shadow-[0_0_12px_rgba(216,154,53,0.1)]'
+                              : 'border-white/[0.14] bg-transparent text-transparent',
+                          ].join(' ')}
+                        >
+                          {isSelected ? (
+                            <Check size={14} strokeWidth={2.4} />
+                          ) : (
+                            <Circle size={12} />
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded-[10px] border border-white/[0.065] bg-white/[0.016] px-4 py-6 text-center">
+                <p className="font-serif text-sm text-[#d9d5cf]">
+                  No matching mantra
+                </p>
+
+                <p className="mt-1 text-[10px] text-[#626b76]">
+                  Try a different search term.
+                </p>
+              </div>
+            )}
+
+            {!hasRequestedMantra &&
+            !debouncedMantraSearch.trim() &&
+            selectableMantras.length ? (
+              <p className="mt-2 text-right text-[8px] text-[#59616c]">
+                Showing up to {PRACTICE_MANTRA_LIMIT} preferred or recently
+                added mantras
+              </p>
+            ) : null}
           </div>
 
           <div className="my-5 h-px bg-[linear-gradient(90deg,transparent,rgba(148,163,184,0.12)_15%,rgba(216,154,53,0.13)_50%,rgba(148,163,184,0.12)_85%,transparent)]" />
@@ -430,6 +559,7 @@ export function PracticeSetupPage() {
                     aria-pressed={isSelected}
                     className={[
                       'min-h-[58px] rounded-[9px] border px-2 py-2.5 text-center transition-all',
+
                       isSelected
                         ? [
                             'border-[#d89a35]/55',
@@ -467,6 +597,7 @@ export function PracticeSetupPage() {
                 aria-pressed={isCustomTarget}
                 className={[
                   'min-h-[58px] rounded-[9px] border px-2 py-2.5 text-center transition-all',
+
                   isCustomTarget
                     ? [
                         'border-[#d89a35]/55',
@@ -590,6 +721,10 @@ export function PracticeSetupPage() {
       </div>
     </main>
   );
+}
+
+function getMantraImage(mantra: Mantra) {
+  return mantra.image || MANTRA_IMAGES[mantra.slug] || null;
 }
 
 function ResumeStat({ label, value }: { label: string; value: string }) {

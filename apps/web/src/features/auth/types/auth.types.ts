@@ -1,3 +1,10 @@
+export type ProfileIntention =
+  | 'Peace'
+  | 'Focus'
+  | 'Healing'
+  | 'Discipline'
+  | 'Devotion';
+
 export interface AuthUser {
   id: string;
 
@@ -6,6 +13,10 @@ export interface AuthUser {
   email: string;
 
   avatar: string | null;
+
+  bio: string | null;
+
+  intention: ProfileIntention | null;
 
   role: 'user' | 'admin';
 

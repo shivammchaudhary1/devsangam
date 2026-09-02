@@ -63,6 +63,18 @@ export async function updateMe(request: Request, response: Response) {
     user.name = input.name;
   }
 
+  if (input.avatar !== undefined) {
+    user.avatar = input.avatar;
+  }
+
+  if (input.bio !== undefined) {
+    user.bio = input.bio;
+  }
+
+  if (input.intention !== undefined) {
+    user.intention = input.intention;
+  }
+
   const preferences = input.preferences;
 
   if (preferences) {
@@ -165,14 +177,6 @@ export async function changePassword(request: Request, response: Response) {
 
   await user.save();
 
-  /*
-   * A password change invalidates
-   * password-reset links and signs
-   * out other sessions.
-   *
-   * The current authenticated
-   * session remains active.
-   */
   await Promise.all([
     PasswordResetTokenModel.deleteMany({
       userId: user._id,

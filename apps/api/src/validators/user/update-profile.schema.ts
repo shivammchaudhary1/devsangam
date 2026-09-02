@@ -1,5 +1,13 @@
 import { z } from 'zod';
 
+const profileIntentionSchema = z.enum([
+  'Peace',
+  'Focus',
+  'Healing',
+  'Discipline',
+  'Devotion',
+]);
+
 const updatePreferencesSchema = z
   .object({
     language: z
@@ -56,10 +64,31 @@ export const updateProfileSchema = z
       .max(80, 'Name is too long.')
       .optional(),
 
+    avatar: z
+      .union([
+        z.string().trim().url('Avatar must be a valid URL.').max(500),
+        z.null(),
+      ])
+      .optional(),
+
+    bio: z
+      .union([
+        z.string().trim().max(240, 'Bio cannot exceed 240 characters.'),
+        z.null(),
+      ])
+      .optional(),
+
+    intention: z.union([profileIntentionSchema, z.null()]).optional(),
+
     preferences: updatePreferencesSchema.optional(),
   })
   .refine(
-    (input) => input.name !== undefined || input.preferences !== undefined,
+    (input) =>
+      input.name !== undefined ||
+      input.avatar !== undefined ||
+      input.bio !== undefined ||
+      input.intention !== undefined ||
+      input.preferences !== undefined,
     {
       message: 'At least one profile field must be provided.',
     }

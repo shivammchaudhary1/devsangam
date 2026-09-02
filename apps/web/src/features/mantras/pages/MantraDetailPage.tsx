@@ -61,7 +61,8 @@ export function MantraDetailPage() {
     (favorite) => favorite._id === mantra._id
   );
 
-  const image = MANTRA_IMAGES[mantra.slug];
+  // const image = MANTRA_IMAGES[mantra.slug];
+  const image = mantra.image || MANTRA_IMAGES[mantra.slug];
 
   const primaryTarget = mantra.defaultTargets[0] ?? 108;
 

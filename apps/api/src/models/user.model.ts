@@ -1,4 +1,4 @@
-import { type InferSchemaType,model, Schema } from 'mongoose';
+import { type InferSchemaType, model, Schema } from 'mongoose';
 
 const userSchema = new Schema(
   {
@@ -26,6 +26,21 @@ const userSchema = new Schema(
     avatar: {
       type: String,
       default: null,
+      trim: true,
+      maxlength: 500,
+    },
+
+    bio: {
+      type: String,
+      default: null,
+      trim: true,
+      maxlength: 240,
+    },
+
+    intention: {
+      type: String,
+      enum: ['Peace', 'Focus', 'Healing', 'Discipline', 'Devotion'],
+      default: null,
     },
 
     role: {
@@ -38,6 +53,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+
     favoriteMantraIds: {
       type: [
         {

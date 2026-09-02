@@ -1,24 +1,40 @@
 import { formatMemberSince } from '../utils/profile-formatters';
 import { ProfileAvatar } from './ProfileAvatar';
-import type { AuthUser } from '@/features/auth/types/auth.types';
+import type {
+  AuthUser,
+  ProfileIntention,
+} from '@/features/auth/types/auth.types';
 import {
   CalendarDays,
   CheckCircle2,
   Loader2,
   Pencil,
   Save,
+  Sparkles,
   X,
 } from 'lucide-react';
+
+const PROFILE_INTENTIONS: ProfileIntention[] = [
+  'Peace',
+  'Focus',
+  'Healing',
+  'Discipline',
+  'Devotion',
+];
 
 type ProfileIdentityCardProps = {
   user: AuthUser;
   initials: string;
   editing: boolean;
   editedName: string;
+  editedBio: string;
+  editedIntention: ProfileIntention | '';
   saving: boolean;
   onStartEditing: () => void;
   onCancelEditing: () => void;
   onEditedNameChange: (value: string) => void;
+  onEditedBioChange: (value: string) => void;
+  onEditedIntentionChange: (value: ProfileIntention | '') => void;
   onSave: () => void | Promise<void>;
 };
 
@@ -27,10 +43,14 @@ export function ProfileIdentityCard({
   initials,
   editing,
   editedName,
+  editedBio,
+  editedIntention,
   saving,
   onStartEditing,
   onCancelEditing,
   onEditedNameChange,
+  onEditedBioChange,
+  onEditedIntentionChange,
   onSave,
 }: ProfileIdentityCardProps) {
   return (
@@ -61,6 +81,53 @@ export function ProfileIdentityCard({
                 onChange={(event) => onEditedNameChange(event.target.value)}
                 className="mt-2 h-11 w-full rounded-[8px] border border-[var(--ds-border-gold)] bg-[var(--ds-night)] px-3 text-[13px] text-[var(--ds-cream)] outline-none"
               />
+
+              <label
+                htmlFor="profile-intention"
+                className="mt-4 block text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--ds-muted)]"
+              >
+                Spiritual Intention
+              </label>
+
+              <select
+                id="profile-intention"
+                value={editedIntention}
+                onChange={(event) =>
+                  onEditedIntentionChange(
+                    event.target.value as ProfileIntention | ''
+                  )
+                }
+                className="mt-2 h-11 w-full rounded-[8px] border border-[var(--ds-border-gold)] bg-[var(--ds-night)] px-3 text-[13px] text-[var(--ds-cream)] outline-none"
+              >
+                <option value="">Not selected</option>
+
+                {PROFILE_INTENTIONS.map((intention) => (
+                  <option key={intention} value={intention}>
+                    {intention}
+                  </option>
+                ))}
+              </select>
+
+              <label
+                htmlFor="profile-bio"
+                className="mt-4 block text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--ds-muted)]"
+              >
+                About Your Practice
+              </label>
+
+              <textarea
+                id="profile-bio"
+                value={editedBio}
+                maxLength={240}
+                rows={4}
+                onChange={(event) => onEditedBioChange(event.target.value)}
+                placeholder="A short note about your practice or intention..."
+                className="mt-2 w-full resize-none rounded-[8px] border border-[var(--ds-border-gold)] bg-[var(--ds-night)] px-3 py-3 text-[13px] leading-5 text-[var(--ds-cream)] outline-none placeholder:text-[var(--ds-muted)]"
+              />
+
+              <p className="mt-1 text-right text-[9px] text-[var(--ds-muted)]">
+                {editedBio.length}/240
+              </p>
 
               <div className="mt-3 flex gap-2">
                 <button
@@ -103,6 +170,22 @@ export function ProfileIdentityCard({
               <p className="mt-2 text-[12px] text-[var(--ds-muted)]">
                 {user.email}
               </p>
+
+              {user.intention ? (
+                <div className="mt-3 flex items-center gap-2">
+                  <Sparkles size={12} className="text-[var(--ds-gold)]" />
+
+                  <span className="text-[11px] text-[var(--ds-soft-gold)]">
+                    Intention: {user.intention}
+                  </span>
+                </div>
+              ) : null}
+
+              {user.bio ? (
+                <p className="mt-3 max-w-xl text-[12px] leading-5 text-[var(--ds-muted)]">
+                  {user.bio}
+                </p>
+              ) : null}
 
               <button
                 type="button"

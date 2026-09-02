@@ -10,17 +10,15 @@ type MantraCardProps = {
 };
 
 export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
-  const image = MANTRA_IMAGES[mantra.slug];
+  const image = mantra.image || MANTRA_IMAGES[mantra.slug];
 
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d1726] transition hover:-translate-y-0.5 hover:border-amber-400/30">
-      {/* Favorite */}
       <div className="absolute right-3 top-3 z-20">
         <FavoriteButton mantra={mantra} isFavorite={isFavorite} />
       </div>
 
       <div className="grid min-h-[250px] grid-cols-[175px_1fr]">
-        {/* Image */}
         <div className="relative min-h-[250px] overflow-hidden bg-white/[0.03]">
           {image ? (
             <img
@@ -39,7 +37,6 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0d1726]/20" />
         </div>
 
-        {/* Content */}
         <div className="flex min-w-0 flex-col px-5 py-4 pr-14">
           <div>
             {mantra.deity ? (

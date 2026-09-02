@@ -183,7 +183,8 @@ function ActivePracticeSession({
     handleHapticToggle();
   }, [handleHapticToggle, hapticEnabled, preferenceUserId]);
 
-  const image = MANTRA_IMAGES[mantra.slug];
+  // const image = MANTRA_IMAGES[mantra.slug];
+  const image = mantra.image || MANTRA_IMAGES[mantra.slug];
 
   if (!isHydrated) {
     return <PracticeSessionLoading />;

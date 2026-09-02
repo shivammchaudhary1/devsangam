@@ -9,7 +9,11 @@ export function serializeUser(user: HydratedDocument<User>) {
 
     email: user.email,
 
-    avatar: user.avatar,
+    avatar: user.avatar ?? null,
+
+    bio: user.bio ?? null,
+
+    intention: user.intention ?? null,
 
     role: user.role,
 
