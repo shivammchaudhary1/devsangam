@@ -79,7 +79,7 @@ type RecentSessionRowProps = {
 };
 
 function RecentSessionRow({ session, mantra }: RecentSessionRowProps) {
-  const artwork = MANTRA_IMAGES[session.mantraSlug];
+  const artwork = mantra?.image || MANTRA_IMAGES[session.mantraSlug];
 
   return (
     <div className="flex min-h-[64px] items-center gap-3 rounded-[8px] border border-white/[0.045] bg-[var(--ds-white-02)] px-3 py-2">

@@ -7,7 +7,10 @@ import { getErrorMessage, getInitials } from '../utils/profile-formatters';
 import { useToast } from '@/components/feedback/useToast';
 import { updateCurrentUser } from '@/features/auth/api/auth.api';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import type { AuthUser } from '@/features/auth/types/auth.types';
+import type {
+  AuthUser,
+  ProfileIntention,
+} from '@/features/auth/types/auth.types';
 import { useInsightsOverview } from '@/features/insights/hooks/useInsightsOverview';
 import { useMemo, useState } from 'react';
 
@@ -39,6 +42,12 @@ function ProfileContent({ user, setUser }: ProfileContentProps) {
 
   const [editedName, setEditedName] = useState('');
 
+  const [editedBio, setEditedBio] = useState('');
+
+  const [editedIntention, setEditedIntention] = useState<ProfileIntention | ''>(
+    ''
+  );
+
   const [saving, setSaving] = useState(false);
 
   const {
@@ -54,16 +63,22 @@ function ProfileContent({ user, setUser }: ProfileContentProps) {
 
   function startEditing() {
     setEditedName(user.name);
+    setEditedBio(user.bio ?? '');
+    setEditedIntention(user.intention ?? '');
     setEditing(true);
   }
 
   function cancelEditing() {
     setEditedName('');
+    setEditedBio('');
+    setEditedIntention('');
     setEditing(false);
   }
 
   async function saveProfile() {
     const name = editedName.trim();
+    const bio = editedBio.trim() || null;
+    const intention = editedIntention || null;
 
     if (name.length < 2) {
       toast.error('Name must contain at least 2 characters.');
@@ -71,8 +86,24 @@ function ProfileContent({ user, setUser }: ProfileContentProps) {
       return;
     }
 
-    if (name === user.name) {
+    if (name.length > 80) {
+      toast.error('Name cannot exceed 80 characters.');
+
+      return;
+    }
+
+    if (editedBio.trim().length > 240) {
+      toast.error('Bio cannot exceed 240 characters.');
+
+      return;
+    }
+
+    const unchanged =
+      name === user.name && bio === user.bio && intention === user.intention;
+
+    if (unchanged) {
       setEditing(false);
+
       return;
     }
 
@@ -81,6 +112,8 @@ function ProfileContent({ user, setUser }: ProfileContentProps) {
     try {
       const updatedUser = await updateCurrentUser({
         name,
+        bio,
+        intention,
       });
 
       setUser(updatedUser);
@@ -111,10 +144,14 @@ function ProfileContent({ user, setUser }: ProfileContentProps) {
             initials={initials}
             editing={editing}
             editedName={editedName}
+            editedBio={editedBio}
+            editedIntention={editedIntention}
             saving={saving}
             onStartEditing={startEditing}
             onCancelEditing={cancelEditing}
             onEditedNameChange={setEditedName}
+            onEditedBioChange={setEditedBio}
+            onEditedIntentionChange={setEditedIntention}
             onSave={saveProfile}
           />
 

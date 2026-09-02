@@ -8,11 +8,14 @@ import {
 import { useFavorites } from '../hooks/useFavorites';
 import { useMantras } from '../hooks/useMantras';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
-import { Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
+
+const MANTRAS_PER_PAGE = 6;
 
 export function MantraLibraryPage() {
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
 
   const [category, setCategory] = useState<MantraCategory>(
     DEFAULT_MANTRA_CATEGORY
@@ -29,7 +32,12 @@ export function MantraLibraryPage() {
     [debouncedSearch, category]
   );
 
-  const { data: mantras = [], isLoading, isError } = useMantras(queryParams);
+  const {
+    data: mantras = [],
+    isLoading,
+    isError,
+    isFetching,
+  } = useMantras(queryParams);
 
   const { data: favoriteMantras = [] } = useFavorites();
 
@@ -37,6 +45,45 @@ export function MantraLibraryPage() {
     () => new Set(favoriteMantras.map((mantra) => mantra._id)),
     [favoriteMantras]
   );
+
+  const totalPages = Math.max(1, Math.ceil(mantras.length / MANTRAS_PER_PAGE));
+
+  const currentPage = Math.min(page, totalPages);
+
+  const visibleMantras = useMemo(() => {
+    const start = (currentPage - 1) * MANTRAS_PER_PAGE;
+    const end = start + MANTRAS_PER_PAGE;
+
+    return mantras.slice(start, end);
+  }, [currentPage, mantras]);
+
+  function handleSearchChange(value: string) {
+    setSearch(value);
+    setPage(1);
+  }
+
+  function handleCategoryChange(nextCategory: MantraCategory) {
+    setCategory(nextCategory);
+    setPage(1);
+  }
+
+  function handlePreviousPage() {
+    setPage((current) => Math.max(1, current - 1));
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
+
+  function handleNextPage() {
+    setPage((current) => Math.min(totalPages, current + 1));
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
 
   return (
     <main className="min-h-screen bg-[#07111f] px-4 pb-16 pt-6 text-white md:px-6 lg:px-8">
@@ -66,7 +113,7 @@ export function MantraLibraryPage() {
             <input
               type="search"
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) => handleSearchChange(event.target.value)}
               placeholder="Search mantras, deity, purpose..."
               className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-amber-400/50 focus:bg-white/[0.06]"
             />
@@ -80,7 +127,7 @@ export function MantraLibraryPage() {
                 <button
                   key={item}
                   type="button"
-                  onClick={() => setCategory(item)}
+                  onClick={() => handleCategoryChange(item)}
                   className={[
                     'shrink-0 rounded-full border px-3.5 py-1.5 text-xs transition',
 
@@ -99,7 +146,7 @@ export function MantraLibraryPage() {
         {isLoading ? (
           <section className="grid gap-4 xl:grid-cols-2">
             {Array.from({
-              length: 4,
+              length: MANTRAS_PER_PAGE,
             }).map((_, index) => (
               <div
                 key={index}
@@ -132,15 +179,60 @@ export function MantraLibraryPage() {
         ) : null}
 
         {!isLoading && !isError && mantras.length > 0 ? (
-          <section className="grid gap-4 xl:grid-cols-2">
-            {mantras.map((mantra) => (
-              <MantraCard
-                key={mantra._id}
-                mantra={mantra}
-                isFavorite={favoriteMantraIds.has(mantra._id)}
-              />
-            ))}
-          </section>
+          <>
+            <div
+              className={[
+                'grid gap-4 transition-opacity xl:grid-cols-2',
+                isFetching ? 'opacity-70' : 'opacity-100',
+              ].join(' ')}
+              aria-busy={isFetching}
+            >
+              {visibleMantras.map((mantra) => (
+                <MantraCard
+                  key={mantra._id}
+                  mantra={mantra}
+                  isFavorite={favoriteMantraIds.has(mantra._id)}
+                />
+              ))}
+            </div>
+
+            {totalPages > 1 ? (
+              <nav
+                aria-label="Mantra library pagination"
+                className="mt-8 flex items-center justify-center gap-3"
+              >
+                <button
+                  type="button"
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 1}
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-medium text-slate-300 transition hover:border-amber-400/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                >
+                  <ChevronLeft size={15} />
+                  Previous
+                </button>
+
+                <div className="min-w-[96px] text-center">
+                  <p className="text-xs font-medium text-slate-300">
+                    Page {currentPage} of {totalPages}
+                  </p>
+
+                  <p className="mt-0.5 text-[10px] text-slate-500">
+                    {mantras.length} mantras
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-medium text-slate-300 transition hover:border-amber-400/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                >
+                  Next
+                  <ChevronRight size={15} />
+                </button>
+              </nav>
+            ) : null}
+          </>
         ) : null}
       </div>
     </main>

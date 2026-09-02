@@ -1,4 +1,8 @@
-import type { AuthResponse, AuthUser } from '../types/auth.types';
+import type {
+  AuthResponse,
+  AuthUser,
+  ProfileIntention,
+} from '../types/auth.types';
 import { apiRequest } from '@/services/api/client';
 
 export interface LoginPayload {
@@ -14,6 +18,12 @@ export interface RegisterPayload {
 
 export interface UpdateCurrentUserPayload {
   name?: string;
+
+  avatar?: string | null;
+
+  bio?: string | null;
+
+  intention?: ProfileIntention | null;
 
   preferences?: Partial<AuthUser['preferences']>;
 }
