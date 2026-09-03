@@ -20,8 +20,8 @@ export function EmptyState({
     <div
       className={[
         'flex min-h-[150px] items-center justify-center',
-        'rounded-[10px] border border-dashed border-white/[0.07]',
-        'bg-white/[0.012] px-6 text-center',
+        'rounded-[10px] border border-dashed border-[var(--ds-border-soft)]',
+        'bg-[var(--ds-white-03)] px-6 text-center',
         className,
       ].join(' ')}
     >

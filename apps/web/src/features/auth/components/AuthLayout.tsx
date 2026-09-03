@@ -8,7 +8,7 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <main className="min-h-dvh overflow-hidden bg-[#080a0f] text-white">
+    <main className="min-h-dvh overflow-hidden bg-[var(--ds-obsidian)] text-[var(--ds-cream)]">
       <div
         className="
           grid
@@ -27,8 +27,8 @@ export function AuthLayout({ children }: AuthLayoutProps) {
             min-h-dvh
             overflow-hidden
             border-r
-            border-white/[0.055]
-            bg-[#05070a]
+            border-[var(--ds-border-soft)]
+            bg-[var(--ds-ink)]
             lg:block
           "
         >
@@ -105,7 +105,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
             items-center
             justify-center
             overflow-hidden
-            bg-[#080a0f]
+            bg-[var(--ds-obsidian)]
             px-5
             py-8
             sm:px-8

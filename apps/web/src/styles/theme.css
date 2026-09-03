@@ -1,21 +1,14 @@
 /*
- * DevSangam visual foundation
+ * DevSangam visual foundation.
  *
- * Reference direction:
- * - near-black blue/graphite surfaces
- * - warm antique gold
- * - subtle layered elevation
- * - restrained illumination
- * - low-contrast borders
- * - dark-first spiritual atmosphere
+ * Typography remains unchanged.
+ * Only semantic colors, surfaces,
+ * borders, gradients and shadows
+ * change between themes.
  */
 
 :root,
 .dark {
-  /* ======================================================
-     CORE APPLICATION COLORS
-     ====================================================== */
-
   --background: #070b11;
   --foreground: #f4eee2;
 
@@ -43,19 +36,11 @@
   --input: #121922;
   --ring: #d89a35;
 
-  /* ======================================================
-     CHARTS
-     ====================================================== */
-
   --chart-1: #dda13e;
   --chart-2: #bd7d29;
   --chart-3: #efc875;
   --chart-4: #8c632d;
   --chart-5: #68717d;
-
-  /* ======================================================
-     SIDEBAR
-     ====================================================== */
 
   --sidebar: #080d14;
   --sidebar-foreground: #ece6dc;
@@ -70,10 +55,6 @@
   --sidebar-ring: #d89a35;
 
   --radius: 0.75rem;
-
-  /* ======================================================
-     DEVSANGAM BRAND TOKENS
-     ====================================================== */
 
   --ds-ink: #05080d;
   --ds-obsidian: #070b11;
@@ -105,10 +86,6 @@
   --ds-success: #4da779;
   --ds-danger: #d95858;
 
-  /* ======================================================
-     TRANSLUCENT BRAND COLORS
-     ====================================================== */
-
   --ds-amber-03: rgb(216 154 53 / 0.03);
   --ds-amber-05: rgb(216 154 53 / 0.05);
   --ds-amber-08: rgb(216 154 53 / 0.08);
@@ -125,9 +102,14 @@
   --ds-white-08: rgb(255 255 255 / 0.08);
   --ds-white-10: rgb(255 255 255 / 0.1);
 
-  /* ======================================================
-     SURFACE GRADIENTS
-     ====================================================== */
+  --ds-selection: rgb(216 154 53 / 0.3);
+  --ds-selection-text: #fff8e8;
+
+  --ds-focus: rgb(216 154 53 / 0.72);
+
+  --ds-scrollbar: rgb(216 154 53 / 0.28);
+  --ds-scrollbar-hover: rgb(216 154 53 / 0.42);
+  --ds-scrollbar-track: rgb(255 255 255 / 0.025);
 
   --ds-gradient-page:
     radial-gradient(
@@ -165,10 +147,6 @@
     #b87327 100%
   );
 
-  /* ======================================================
-     SHADOWS
-     ====================================================== */
-
   --ds-shadow-card: 0 14px 34px rgb(0 0 0 / 0.24), 0 2px 8px rgb(0 0 0 / 0.18);
 
   --ds-shadow-card-deep:
@@ -181,4 +159,162 @@
   --ds-shadow-gold-inset:
     inset 0 1px 0 rgb(244 217 149 / 0.12),
     inset 0 0 18px rgb(216 154 53 / 0.025);
+}
+
+.light {
+  --background: #f7f3eb;
+  --foreground: #211e19;
+
+  --card: #fffdf8;
+  --card-foreground: #211e19;
+
+  --popover: #fffdf8;
+  --popover-foreground: #211e19;
+
+  --primary: #a96f1d;
+  --primary-foreground: #fffaf0;
+
+  --secondary: #eee7dc;
+  --secondary-foreground: #302b25;
+
+  --muted: #eee8df;
+  --muted-foreground: #706960;
+
+  --accent: #e9e1d5;
+  --accent-foreground: #29251f;
+
+  --destructive: #b84343;
+
+  --border: #d8cfc2;
+  --input: #fffaf2;
+  --ring: #a96f1d;
+
+  --chart-1: #a96f1d;
+  --chart-2: #c08937;
+  --chart-3: #7d541c;
+  --chart-4: #d3ad66;
+  --chart-5: #777067;
+
+  --sidebar: #f1eadf;
+  --sidebar-foreground: #302b25;
+
+  --sidebar-primary: #a96f1d;
+  --sidebar-primary-foreground: #fffaf0;
+
+  --sidebar-accent: #e7dfd3;
+  --sidebar-accent-foreground: #29251f;
+
+  --sidebar-border: #d5cabc;
+  --sidebar-ring: #a96f1d;
+
+  --ds-ink: #ece5da;
+  --ds-obsidian: #f7f3eb;
+  --ds-night: #fffaf2;
+  --ds-sidebar: #f1eadf;
+
+  --ds-charcoal: #fffdf8;
+  --ds-elevated: #fcf8f1;
+  --ds-surface: #f4ede3;
+  --ds-surface-soft: #ebe2d6;
+
+  --ds-border: #d8cfc2;
+  --ds-border-soft: rgb(72 57 38 / 0.12);
+  --ds-border-gold: rgb(169 111 29 / 0.3);
+
+  --ds-amber: #ad741e;
+  --ds-amber-bright: #b87b21;
+  --ds-gold: #9f691d;
+  --ds-soft-gold: #8f5e1c;
+  --ds-pale-gold: #79501b;
+  --ds-bronze: #714916;
+
+  --ds-cream: #211e19;
+  --ds-text: #403a33;
+  --ds-muted: #6c655d;
+  --ds-muted-soft: #7b746c;
+  --ds-faint: #958c81;
+
+  --ds-success: #397b5a;
+  --ds-danger: #b84343;
+
+  --ds-amber-03: rgb(169 111 29 / 0.035);
+  --ds-amber-05: rgb(169 111 29 / 0.055);
+  --ds-amber-08: rgb(169 111 29 / 0.085);
+  --ds-amber-10: rgb(169 111 29 / 0.11);
+  --ds-amber-14: rgb(169 111 29 / 0.14);
+  --ds-amber-18: rgb(169 111 29 / 0.18);
+  --ds-amber-24: rgb(169 111 29 / 0.24);
+  --ds-amber-32: rgb(169 111 29 / 0.32);
+
+  /*
+   * Legacy token names are preserved
+   * so existing components do not need
+   * visual-system rewrites.
+   *
+   * In light mode these become subtle
+   * dark overlays instead of white ones.
+   */
+  --ds-white-02: rgb(42 34 25 / 0.02);
+  --ds-white-03: rgb(42 34 25 / 0.03);
+  --ds-white-04: rgb(42 34 25 / 0.04);
+  --ds-white-06: rgb(42 34 25 / 0.06);
+  --ds-white-08: rgb(42 34 25 / 0.08);
+  --ds-white-10: rgb(42 34 25 / 0.1);
+
+  --ds-selection: rgb(169 111 29 / 0.2);
+  --ds-selection-text: #211e19;
+
+  --ds-focus: rgb(169 111 29 / 0.72);
+
+  --ds-scrollbar: rgb(169 111 29 / 0.28);
+  --ds-scrollbar-hover: rgb(169 111 29 / 0.42);
+  --ds-scrollbar-track: rgb(42 34 25 / 0.045);
+
+  --ds-gradient-page:
+    radial-gradient(
+      circle at 72% -12%,
+      rgb(191 133 48 / 0.1),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 5% 82%,
+      rgb(152 105 45 / 0.06),
+      transparent 30rem
+    ),
+    linear-gradient(145deg, #f8f4ed 0%, #f3ede4 52%, #f8f4ed 100%);
+
+  --ds-gradient-panel:
+    linear-gradient(145deg, rgb(255 255 255 / 0.7), transparent 35%),
+    linear-gradient(180deg, #fffdf8 0%, #f7f1e8 100%);
+
+  --ds-gradient-panel-soft:
+    linear-gradient(155deg, rgb(255 255 255 / 0.65), transparent 42%), #fbf7f0;
+
+  --ds-gradient-gold: linear-gradient(
+    135deg,
+    #d9b46d 0%,
+    #ba812d 36%,
+    #9d661c 76%,
+    #744813 100%
+  );
+
+  --ds-gradient-gold-text: linear-gradient(
+    135deg,
+    #8a5918 0%,
+    #a96f1d 42%,
+    #875515 100%
+  );
+
+  --ds-shadow-card:
+    0 14px 34px rgb(73 55 34 / 0.08), 0 2px 8px rgb(73 55 34 / 0.06);
+
+  --ds-shadow-card-deep:
+    0 24px 70px rgb(73 55 34 / 0.12), 0 4px 14px rgb(73 55 34 / 0.08);
+
+  --ds-shadow-gold: 0 0 24px rgb(169 111 29 / 0.08);
+
+  --ds-shadow-gold-strong: 0 0 36px rgb(169 111 29 / 0.13);
+
+  --ds-shadow-gold-inset:
+    inset 0 1px 0 rgb(255 255 255 / 0.7), inset 0 0 18px rgb(169 111 29 / 0.035);
 }

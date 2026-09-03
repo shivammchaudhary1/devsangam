@@ -65,7 +65,7 @@ const MobileStreakHero = memo(function MobileStreakHero({
   longestStreakDays,
 }: MobileStreakHeroProps) {
   return (
-    <section className="relative overflow-hidden rounded-[12px] border border-[#d89a35]/20 bg-[linear-gradient(145deg,rgba(216,154,53,0.075),rgba(13,19,28,0.98)_42%,#0a1018)] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.24)]">
+    <section className="relative overflow-hidden rounded-[12px] border border-[#d89a35]/20 bg-[var(--ds-gradient-panel)] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.24)]">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-14 -top-16 size-40 rounded-full bg-[#d89a35]/[0.08] blur-3xl"
@@ -74,7 +74,7 @@ const MobileStreakHero = memo(function MobileStreakHero({
       <div className="relative flex items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Flame size={13} strokeWidth={1.7} className="text-[#dda13e]" />
+            <Flame size={13} strokeWidth={1.7} className="text-[var(--ds-gold)]" />
 
             <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#b88232]">
               Current Streak
@@ -82,7 +82,7 @@ const MobileStreakHero = memo(function MobileStreakHero({
           </div>
 
           <div className="mt-3 flex items-end gap-2">
-            <p className="font-serif text-[42px] font-medium leading-none tracking-[-0.04em] text-[#efc875]">
+            <p className="font-serif text-[42px] font-medium leading-none tracking-[-0.04em] text-[var(--ds-soft-gold)]">
               {formatInsightsNumber(currentStreakDays)}
             </p>
 
@@ -91,7 +91,7 @@ const MobileStreakHero = memo(function MobileStreakHero({
             </p>
           </div>
 
-          <p className="mt-2 text-[9px] text-[#727a85]">
+          <p className="mt-2 text-[9px] text-[var(--ds-muted)]">
             Best:{' '}
             <span className="font-medium text-[#a69b8b]">
               {formatInsightsNumber(longestStreakDays)}{' '}
@@ -110,10 +110,10 @@ const MobileStreakHero = memo(function MobileStreakHero({
             <Flame
               size={25}
               strokeWidth={1.5}
-              className="mx-auto text-[#d89a35]"
+              className="mx-auto text-[var(--ds-gold)]"
             />
 
-            <p className="mt-1 text-[7px] font-semibold uppercase tracking-[0.1em] text-[#846a45]">
+            <p className="mt-1 text-[7px] font-semibold uppercase tracking-[0.1em] text-[var(--ds-bronze)]">
               Sadhana
             </p>
           </div>
@@ -141,21 +141,21 @@ const MobileWeeklyActivity = memo(function MobileWeeklyActivity({
   );
 
   return (
-    <section className="rounded-[12px] border border-white/[0.075] bg-[#0d131c] p-4 shadow-[0_13px_30px_rgba(0,0,0,0.2)]">
+    <section className="rounded-[12px] border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)] p-4 shadow-[0_13px_30px_rgba(0,0,0,0.2)]">
       <div className="flex items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <BarChart3 size={13} strokeWidth={1.7} className="text-[#d89a35]" />
+            <BarChart3 size={13} strokeWidth={1.7} className="text-[var(--ds-gold)]" />
 
-            <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#747c87]">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[var(--ds-muted)]">
               This Week
             </p>
           </div>
 
-          <p className="mt-1 text-[9px] text-[#59616c]">Completed chants</p>
+          <p className="mt-1 text-[9px] text-[var(--ds-muted)]">Completed chants</p>
         </div>
 
-        <p className="font-serif text-[15px] text-[#e0b55f]">
+        <p className="font-serif text-[15px] text-[var(--ds-soft-gold)]">
           {formatInsightsNumber(totalChants)}
         </p>
       </div>
@@ -169,7 +169,7 @@ const MobileWeeklyActivity = memo(function MobileWeeklyActivity({
               key={item.date}
               className="flex min-w-0 flex-1 flex-col items-center justify-end"
             >
-              <span className="mb-1.5 text-[7px] font-medium text-[#8a929d]">
+              <span className="mb-1.5 text-[7px] font-medium text-[var(--ds-muted)]">
                 {item.chants > 0 ? formatInsightsNumber(item.chants) : ''}
               </span>
 
@@ -184,7 +184,7 @@ const MobileWeeklyActivity = memo(function MobileWeeklyActivity({
                           'bg-[linear-gradient(180deg,#dfa342,#9c611f)]',
                           'shadow-[0_0_12px_rgba(216,154,53,0.07)]',
                         ].join(' ')
-                      : 'border-white/[0.045] bg-white/[0.025]',
+                      : 'border-[var(--ds-border-soft)] bg-[var(--ds-white-03)]',
                   ].join(' ')}
                   style={{
                     height,
@@ -192,7 +192,7 @@ const MobileWeeklyActivity = memo(function MobileWeeklyActivity({
                 />
               </div>
 
-              <span className="mt-2 text-[7px] font-medium text-[#727b86]">
+              <span className="mt-2 text-[7px] font-medium text-[var(--ds-muted)]">
                 {formatWeekday(item.date)}
               </span>
             </div>
@@ -211,11 +211,11 @@ const MobilePracticeSummary = memo(function MobilePracticeSummary({
   insights,
 }: MobilePracticeSummaryProps) {
   return (
-    <section className="rounded-[12px] border border-white/[0.075] bg-[#0d131c] p-4 shadow-[0_13px_30px_rgba(0,0,0,0.2)]">
+    <section className="rounded-[12px] border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)] p-4 shadow-[0_13px_30px_rgba(0,0,0,0.2)]">
       <div className="flex items-center gap-2">
-        <Sparkles size={13} strokeWidth={1.7} className="text-[#d89a35]" />
+        <Sparkles size={13} strokeWidth={1.7} className="text-[var(--ds-gold)]" />
 
-        <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#747c87]">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[var(--ds-muted)]">
           Practice Summary
         </p>
       </div>
@@ -240,10 +240,10 @@ const MobilePracticeSummary = memo(function MobilePracticeSummary({
         />
       </div>
 
-      <div className="mt-4 border-t border-white/[0.055] pt-3 text-center">
-        <p className="text-[8px] text-[#606873]">Total chants</p>
+      <div className="mt-4 border-t border-[var(--ds-border-soft)] pt-3 text-center">
+        <p className="text-[8px] text-[var(--ds-muted)]">Total chants</p>
 
-        <p className="mt-1 font-serif text-[18px] text-[#e0b55f]">
+        <p className="mt-1 font-serif text-[18px] text-[var(--ds-soft-gold)]">
           {formatInsightsNumber(insights.summary.totalChants)}
         </p>
       </div>
@@ -266,11 +266,11 @@ const MobileSummaryStat = memo(function MobileSummaryStat({
 }: MobileSummaryStatProps) {
   return (
     <div className="px-2 text-center">
-      <Icon size={12} strokeWidth={1.6} className="mx-auto text-[#b47c2d]" />
+      <Icon size={12} strokeWidth={1.6} className="mx-auto text-[var(--ds-bronze)]" />
 
-      <p className="mt-2 font-serif text-[13px] text-[#d8b05d]">{value}</p>
+      <p className="mt-2 font-serif text-[13px] text-[var(--ds-soft-gold)]">{value}</p>
 
-      <p className="mt-1 text-[7px] uppercase tracking-[0.08em] text-[#5c6570]">
+      <p className="mt-1 text-[7px] uppercase tracking-[0.08em] text-[var(--ds-muted)]">
         {label}
       </p>
     </div>

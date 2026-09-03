@@ -49,20 +49,20 @@ export const PracticeProgressSummary = memo(function PracticeProgressSummary({
         />
       </section>
 
-      <section className="mx-auto mt-3 max-w-xl rounded-[10px] border border-white/[0.06] bg-[#090f17] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:px-4">
+      <section className="mx-auto mt-3 max-w-xl rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:px-4">
         <div className="flex items-center justify-between gap-3">
           <div className="shrink-0">
             <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-[#5f6772]">
               Current Mala
             </p>
 
-            <p className="mt-1 font-serif text-[11px] text-[#c8b58c]">
+            <p className="mt-1 font-serif text-[11px] text-[var(--ds-soft-gold)]">
               {malaProgressCount} / {MALA_SIZE}
             </p>
           </div>
 
           <div className="min-w-0 flex-1">
-            <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.035]">
+            <div className="h-1.5 overflow-hidden rounded-full bg-[var(--ds-white-03)]">
               <div
                 className="h-full rounded-full bg-[linear-gradient(90deg,#8f581f,#c98b32_48%,#efc875)] shadow-[0_0_8px_rgba(216,154,53,0.12)] transition-[width] duration-200"
                 style={{
@@ -72,21 +72,21 @@ export const PracticeProgressSummary = memo(function PracticeProgressSummary({
             </div>
 
             <div className="mt-1.5 flex items-center justify-between">
-              <span className="text-[7px] text-[#4e5661]">0</span>
+              <span className="text-[7px] text-[var(--ds-muted)]">0</span>
 
-              <span className="text-[7px] font-medium text-[#8d7043]">
+              <span className="text-[7px] font-medium text-[var(--ds-bronze)]">
                 {Math.round(malaProgressPercentage)}%
               </span>
 
-              <span className="text-[7px] text-[#4e5661]">{MALA_SIZE}</span>
+              <span className="text-[7px] text-[var(--ds-muted)]">{MALA_SIZE}</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto mt-3 flex max-w-[210px] items-center justify-center gap-2.5 rounded-[10px] border border-white/[0.06] bg-[#090f17] px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)]">
+      <section className="mx-auto mt-3 flex max-w-[210px] items-center justify-center gap-2.5 rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)]">
         <div className="flex size-7 items-center justify-center rounded-[7px] border border-[#d89a35]/12 bg-[#d89a35]/[0.035]">
-          <Clock3 size={13} strokeWidth={1.6} className="text-[#b88133]" />
+          <Clock3 size={13} strokeWidth={1.6} className="text-[var(--ds-bronze)]" />
         </div>
 
         <div className="text-left">
@@ -94,7 +94,7 @@ export const PracticeProgressSummary = memo(function PracticeProgressSummary({
             Elapsed Time
           </p>
 
-          <p className="mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[#d9d3ca]">
+          <p className="mt-0.5 font-mono text-[13px] font-medium tabular-nums text-[var(--ds-cream)]">
             {formatPracticeDuration(elapsedSeconds)}
           </p>
         </div>
@@ -105,10 +105,10 @@ export const PracticeProgressSummary = memo(function PracticeProgressSummary({
           <RefreshCcw
             size={11}
             strokeWidth={1.7}
-            className="mt-1 shrink-0 text-[#a77732]"
+            className="mt-1 shrink-0 text-[var(--ds-bronze)]"
           />
 
-          <p className="text-[8px] leading-5 text-[#806e55]">{syncMessage}</p>
+          <p className="text-[8px] leading-5 text-[var(--ds-bronze)]">{syncMessage}</p>
         </div>
       ) : null}
     </>

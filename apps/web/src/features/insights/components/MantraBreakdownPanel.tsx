@@ -29,38 +29,63 @@ export const MantraBreakdownPanel = memo(function MantraBreakdownPanel({
   }
 
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-[#09121e] p-4 sm:p-5">
-      <div className="flex items-start justify-between gap-3">
+    <section
+      className={
+        'rounded-2xl border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-gradient-panel-soft)] p-4 ' +
+        'shadow-[var(--ds-shadow-card)] sm:p-5'
+      }
+    >
+      <div className={'flex items-start justify-between gap-3'}>
         <div>
-          <div className="flex items-center gap-2">
-            <Sparkles size={14} strokeWidth={1.7} className="text-amber-400" />
+          <div className={'flex items-center gap-2'}>
+            <Sparkles
+              size={14}
+              strokeWidth={1.7}
+              className={'text-[var(--ds-gold)]'}
+            />
 
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <p
+              className={
+                'text-[10px] font-semibold uppercase ' +
+                'tracking-[0.16em] text-[var(--ds-gold)]'
+              }
+            >
               Mantras
             </p>
           </div>
 
-          <h2 className="mt-1 font-serif text-lg text-slate-200">
+          <h2 className={'mt-1 font-serif text-lg text-[var(--ds-cream)]'}>
             Practice breakdown
           </h2>
 
-          <p className="mt-1 text-[11px] leading-5 text-slate-600">
+          <p className={'mt-1 text-[11px] leading-5 text-[var(--ds-muted)]'}>
             See where your chanting practice has been focused.
           </p>
         </div>
 
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-right">
-          <p className="text-[8px] uppercase tracking-[0.1em] text-slate-600">
+        <div
+          className={
+            'rounded-xl border border-[var(--ds-border-soft)] ' +
+            'bg-[var(--ds-white-03)] px-3 py-2 text-right'
+          }
+        >
+          <p
+            className={
+              'text-[8px] uppercase tracking-[0.1em] ' +
+              'text-[var(--ds-muted)]'
+            }
+          >
             Practiced
           </p>
 
-          <p className="mt-1 font-serif text-base text-slate-300">
+          <p className={'mt-1 font-serif text-base text-[var(--ds-cream)]'}>
             {formatInsightsNumber(breakdown.length)}
           </p>
         </div>
       </div>
 
-      <div className="mt-5 max-h-[390px] space-y-3 overflow-y-auto pr-1">
+      <div className={'mt-5 max-h-[390px] space-y-3 overflow-y-auto pr-1'}>
         {breakdown.map((item, index) => (
           <MantraBreakdownItem
             key={item.mantraSlug}
@@ -96,65 +121,108 @@ const MantraBreakdownItem = memo(function MantraBreakdownItem({
   const title = mantra?.title ?? formatMantraSlug(item.mantraSlug);
 
   return (
-    <article className="rounded-xl border border-white/[0.06] bg-white/[0.018] p-3.5 transition hover:border-amber-400/[0.12] hover:bg-white/[0.025]">
-      <div className="flex items-start gap-3">
-        <div className="relative size-11 shrink-0 overflow-hidden rounded-xl border border-white/[0.07] bg-[#070f19]">
+    <article
+      className={
+        'rounded-xl border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-white-03)] p-3.5 transition ' +
+        'hover:border-[var(--ds-border-gold)] ' +
+        'hover:bg-[var(--ds-amber-03)]'
+      }
+    >
+      <div className={'flex items-start gap-3'}>
+        <div
+          className={
+            'relative size-11 shrink-0 overflow-hidden ' +
+            'rounded-xl border border-[var(--ds-border-soft)] ' +
+            'bg-[var(--ds-night)]'
+          }
+        >
           {mantra?.image ? (
             <img
               src={mantra.image}
               alt=""
               loading="lazy"
               decoding="async"
-              className="h-full w-full object-cover"
+              className={'h-full w-full object-cover'}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center">
+            <div className={'flex h-full w-full items-center justify-center'}>
               <Sparkles
                 size={15}
                 strokeWidth={1.6}
-                className="text-amber-400/45"
+                className={'text-[var(--ds-gold)] opacity-50'}
               />
             </div>
           )}
 
-          <div className="absolute bottom-0 right-0 flex size-4 items-center justify-center rounded-tl-md bg-[#07111f]/90 text-[7px] font-semibold text-amber-300">
+          <div
+            className={
+              'absolute bottom-0 right-0 flex size-4 ' +
+              'items-center justify-center rounded-tl-md ' +
+              'bg-black/65 text-[7px] font-semibold ' +
+              'text-[#f4d995]'
+            }
+          >
             {rank}
           </div>
         </div>
 
-        <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-3">
+        <div className={'min-w-0 flex-1'}>
+          <div className={'flex items-start justify-between gap-3'}>
             <div className="min-w-0">
-              <h3 className="truncate font-serif text-sm text-slate-200">
+              <h3
+                className={'truncate font-serif text-sm text-[var(--ds-cream)]'}
+              >
                 {title}
               </h3>
 
-              <p className="mt-0.5 truncate text-[9px] text-slate-600">
+              <p
+                className={'mt-0.5 truncate text-[9px] text-[var(--ds-muted)]'}
+              >
                 {mantra?.deity ?? 'Mantra practice'}
               </p>
             </div>
 
-            <div className="shrink-0 text-right">
-              <p className="font-serif text-base text-amber-200">
+            <div className={'shrink-0 text-right'}>
+              <p className={'font-serif text-base text-[var(--ds-soft-gold)]'}>
                 {formatInsightsNumber(item.totalChants)}
               </p>
 
-              <p className="text-[8px] uppercase tracking-[0.08em] text-slate-600">
+              <p
+                className={
+                  'text-[8px] uppercase tracking-[0.08em] ' +
+                  'text-[var(--ds-muted)]'
+                }
+              >
                 chants
               </p>
             </div>
           </div>
 
           <div className="mt-3">
-            <div className="flex items-center justify-between gap-3 text-[8px] text-slate-600">
+            <div
+              className={
+                'flex items-center justify-between gap-3 ' +
+                'text-[8px] text-[var(--ds-muted)]'
+              }
+            >
               <span>Share of practice</span>
 
-              <span className="text-slate-500">{contribution}%</span>
+              <span className={'text-[var(--ds-text)]'}>{contribution}%</span>
             </div>
 
-            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+            <div
+              className={
+                'mt-1.5 h-1.5 overflow-hidden rounded-full ' +
+                'bg-[var(--ds-white-06)]'
+              }
+            >
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#9b631a] via-[#c68a2e] to-[#e4bc58] transition-[width] duration-500"
+                className={
+                  'h-full rounded-full bg-gradient-to-r ' +
+                  'from-[#9b631a] via-[#c68a2e] to-[#e4bc58] ' +
+                  'transition-[width] duration-500'
+                }
                 style={{
                   width: `${contribution}%`,
                 }}
@@ -162,7 +230,7 @@ const MantraBreakdownItem = memo(function MantraBreakdownItem({
             </div>
           </div>
 
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className={'mt-3 grid grid-cols-3 gap-2'}>
             <MantraStat
               label="Sessions"
               value={formatInsightsNumber(item.totalCompletedSessions)}
@@ -199,16 +267,33 @@ const MantraStat = memo(function MantraStat({
   icon: Icon,
 }: MantraStatProps) {
   return (
-    <div className="rounded-lg border border-white/[0.045] bg-[#07101a]/60 px-2 py-2">
-      <div className="flex items-center gap-1">
-        <Icon size={9} strokeWidth={1.6} className="text-amber-400/55" />
+    <div
+      className={
+        'rounded-lg border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-night)] px-2 py-2'
+      }
+    >
+      <div className={'flex items-center gap-1'}>
+        <Icon
+          size={9}
+          strokeWidth={1.6}
+          className={'text-[var(--ds-gold)] opacity-60'}
+        />
 
-        <span className="text-[7px] uppercase tracking-[0.07em] text-slate-600">
+        <span
+          className={
+            'text-[7px] uppercase tracking-[0.07em] ' + 'text-[var(--ds-muted)]'
+          }
+        >
           {label}
         </span>
       </div>
 
-      <p className="mt-1 truncate text-[10px] font-medium text-slate-400">
+      <p
+        className={
+          'mt-1 truncate text-[10px] font-medium ' + 'text-[var(--ds-text)]'
+        }
+      >
         {value}
       </p>
     </div>
@@ -217,28 +302,54 @@ const MantraStat = memo(function MantraStat({
 
 function MantraBreakdownEmptyState() {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-[#09121e] p-5">
-      <div className="flex items-center gap-2">
-        <Sparkles size={14} className="text-amber-400" />
+    <section
+      className={
+        'rounded-2xl border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-gradient-panel-soft)] p-5 ' +
+        'shadow-[var(--ds-shadow-card)]'
+      }
+    >
+      <div className={'flex items-center gap-2'}>
+        <Sparkles size={14} className={'text-[var(--ds-gold)]'} />
 
-        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <p
+          className={
+            'text-[10px] font-semibold uppercase ' +
+            'tracking-[0.16em] text-[var(--ds-gold)]'
+          }
+        >
           Mantras
         </p>
       </div>
 
-      <h2 className="mt-1 font-serif text-lg text-slate-200">
+      <h2 className={'mt-1 font-serif text-lg text-[var(--ds-cream)]'}>
         Practice breakdown
       </h2>
 
-      <div className="mt-5 flex min-h-40 items-center justify-center rounded-xl border border-dashed border-white/[0.07] bg-white/[0.015] px-6 text-center">
+      <div
+        className={
+          'mt-5 flex min-h-40 items-center justify-center ' +
+          'rounded-xl border border-dashed ' +
+          'border-[var(--ds-border-soft)] ' +
+          'bg-[var(--ds-white-03)] px-6 text-center'
+        }
+      >
         <div>
-          <Sparkles size={20} className="mx-auto text-amber-400/45" />
+          <Sparkles
+            size={20}
+            className={'mx-auto text-[var(--ds-gold)] opacity-55'}
+          />
 
-          <p className="mt-3 font-serif text-base text-slate-300">
+          <p className={'mt-3 font-serif text-base text-[var(--ds-text)]'}>
             No mantra activity yet
           </p>
 
-          <p className="mx-auto mt-2 max-w-xs text-[11px] leading-5 text-slate-600">
+          <p
+            className={
+              'mx-auto mt-2 max-w-xs text-[11px] leading-5 ' +
+              'text-[var(--ds-muted)]'
+            }
+          >
             Complete a Sadhana during this period to see your mantra-wise
             practice here.
           </p>

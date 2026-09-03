@@ -6,11 +6,13 @@ import {
 } from '@/features/auth/api/auth.api';
 import type { AuthUser } from '@/features/auth/types/auth.types';
 import { writePracticePreferences } from '@/features/practice/storage/practice-preferences.storage';
+import type { ThemePreference } from '@/features/theme/types/theme.types';
 import { type FormEvent, useMemo, useState } from 'react';
 
 const PRACTICE_TARGET_OPTIONS = [108, 216, 1008] as const;
 
 export type PendingSetting =
+  | 'theme'
   | 'target'
   | 'timezone'
   | 'sound'
@@ -46,6 +48,47 @@ export function useSettingsActions({
 
     return [...values].sort((left, right) => left - right);
   }, [user.preferences.defaultTarget]);
+
+  async function handleThemeChange(theme: ThemePreference) {
+    if (theme === user.preferences.theme) {
+      return;
+    }
+
+    setPendingSetting('theme');
+
+    try {
+      const updatedUser = await updateCurrentUser({
+        preferences: {
+          theme,
+        },
+      });
+
+      /*
+       * ThemeProvider observes the authenticated
+       * user's preference. Updating AuthUser here
+       * therefore changes the visual theme and
+       * mirrors the preference to localStorage.
+       */
+      setUser(updatedUser);
+
+      if (theme === 'system') {
+        toast.success('Appearance now follows your device.');
+      } else {
+        toast.success(
+          theme === 'dark' ? 'Dark theme enabled.' : 'Light theme enabled.'
+        );
+      }
+    } catch (error) {
+      toast.error(
+        getSettingsErrorMessage(
+          error,
+          'Appearance preference could not be updated.'
+        )
+      );
+    } finally {
+      setPendingSetting(null);
+    }
+  }
 
   async function handleTargetChange(target: number) {
     if (target === user.preferences.defaultTarget) {
@@ -224,19 +267,35 @@ export function useSettingsActions({
 
   return {
     confirmPassword,
+
     currentPassword,
+
     handleHapticToggle,
+
     handlePasswordSubmit,
+
     handleSoundToggle,
+
     handleTargetChange,
+
+    handleThemeChange,
+
     handleUseDeviceTimezone,
+
     newPassword,
+
     pendingSetting,
+
     setConfirmPassword,
+
     setCurrentPassword,
+
     setNewPassword,
+
     setShowPasswords,
+
     showPasswords,
+
     targetOptions,
   };
 }

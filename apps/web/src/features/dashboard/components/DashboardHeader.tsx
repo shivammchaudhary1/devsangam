@@ -11,7 +11,7 @@ export function DesktopDashboardHeader({
   timezone,
 }: DesktopDashboardHeaderProps) {
   return (
-    <header className="hidden items-start justify-between border-b border-white/[0.055] pb-5 md:flex">
+    <header className="hidden items-start justify-between border-b border-[var(--ds-border-soft)] pb-5 md:flex">
       <div>
         <div className="flex items-center gap-2">
           <Sparkles

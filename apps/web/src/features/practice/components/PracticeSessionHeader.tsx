@@ -26,12 +26,12 @@ export const PracticeSessionHeader = memo(function PracticeSessionHeader({
 }: PracticeSessionHeaderProps) {
   return (
     <>
-      <div className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border border-white/[0.065] bg-[#090f17]/82 px-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.018)] backdrop-blur-md sm:px-4">
+      <div className="flex min-h-11 items-center justify-between gap-3 rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.018)] backdrop-blur-md sm:px-4">
         <button
           type="button"
           onClick={onExit}
           disabled={isBusy}
-          className="group inline-flex items-center gap-2 rounded-[7px] px-1.5 py-1 text-[10px] font-medium text-[#7c8590] transition hover:bg-white/[0.025] hover:text-[#dfb35c] disabled:cursor-not-allowed disabled:opacity-40"
+          className="group inline-flex items-center gap-2 rounded-[7px] px-1.5 py-1 text-[10px] font-medium text-[var(--ds-muted)] transition hover:bg-[var(--ds-white-03)] hover:text-[#dfb35c] disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ArrowLeft
             size={14}
@@ -71,7 +71,7 @@ export const PracticeSessionHeader = memo(function PracticeSessionHeader({
             </span>
           </div>
 
-          <div className="flex min-w-0 items-center gap-2 text-[8px] font-semibold uppercase tracking-[0.12em] text-[#6d7580]">
+          <div className="flex min-w-0 items-center gap-2 text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--ds-muted)]">
             <span className="truncate">
               Mala {currentMalaRound} / {totalMalaRounds}
             </span>
@@ -79,7 +79,7 @@ export const PracticeSessionHeader = memo(function PracticeSessionHeader({
             <Sparkles
               size={11}
               strokeWidth={1.6}
-              className="shrink-0 text-[#c88b32]"
+              className="shrink-0 text-[var(--ds-gold)]"
             />
           </div>
         </div>
@@ -96,16 +96,16 @@ export const PracticeSessionHeader = memo(function PracticeSessionHeader({
           <div className="h-px w-8 bg-[linear-gradient(90deg,rgba(216,154,53,0.22),transparent)]" />
         </div>
 
-        <h1 className="mt-2 font-serif text-[20px] font-medium uppercase tracking-[0.07em] text-[#e8d7b4] sm:text-[23px]">
+        <h1 className="mt-2 font-serif text-[20px] font-medium uppercase tracking-[0.07em] text-[var(--ds-soft-gold)] sm:text-[23px]">
           {mantra.title}
         </h1>
 
-        <p className="font-devanagari mt-2 text-[14px] leading-7 text-[#cdb98d] sm:text-[16px]">
+        <p className="font-devanagari mt-2 text-[14px] leading-7 text-[var(--ds-soft-gold)] sm:text-[16px]">
           {mantra.sanskrit}
         </p>
 
         {mantra.transliteration ? (
-          <p className="mx-auto mt-1.5 max-w-lg text-[9px] leading-4 tracking-[0.02em] text-[#69717c] sm:text-[10px]">
+          <p className="mx-auto mt-1.5 max-w-lg text-[9px] leading-4 tracking-[0.02em] text-[var(--ds-muted)] sm:text-[10px]">
             {mantra.transliteration}
           </p>
         ) : null}

@@ -89,8 +89,8 @@ export function RegisterPage() {
           grid-cols-2
           rounded-lg
           border
-          border-white/[0.07]
-          bg-[#11151d]
+          border-[var(--ds-border-soft)]
+          bg-[var(--ds-elevated)]
           p-1
           lg:hidden
         "
@@ -105,7 +105,7 @@ export function RegisterPage() {
             rounded-md
             text-xs
             font-medium
-            text-[#afb6c1]
+            text-[var(--ds-muted)]
           "
         >
           Login
@@ -126,7 +126,7 @@ export function RegisterPage() {
             to-[#604018]/80
             text-xs
             font-semibold
-            text-[#f7d891]
+            text-[var(--ds-soft-gold)]
             shadow-[0_0_15px_rgba(245,158,11,0.14)]
           "
         >
@@ -149,7 +149,7 @@ export function RegisterPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Name
@@ -165,7 +165,7 @@ export function RegisterPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -177,13 +177,13 @@ export function RegisterPage() {
                 className="
                   h-[50px]
                   rounded-lg
-                  border-[#343b49]
-                  bg-[#0d1118]
+                  border-[var(--ds-border-soft)]
+                  bg-[var(--ds-night)]
                   pl-11
-                  text-[#f8fafc]
-                  placeholder:text-[#657080]
-                  hover:border-[#454e5d]
-                  focus-visible:border-[#c99836]/80
+                  text-[var(--ds-cream)]
+                  placeholder:text-[var(--ds-muted)]
+                  hover:border-[var(--ds-border-gold)]
+                  focus-visible:border-[var(--ds-border-gold)]
                   focus-visible:ring-[3px]
                   focus-visible:ring-amber-500/[0.08]
                 "
@@ -214,7 +214,7 @@ export function RegisterPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Email
@@ -230,7 +230,7 @@ export function RegisterPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -243,13 +243,13 @@ export function RegisterPage() {
                 className="
                   h-[50px]
                   rounded-lg
-                  border-[#343b49]
-                  bg-[#0d1118]
+                  border-[var(--ds-border-soft)]
+                  bg-[var(--ds-night)]
                   pl-11
-                  text-[#f8fafc]
-                  placeholder:text-[#657080]
-                  hover:border-[#454e5d]
-                  focus-visible:border-[#c99836]/80
+                  text-[var(--ds-cream)]
+                  placeholder:text-[var(--ds-muted)]
+                  hover:border-[var(--ds-border-gold)]
+                  focus-visible:border-[var(--ds-border-gold)]
                   focus-visible:ring-[3px]
                   focus-visible:ring-amber-500/[0.08]
                 "
@@ -280,7 +280,7 @@ export function RegisterPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Password
@@ -296,7 +296,7 @@ export function RegisterPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -333,7 +333,7 @@ export function RegisterPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Confirm Password
@@ -349,7 +349,7 @@ export function RegisterPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -440,7 +440,7 @@ export function RegisterPage() {
             mt-7
             text-center
             text-xs
-            text-[#8d95a2]
+            text-[var(--ds-muted)]
             sm:text-sm
           "
         >
@@ -449,7 +449,7 @@ export function RegisterPage() {
             to="/auth/login"
             className="
               font-medium
-              text-[#e8b647]
+              text-[var(--ds-gold)]
               transition
               hover:text-[#ffd16c]
             "

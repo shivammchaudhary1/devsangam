@@ -80,7 +80,7 @@ const userSchema = new Schema(
 
       theme: {
         type: String,
-        enum: ['dark', 'light'],
+        enum: ['dark', 'light', 'system'],
         default: 'dark',
       },
 

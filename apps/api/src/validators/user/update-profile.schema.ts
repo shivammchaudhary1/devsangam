@@ -17,7 +17,7 @@ const updatePreferencesSchema = z
       .max(20, 'Language value is too long.')
       .optional(),
 
-    theme: z.enum(['dark', 'light']).optional(),
+    theme: z.enum(['dark', 'light', 'system']).optional(),
 
     soundEnabled: z.boolean().optional(),
 

@@ -150,7 +150,7 @@ export function ProfileIdentityCard({
                 onClick={onCancelAvatarSelection}
                 className={
                   'flex h-8 items-center justify-center gap-1.5 ' +
-                  'rounded-[7px] border border-white/[0.08] ' +
+                  'rounded-[7px] border border-[var(--ds-border-soft)] ' +
                   'px-2.5 text-[9px] text-[var(--ds-muted)] ' +
                   'disabled:opacity-50'
                 }
@@ -184,7 +184,7 @@ export function ProfileIdentityCard({
                   onClick={() => void onRemoveAvatar()}
                   className={
                     'flex h-8 items-center justify-center gap-1.5 ' +
-                    'rounded-[7px] border border-white/[0.08] ' +
+                    'rounded-[7px] border border-[var(--ds-border-soft)] ' +
                     'px-2.5 text-[9px] text-[var(--ds-muted)] ' +
                     'transition hover:text-red-300 disabled:opacity-50'
                   }
@@ -303,7 +303,7 @@ export function ProfileIdentityCard({
                   disabled={saving}
                   className={
                     'flex h-9 items-center gap-2 rounded-[7px] ' +
-                    'border border-white/[0.08] px-3 text-[11px] ' +
+                    'border border-[var(--ds-border-soft)] px-3 text-[11px] ' +
                     'text-[var(--ds-muted)] disabled:opacity-50'
                   }
                 >
@@ -398,7 +398,7 @@ export function ProfileIdentityCard({
 
           <div
             className={
-              'mt-4 flex flex-wrap gap-4 border-t ' + 'border-white/[0.05] pt-4'
+              'mt-4 flex flex-wrap gap-4 border-t ' + 'border-[var(--ds-border-soft)] pt-4'
             }
           >
             <span

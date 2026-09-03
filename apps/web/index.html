@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
 
@@ -15,6 +15,39 @@
     <link rel="apple-touch-icon" sizes="192x192" href="/pwa-192x192.png?v=5" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#070b11" />
+
+    <script>
+      (() => {
+        const storageKey = 'devsangam.theme';
+
+        let preference = 'dark';
+
+        try {
+          const stored = localStorage.getItem(storageKey);
+
+          if (stored === 'dark' || stored === 'light' || stored === 'system') {
+            preference = stored;
+          }
+        } catch {
+          // Use dark default.
+        }
+
+        const resolved =
+          preference === 'system'
+            ? matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+            : preference;
+
+        const root = document.documentElement;
+
+        root.classList.add(resolved);
+
+        root.style.colorScheme = resolved;
+      })();
+    </script>
 
     <title>DevSangam</title>
   </head>

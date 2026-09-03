@@ -46,7 +46,7 @@ export function FavoriteButton({
 
         isFavorite
           ? 'border-amber-400/40 bg-amber-400/[0.12] text-amber-300'
-          : 'border-white/10 bg-[#07111f]/70 text-slate-400 hover:border-amber-400/30 hover:text-amber-300',
+          : 'border-[var(--ds-border-soft)] bg-[var(--ds-night)] text-slate-400 hover:border-amber-400/30 hover:text-amber-300',
       ].join(' ')}
     >
       {pending ? (

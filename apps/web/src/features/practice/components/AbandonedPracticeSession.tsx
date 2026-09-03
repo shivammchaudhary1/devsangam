@@ -7,9 +7,9 @@ export const AbandonedPracticeSession = memo(
     const navigate = useNavigate();
 
     return (
-      <main className="flex min-h-[70vh] items-center justify-center bg-[#07111f] px-4 text-white">
-        <section className="w-full max-w-md rounded-2xl border border-white/[0.08] bg-[#0b1421] p-6 text-center">
-          <h1 className="font-serif text-xl text-[#f0dfad]">Session ended</h1>
+      <main className="flex min-h-[70vh] items-center justify-center bg-[var(--ds-obsidian)] px-4 text-[var(--ds-cream)]">
+        <section className="w-full max-w-md rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)] p-6 text-center">
+          <h1 className="font-serif text-xl text-[var(--ds-soft-gold)]">Session ended</h1>
 
           <p className="mt-2 text-sm leading-6 text-slate-500">
             This practice session has already been exited.

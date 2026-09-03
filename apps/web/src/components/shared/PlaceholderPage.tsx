@@ -31,7 +31,7 @@ export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
           className="
             font-display
             text-3xl
-            text-[#e5c07b]
+            text-[var(--ds-soft-gold)]
           "
         >
           {title}

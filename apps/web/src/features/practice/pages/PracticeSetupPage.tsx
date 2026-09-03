@@ -232,21 +232,36 @@ export function PracticeSetupPage() {
 
   if (isMantraLoading) {
     return (
-      <div className="flex min-h-[65vh] items-center justify-center">
-        <Loader2 className="size-7 animate-spin text-[#d89a35]" />
+      <div className={'flex min-h-[65vh] items-center ' + 'justify-center'}>
+        <Loader2 className={'size-7 animate-spin ' + 'text-[var(--ds-gold)]'} />
       </div>
     );
   }
 
   if (isMantraError || (hasRequestedMantra && !requestedMantraQuery.data)) {
     return (
-      <div className="mx-auto flex min-h-[65vh] max-w-xl items-center justify-center px-4">
-        <div className="w-full rounded-[12px] border border-red-400/20 bg-red-400/[0.035] p-6 text-center">
-          <h1 className="font-serif text-xl text-red-100">
+      <div
+        className={
+          'mx-auto flex min-h-[65vh] max-w-xl ' +
+          'items-center justify-center px-4'
+        }
+      >
+        <div
+          className={
+            'w-full rounded-[12px] border ' +
+            'border-red-400/20 bg-red-400/[0.035] ' +
+            'p-6 text-center'
+          }
+        >
+          <h1 className={'font-serif text-xl ' + 'text-[var(--ds-danger)]'}>
             Practice unavailable
           </h1>
 
-          <p className="mt-2 text-sm leading-6 text-red-100/60">
+          <p
+            className={
+              'mt-2 text-sm leading-6 ' + 'text-[var(--ds-danger)] opacity-80'
+            }
+          >
             We could not load the requested mantra. Please try again.
           </p>
         </div>
@@ -255,42 +270,105 @@ export function PracticeSetupPage() {
   }
 
   return (
-    <main className="relative min-h-full overflow-hidden bg-[var(--ds-obsidian)] px-3 pb-28 pt-5 text-[var(--ds-cream)] sm:px-5 md:pb-10 lg:px-7 lg:py-6 xl:px-8">
+    <main
+      className={
+        'relative min-h-full overflow-hidden ' +
+        'bg-[var(--ds-obsidian)] px-3 pb-28 pt-5 ' +
+        'text-[var(--ds-cream)] sm:px-5 md:pb-10 ' +
+        'lg:px-7 lg:py-6 xl:px-8'
+      }
+    >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        className={'pointer-events-none absolute inset-0 overflow-hidden'}
       >
-        <div className="absolute left-[24%] top-[-220px] size-[480px] rounded-full bg-[#d89a35]/[0.025] blur-[120px]" />
+        <div
+          className={
+            'absolute left-[24%] top-[-220px] ' +
+            'size-[480px] rounded-full ' +
+            'bg-[#d89a35]/[0.025] blur-[120px]'
+          }
+        />
 
-        <div className="absolute bottom-[-220px] right-[-140px] size-[420px] rounded-full border border-[#d89a35]/[0.025]" />
+        <div
+          className={
+            'absolute bottom-[-220px] right-[-140px] ' +
+            'size-[420px] rounded-full border ' +
+            'border-[#d89a35]/[0.025]'
+          }
+        />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[940px]">
-        <header className="mb-5 border-b border-white/[0.065] pb-5 lg:mb-6">
+      <div className={'relative z-10 mx-auto w-full max-w-[940px]'}>
+        <header
+          className={
+            'mb-5 border-b border-[var(--ds-border-soft)] ' + 'pb-5 lg:mb-6'
+          }
+        >
           <div className="flex items-center gap-2">
-            <Sparkles size={12} strokeWidth={1.7} className="text-[#d89a35]" />
+            <Sparkles
+              size={12}
+              strokeWidth={1.7}
+              className="text-[var(--ds-gold)]"
+            />
 
-            <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-[#c58a32]">
+            <span
+              className={
+                'text-[9px] font-semibold uppercase ' +
+                'tracking-[0.18em] text-[var(--ds-gold)]'
+              }
+            >
               Start Practice
             </span>
           </div>
 
-          <h1 className="mt-2 font-serif text-[25px] font-medium tracking-[0.015em] text-[#eee5d8] sm:text-[29px]">
+          <h1
+            className={
+              'mt-2 font-serif text-[25px] font-medium ' +
+              'tracking-[0.015em] text-[var(--ds-cream)] ' +
+              'sm:text-[29px]'
+            }
+          >
             Begin Your Sadhana
           </h1>
 
-          <p className="mt-1.5 max-w-2xl text-[11px] leading-5 text-[#737b86] sm:text-xs">
+          <p
+            className={
+              'mt-1.5 max-w-2xl text-[11px] leading-5 ' +
+              'text-[var(--ds-muted)] sm:text-xs'
+            }
+          >
             {hasRequestedMantra
-              ? 'Set your target and begin practice with your selected mantra.'
-              : 'Choose a mantra, set your intention, and enter your chanting practice.'}
+              ? 'Set your target and begin practice ' +
+                'with your selected mantra.'
+              : 'Choose a mantra, set your intention, ' +
+                'and enter your chanting practice.'}
           </p>
         </header>
 
         {resumableSession ? (
-          <section className="relative mb-4 overflow-hidden rounded-[12px] border border-[#d89a35]/25 bg-[linear-gradient(135deg,rgba(216,154,53,0.085),rgba(13,19,28,0.98)_38%,#0a1018)] shadow-[0_14px_34px_rgba(0,0,0,0.22),0_0_26px_rgba(216,154,53,0.04)]">
-            <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
-              <div className="flex min-w-0 flex-1 items-center gap-3">
-                <div className="relative size-14 shrink-0 overflow-hidden rounded-[10px] border border-[#d89a35]/18 bg-[#080d14]">
+          <section
+            className={
+              'relative mb-4 overflow-hidden rounded-[12px] ' +
+              'border border-[#d89a35]/25 ' +
+              'bg-[var(--ds-gradient-panel)] ' +
+              'shadow-[var(--ds-shadow-card)]'
+            }
+          >
+            <div
+              className={
+                'flex flex-col gap-4 p-4 sm:flex-row ' +
+                'sm:items-center sm:p-5'
+              }
+            >
+              <div className={'flex min-w-0 flex-1 items-center gap-3'}>
+                <div
+                  className={
+                    'relative size-14 shrink-0 overflow-hidden ' +
+                    'rounded-[10px] border border-[#d89a35]/18 ' +
+                    'bg-[var(--ds-sidebar)]'
+                  }
+                >
                   {resumableImage ? (
                     <img
                       src={resumableImage}
@@ -298,39 +376,55 @@ export function PracticeSetupPage() {
                       aria-hidden="true"
                       loading="lazy"
                       decoding="async"
-                      className="h-full w-full object-cover"
+                      className={'h-full w-full object-cover'}
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center">
-                      <RotateCcw className="size-5 text-[#d89a35]/70" />
+                    <div
+                      className={
+                        'flex h-full w-full items-center ' + 'justify-center'
+                      }
+                    >
+                      <RotateCcw
+                        className={'size-5 text-[var(--ds-gold)] opacity-70'}
+                      />
                     </div>
                   )}
                 </div>
 
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className={'flex items-center gap-2'}>
                     {resumableSession.status === 'paused' ? (
-                      <Pause className="size-3.5 text-[#d89a35]" />
+                      <Pause className={'size-3.5 text-[var(--ds-gold)]'} />
                     ) : (
-                      <Play className="size-3.5 text-[#d89a35]" />
+                      <Play className={'size-3.5 text-[var(--ds-gold)]'} />
                     )}
 
-                    <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-[#c88b32]">
+                    <p
+                      className={
+                        'text-[8px] font-semibold uppercase ' +
+                        'tracking-[0.16em] text-[var(--ds-gold)]'
+                      }
+                    >
                       Continue Sadhana
                     </p>
                   </div>
 
-                  <h2 className="mt-1 truncate font-serif text-sm font-medium text-[#e7d7b7] sm:text-[15px]">
+                  <h2
+                    className={
+                      'mt-1 truncate font-serif text-sm font-medium ' +
+                      'text-[var(--ds-cream)] sm:text-[15px]'
+                    }
+                  >
                     {resumableMantra?.title ?? resumableSession.mantraSlug}
                   </h2>
 
-                  <p className="mt-1 text-[10px] text-[#68717c]">
+                  <p className={'mt-1 text-[10px] text-[var(--ds-muted)]'}>
                     Your unfinished practice is ready to continue.
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 sm:w-[230px]">
+              <div className={'grid grid-cols-3 gap-2 sm:w-[230px]'}>
                 <ResumeStat
                   label="Progress"
                   value={`${resumableSession.completedCount}/${resumableSession.targetCount}`}
@@ -356,7 +450,11 @@ export function PracticeSetupPage() {
               <button
                 type="button"
                 onClick={handleResumePractice}
-                className="ds-gold-button inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-[8px] px-4 text-[10px] font-semibold"
+                className={
+                  'ds-gold-button inline-flex h-10 shrink-0 ' +
+                  'items-center justify-center gap-2 rounded-[8px] ' +
+                  'px-4 text-[10px] font-semibold'
+                }
               >
                 <Play size={14} fill="currentColor" />
                 Resume
@@ -365,34 +463,58 @@ export function PracticeSetupPage() {
           </section>
         ) : null}
 
-        <section className="relative overflow-hidden rounded-[13px] border border-white/[0.075] bg-[linear-gradient(145deg,rgba(255,255,255,0.022),transparent_34%),#0d131c] p-3 shadow-[0_18px_50px_rgba(0,0,0,0.24)] sm:p-4 lg:p-5">
+        <section
+          className={
+            'relative overflow-hidden rounded-[13px] border ' +
+            'border-[var(--ds-border-soft)] ' +
+            'bg-[var(--ds-gradient-panel-soft)] p-3 ' +
+            'shadow-[var(--ds-shadow-card)] sm:p-4 lg:p-5'
+          }
+        >
           <div>
-            <div className="mb-3 flex items-center gap-2">
-              <div className="flex size-6 items-center justify-center rounded-full border border-[#d89a35]/25 bg-[#d89a35]/[0.065] text-[9px] font-semibold text-[#e2ac4c] shadow-[0_0_16px_rgba(216,154,53,0.035)]">
+            <div className={'mb-3 flex items-center gap-2'}>
+              <div
+                className={
+                  'flex size-6 items-center justify-center rounded-full ' +
+                  'border border-[var(--ds-border-gold)] ' +
+                  'bg-[var(--ds-amber-05)] text-[9px] font-semibold ' +
+                  'text-[var(--ds-soft-gold)] ' +
+                  'shadow-[var(--ds-shadow-gold)]'
+                }
+              >
                 1
               </div>
 
               <div>
-                <h2 className="font-serif text-sm font-medium text-[#ddd4c7] sm:text-[15px]">
+                <h2
+                  className={
+                    'font-serif text-sm font-medium ' +
+                    'text-[var(--ds-cream)] sm:text-[15px]'
+                  }
+                >
                   {hasRequestedMantra
                     ? 'Selected Mantra'
                     : 'Choose Your Mantra'}
                 </h2>
 
-                <p className="mt-0.5 text-[9px] text-[#626b76]">
+                <p className={'mt-0.5 text-[9px] text-[var(--ds-muted)]'}>
                   {hasRequestedMantra
                     ? 'Your selected mantra is ready for practice'
-                    : 'Favorites are shown first, followed by recently added mantras'}
+                    : 'Favorites are shown first, followed ' +
+                      'by recently added mantras'}
                 </p>
               </div>
             </div>
 
             {!hasRequestedMantra ? (
-              <div className="relative mb-3">
+              <div className={'relative mb-3'}>
                 <Search
                   aria-hidden="true"
                   size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[#626b76]"
+                  className={
+                    'absolute left-3 top-1/2 z-10 ' +
+                    '-translate-y-1/2 text-[var(--ds-muted)]'
+                  }
                 />
 
                 <input
@@ -400,7 +522,16 @@ export function PracticeSetupPage() {
                   value={mantraSearch}
                   onChange={(event) => setMantraSearch(event.target.value)}
                   placeholder="Search mantra, deity, meaning..."
-                  className="ds-input h-10 w-full rounded-[9px] pl-9 pr-3 text-xs outline-none"
+                  className={
+                    'h-10 w-full rounded-[9px] border ' +
+                    'border-[var(--ds-border-soft)] ' +
+                    'bg-[var(--ds-night)] pl-9 pr-3 text-xs ' +
+                    'text-[var(--ds-cream)] outline-none transition ' +
+                    'placeholder:text-[var(--ds-muted-soft)] ' +
+                    'hover:border-[var(--ds-border-gold)] ' +
+                    'focus:border-[var(--ds-border-gold)] ' +
+                    'focus:shadow-[0_0_0_2px_var(--ds-amber-05)]'
+                  }
                 />
               </div>
             ) : null}
@@ -419,24 +550,39 @@ export function PracticeSetupPage() {
                       onClick={() => setSelectedMantraSlug(mantra.slug)}
                       aria-pressed={isSelected}
                       className={[
-                        'group w-full min-w-0 overflow-hidden rounded-[10px] border text-left transition-all duration-200',
+                        'group w-full min-w-0 overflow-hidden',
+                        'rounded-[10px] border text-left',
+                        'transition-all duration-200',
 
                         isSelected
                           ? [
-                              'border-[#d89a35]/55',
-                              'bg-[linear-gradient(90deg,rgba(216,154,53,0.095),rgba(216,154,53,0.038)_62%,transparent)]',
-                              'shadow-[0_0_22px_rgba(216,154,53,0.055),inset_0_1px_0_rgba(255,255,255,0.025)]',
+                              'border-[var(--ds-border-gold)]',
+                              'bg-[var(--ds-amber-08)]',
+                              'shadow-[var(--ds-shadow-gold-inset)]',
                             ].join(' ')
                           : [
-                              'border-white/[0.065]',
-                              'bg-white/[0.016]',
-                              'hover:border-white/[0.11]',
-                              'hover:bg-white/[0.026]',
+                              'border-[var(--ds-border-soft)]',
+                              'bg-[var(--ds-white-03)]',
+                              'hover:border-[var(--ds-border-gold)]',
+                              'hover:bg-[var(--ds-amber-03)]',
                             ].join(' '),
                       ].join(' ')}
                     >
-                      <div className="flex min-w-0 items-center gap-2.5 p-2.5 min-[400px]:gap-3 sm:p-3">
-                        <div className="relative size-12 shrink-0 overflow-hidden rounded-[8px] border border-white/[0.075] bg-[#080d14] min-[400px]:size-[54px] sm:size-[58px]">
+                      <div
+                        className={
+                          'flex min-w-0 items-center gap-2.5 ' +
+                          'p-2.5 min-[400px]:gap-3 sm:p-3'
+                        }
+                      >
+                        <div
+                          className={
+                            'relative size-12 shrink-0 overflow-hidden ' +
+                            'rounded-[8px] border ' +
+                            'border-[var(--ds-border-soft)] ' +
+                            'bg-[var(--ds-sidebar)] ' +
+                            'min-[400px]:size-[54px] sm:size-[58px]'
+                          }
+                        >
                           {image ? (
                             <img
                               src={image}
@@ -444,55 +590,95 @@ export function PracticeSetupPage() {
                               aria-hidden="true"
                               loading="lazy"
                               decoding="async"
-                              className="h-full w-full object-cover"
+                              className={'h-full w-full object-cover'}
                             />
                           ) : (
-                            <div className="h-full w-full bg-white/[0.02]" />
+                            <div
+                              className={
+                                'h-full w-full bg-[var(--ds-white-03)]'
+                              }
+                            />
                           )}
 
                           <div
                             aria-hidden="true"
-                            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 to-transparent"
+                            className={
+                              'pointer-events-none absolute inset-0 ' +
+                              'bg-gradient-to-t from-black/35 to-transparent'
+                            }
                           />
                         </div>
 
-                        <div className="min-w-0 flex-1 overflow-hidden">
-                          <div className="flex w-full min-w-0 items-center gap-2 overflow-hidden">
+                        <div className={'min-w-0 flex-1 overflow-hidden'}>
+                          <div
+                            className={
+                              'flex w-full min-w-0 items-center ' +
+                              'gap-2 overflow-hidden'
+                            }
+                          >
                             <h3
                               className={[
-                                'truncate font-serif text-sm font-medium sm:text-[15px]',
+                                'truncate font-serif text-sm font-medium',
+                                'sm:text-[15px]',
 
                                 isSelected
-                                  ? 'text-[#ebcf91]'
-                                  : 'text-[#d9d5cf]',
+                                  ? 'text-[var(--ds-soft-gold)]'
+                                  : 'text-[var(--ds-cream)]',
                               ].join(' ')}
                             >
                               {mantra.title}
                             </h3>
 
                             {mantra.deity ? (
-                              <span className="hidden shrink-0 rounded-full border border-white/[0.07] px-2 py-0.5 text-[8px] text-[#626b76] sm:inline-flex">
+                              <span
+                                className={
+                                  'hidden shrink-0 rounded-full border ' +
+                                  'border-[var(--ds-border-soft)] ' +
+                                  'px-2 py-0.5 text-[8px] ' +
+                                  'text-[var(--ds-muted)] sm:inline-flex'
+                                }
+                              >
                                 {mantra.deity}
                               </span>
                             ) : null}
                           </div>
 
-                          <p className="font-devanagari mt-1 truncate text-[11px] text-[#b99a65] sm:text-xs">
+                          <p
+                            className={
+                              'font-devanagari mt-1 truncate text-[11px] ' +
+                              'text-[var(--ds-soft-gold)] sm:text-xs'
+                            }
+                          >
                             {mantra.sanskrit}
                           </p>
 
-                          <p className="mt-1 truncate text-[9px] text-[#626b76] sm:text-[10px]">
+                          <p
+                            className={
+                              'mt-1 truncate text-[9px] ' +
+                              'text-[var(--ds-muted)] sm:text-[10px]'
+                            }
+                          >
                             {mantra.transliteration}
                           </p>
                         </div>
 
                         <div
                           className={[
-                            'flex size-6 shrink-0 items-center justify-center rounded-full border transition',
+                            'flex size-6 shrink-0 items-center justify-center',
+                            'rounded-full border transition',
 
                             isSelected
-                              ? 'border-[#e7b353]/60 bg-[linear-gradient(145deg,#dda13e,#b86e22)] text-[#1c1207] shadow-[0_0_12px_rgba(216,154,53,0.1)]'
-                              : 'border-white/[0.14] bg-transparent text-transparent',
+                              ? [
+                                  'border-[var(--ds-border-gold)]',
+                                  'bg-[var(--ds-gradient-gold)]',
+                                  'text-[#1c1207]',
+                                  'shadow-[var(--ds-shadow-gold)]',
+                                ].join(' ')
+                              : [
+                                  'border-[var(--ds-border-soft)]',
+                                  'bg-transparent',
+                                  'text-transparent',
+                                ].join(' '),
                           ].join(' ')}
                         >
                           {isSelected ? (
@@ -507,12 +693,17 @@ export function PracticeSetupPage() {
                 })}
               </div>
             ) : (
-              <div className="rounded-[10px] border border-white/[0.065] bg-white/[0.016] px-4 py-6 text-center">
-                <p className="font-serif text-sm text-[#d9d5cf]">
+              <div
+                className={
+                  'rounded-[10px] border border-[var(--ds-border-soft)] ' +
+                  'bg-[var(--ds-white-03)] px-4 py-6 text-center'
+                }
+              >
+                <p className={'font-serif text-sm text-[var(--ds-cream)]'}>
                   No matching mantra
                 </p>
 
-                <p className="mt-1 text-[10px] text-[#626b76]">
+                <p className={'mt-1 text-[10px] text-[var(--ds-muted)]'}>
                   Try a different search term.
                 </p>
               </div>
@@ -521,33 +712,53 @@ export function PracticeSetupPage() {
             {!hasRequestedMantra &&
             !debouncedMantraSearch.trim() &&
             selectableMantras.length ? (
-              <p className="mt-2 text-right text-[8px] text-[#59616c]">
+              <p
+                className={'mt-2 text-right text-[8px] text-[var(--ds-muted)]'}
+              >
                 Showing up to {PRACTICE_MANTRA_LIMIT} preferred or recently
                 added mantras
               </p>
             ) : null}
           </div>
 
-          <div className="my-5 h-px bg-[linear-gradient(90deg,transparent,rgba(148,163,184,0.12)_15%,rgba(216,154,53,0.13)_50%,rgba(148,163,184,0.12)_85%,transparent)]" />
+          <div
+            className={
+              'my-5 h-px ' +
+              'bg-[linear-gradient(90deg,transparent,var(--ds-border-soft)_15%,var(--ds-border-gold)_50%,var(--ds-border-soft)_85%,transparent)]'
+            }
+          />
 
           <div>
-            <div className="mb-3 flex items-center gap-2">
-              <div className="flex size-6 items-center justify-center rounded-full border border-[#d89a35]/25 bg-[#d89a35]/[0.065] text-[9px] font-semibold text-[#e2ac4c] shadow-[0_0_16px_rgba(216,154,53,0.035)]">
+            <div className={'mb-3 flex items-center gap-2'}>
+              <div
+                className={
+                  'flex size-6 items-center justify-center rounded-full ' +
+                  'border border-[var(--ds-border-gold)] ' +
+                  'bg-[var(--ds-amber-05)] text-[9px] font-semibold ' +
+                  'text-[var(--ds-soft-gold)] ' +
+                  'shadow-[var(--ds-shadow-gold)]'
+                }
+              >
                 2
               </div>
 
               <div>
-                <h2 className="font-serif text-sm font-medium text-[#ddd4c7] sm:text-[15px]">
+                <h2
+                  className={
+                    'font-serif text-sm font-medium ' +
+                    'text-[var(--ds-cream)] sm:text-[15px]'
+                  }
+                >
                   Set Your Target
                 </h2>
 
-                <p className="mt-0.5 text-[9px] text-[#626b76]">
+                <p className={'mt-0.5 text-[9px] text-[var(--ds-muted)]'}>
                   Choose your chant count
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 min-[420px]:grid-cols-4">
+            <div className={'grid grid-cols-2 gap-2 min-[420px]:grid-cols-4'}>
               {PRACTICE_TARGET_OPTIONS.map((target) => {
                 const isSelected = !isCustomTarget && selectedTarget === target;
 
@@ -558,29 +769,35 @@ export function PracticeSetupPage() {
                     onClick={() => handlePresetTarget(target)}
                     aria-pressed={isSelected}
                     className={[
-                      'min-h-[58px] rounded-[9px] border px-2 py-2.5 text-center transition-all',
+                      'min-h-[58px] rounded-[9px] border',
+                      'px-2 py-2.5 text-center transition-all',
 
                       isSelected
                         ? [
-                            'border-[#d89a35]/55',
-                            'bg-[#d89a35]/[0.075]',
-                            'text-[#e9be69]',
-                            'shadow-[0_0_16px_rgba(216,154,53,0.045)]',
+                            'border-[var(--ds-border-gold)]',
+                            'bg-[var(--ds-amber-08)]',
+                            'text-[var(--ds-soft-gold)]',
+                            'shadow-[var(--ds-shadow-gold)]',
                           ].join(' ')
                         : [
-                            'border-white/[0.065]',
-                            'bg-white/[0.016]',
-                            'text-[#8b939e]',
-                            'hover:border-white/[0.11]',
-                            'hover:bg-white/[0.025]',
+                            'border-[var(--ds-border-soft)]',
+                            'bg-[var(--ds-white-03)]',
+                            'text-[var(--ds-muted)]',
+                            'hover:border-[var(--ds-border-gold)]',
+                            'hover:bg-[var(--ds-amber-03)]',
                           ].join(' '),
                     ].join(' ')}
                   >
-                    <span className="block font-serif text-sm sm:text-base">
+                    <span className={'block font-serif text-sm sm:text-base'}>
                       {target}
                     </span>
 
-                    <span className="mt-0.5 block text-[8px] uppercase tracking-[0.12em] opacity-60">
+                    <span
+                      className={
+                        'mt-0.5 block text-[8px] uppercase ' +
+                        'tracking-[0.12em] opacity-60'
+                      }
+                    >
                       {target === 108
                         ? '1 Mala'
                         : target === 216
@@ -596,29 +813,35 @@ export function PracticeSetupPage() {
                 onClick={handleCustomTarget}
                 aria-pressed={isCustomTarget}
                 className={[
-                  'min-h-[58px] rounded-[9px] border px-2 py-2.5 text-center transition-all',
+                  'min-h-[58px] rounded-[9px] border',
+                  'px-2 py-2.5 text-center transition-all',
 
                   isCustomTarget
                     ? [
-                        'border-[#d89a35]/55',
-                        'bg-[#d89a35]/[0.075]',
-                        'text-[#e9be69]',
-                        'shadow-[0_0_16px_rgba(216,154,53,0.045)]',
+                        'border-[var(--ds-border-gold)]',
+                        'bg-[var(--ds-amber-08)]',
+                        'text-[var(--ds-soft-gold)]',
+                        'shadow-[var(--ds-shadow-gold)]',
                       ].join(' ')
                     : [
-                        'border-white/[0.065]',
-                        'bg-white/[0.016]',
-                        'text-[#8b939e]',
-                        'hover:border-white/[0.11]',
-                        'hover:bg-white/[0.025]',
+                        'border-[var(--ds-border-soft)]',
+                        'bg-[var(--ds-white-03)]',
+                        'text-[var(--ds-muted)]',
+                        'hover:border-[var(--ds-border-gold)]',
+                        'hover:bg-[var(--ds-amber-03)]',
                       ].join(' '),
                 ].join(' ')}
               >
-                <span className="block font-serif text-sm sm:text-base">
+                <span className={'block font-serif text-sm sm:text-base'}>
                   Custom
                 </span>
 
-                <span className="mt-0.5 block text-[8px] uppercase tracking-[0.12em] opacity-60">
+                <span
+                  className={
+                    'mt-0.5 block text-[8px] uppercase ' +
+                    'tracking-[0.12em] opacity-60'
+                  }
+                >
                   Set own
                 </span>
               </button>
@@ -633,11 +856,24 @@ export function PracticeSetupPage() {
                   value={customTarget}
                   onChange={(event) => setCustomTarget(event.target.value)}
                   placeholder="Enter chant count"
-                  className="ds-input h-10 w-full rounded-[9px] px-3 text-xs outline-none"
+                  className={
+                    'h-10 w-full rounded-[9px] border ' +
+                    'border-[var(--ds-border-soft)] ' +
+                    'bg-[var(--ds-night)] px-3 text-xs ' +
+                    'text-[var(--ds-cream)] outline-none transition ' +
+                    'placeholder:text-[var(--ds-muted-soft)] ' +
+                    'hover:border-[var(--ds-border-gold)] ' +
+                    'focus:border-[var(--ds-border-gold)] ' +
+                    'focus:shadow-[0_0_0_2px_var(--ds-amber-05)]'
+                  }
                 />
 
                 {!isValidCustomTarget ? (
-                  <p className="mt-1.5 text-[10px] text-red-300/80">
+                  <p
+                    className={
+                      'mt-1.5 text-[10px] ' + 'text-[var(--ds-danger)]'
+                    }
+                  >
                     Enter a whole number between {MIN_CUSTOM_PRACTICE_TARGET}{' '}
                     and {MAX_CUSTOM_PRACTICE_TARGET}.
                   </p>
@@ -647,36 +883,83 @@ export function PracticeSetupPage() {
           </div>
 
           {selectedMantra ? (
-            <div className="mt-4 grid grid-cols-1 gap-3 rounded-[10px] border border-white/[0.06] bg-[#090f17] px-3 py-3 min-[420px]:grid-cols-[1fr_auto_auto] min-[420px]:items-center">
+            <div
+              className={
+                'mt-4 grid grid-cols-1 gap-3 rounded-[10px] ' +
+                'border border-[var(--ds-border-soft)] ' +
+                'bg-[var(--ds-night)] px-3 py-3 ' +
+                'min-[420px]:grid-cols-[1fr_auto_auto] ' +
+                'min-[420px]:items-center'
+              }
+            >
               <div className="min-w-0">
-                <p className="text-[8px] uppercase tracking-[0.15em] text-[#59616c]">
+                <p
+                  className={
+                    'text-[8px] uppercase tracking-[0.15em] ' +
+                    'text-[var(--ds-muted)]'
+                  }
+                >
                   Selected
                 </p>
 
-                <p className="mt-1 truncate font-serif text-xs text-[#d9d5cf] sm:text-sm">
+                <p
+                  className={
+                    'mt-1 truncate font-serif text-xs ' +
+                    'text-[var(--ds-cream)] sm:text-sm'
+                  }
+                >
                   {selectedMantra.title}
                 </p>
               </div>
 
-              <div className="border-t border-white/[0.06] pt-2 min-[420px]:border-l min-[420px]:border-t-0 min-[420px]:pl-3 min-[420px]:pt-0 min-[420px]:text-right">
-                <p className="text-[8px] uppercase tracking-[0.12em] text-[#59616c]">
+              <div
+                className={
+                  'border-t border-[var(--ds-border-soft)] pt-2 ' +
+                  'min-[420px]:border-l min-[420px]:border-t-0 ' +
+                  'min-[420px]:pl-3 min-[420px]:pt-0 ' +
+                  'min-[420px]:text-right'
+                }
+              >
+                <p
+                  className={
+                    'text-[8px] uppercase tracking-[0.12em] ' +
+                    'text-[var(--ds-muted)]'
+                  }
+                >
                   Target
                 </p>
 
-                <p className="mt-1 font-serif text-sm text-[#e0b55f]">
+                <p
+                  className={
+                    'mt-1 font-serif text-sm ' + 'text-[var(--ds-soft-gold)]'
+                  }
+                >
                   {Number.isFinite(targetCount) && targetCount > 0
                     ? targetCount
                     : '—'}
                 </p>
               </div>
 
-              <div className="border-t border-white/[0.06] pt-2 min-[420px]:border-l min-[420px]:border-t-0 min-[420px]:pl-3 min-[420px]:pt-0 min-[420px]:text-right">
-                <p className="flex items-center gap-1 text-[8px] uppercase tracking-[0.12em] text-[#59616c] min-[420px]:justify-end">
+              <div
+                className={
+                  'border-t border-[var(--ds-border-soft)] pt-2 ' +
+                  'min-[420px]:border-l min-[420px]:border-t-0 ' +
+                  'min-[420px]:pl-3 min-[420px]:pt-0 ' +
+                  'min-[420px]:text-right'
+                }
+              >
+                <p
+                  className={
+                    'flex items-center gap-1 text-[8px] uppercase ' +
+                    'tracking-[0.12em] text-[var(--ds-muted)] ' +
+                    'min-[420px]:justify-end'
+                  }
+                >
                   <Clock3 size={10} />
                   Time
                 </p>
 
-                <p className="mt-1 text-[10px] text-[#a7a9ab]">
+                <p className={'mt-1 text-[10px] text-[var(--ds-text)]'}>
                   {estimatedMinutes ? `~${estimatedMinutes} min` : 'Varies'}
                 </p>
               </div>
@@ -684,12 +967,18 @@ export function PracticeSetupPage() {
           ) : null}
 
           {createSession.isError ? (
-            <p className="mt-3 rounded-[9px] border border-red-400/20 bg-red-400/[0.04] px-3 py-2.5 text-xs text-red-200">
+            <p
+              className={
+                'mt-3 rounded-[9px] border border-red-400/20 ' +
+                'bg-red-400/[0.04] px-3 py-2.5 text-xs ' +
+                'text-[var(--ds-danger)]'
+              }
+            >
               Unable to start your practice. Please try again.
             </p>
           ) : null}
 
-          <div className="mt-4 flex justify-end">
+          <div className={'mt-4 flex justify-end'}>
             <button
               type="button"
               onClick={handleStartPractice}
@@ -698,11 +987,16 @@ export function PracticeSetupPage() {
                 createSession.isPending ||
                 (isCustomTarget && !isValidCustomTarget)
               }
-              className="ds-gold-button inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[9px] px-5 text-[11px] font-semibold sm:w-auto sm:min-w-[190px]"
+              className={
+                'ds-gold-button inline-flex min-h-11 w-full ' +
+                'items-center justify-center gap-2 rounded-[9px] ' +
+                'px-5 text-[11px] font-semibold sm:w-auto ' +
+                'sm:min-w-[190px]'
+              }
             >
               {createSession.isPending ? (
                 <>
-                  <Loader2 className="size-4 animate-spin" />
+                  <Loader2 className={'size-4 animate-spin'} />
                   Preparing Session...
                 </>
               ) : (
@@ -714,7 +1008,12 @@ export function PracticeSetupPage() {
             </button>
           </div>
 
-          <p className="mt-2.5 text-center text-[8px] leading-4 text-[#59616c]">
+          <p
+            className={
+              'mt-2.5 text-center text-[8px] leading-4 ' +
+              'text-[var(--ds-muted)]'
+            }
+          >
             Find a quiet space. Breathe. Chant. Transform.
           </p>
         </section>
@@ -729,12 +1028,25 @@ function getMantraImage(mantra: Mantra) {
 
 function ResumeStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[8px] border border-white/[0.055] bg-black/10 px-2 py-2 text-center">
-      <p className="text-[7px] uppercase tracking-[0.12em] text-[#59616c]">
+    <div
+      className={
+        'rounded-[8px] border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-white-03)] px-2 py-2 text-center'
+      }
+    >
+      <p
+        className={
+          'text-[7px] uppercase tracking-[0.12em] ' + 'text-[var(--ds-muted)]'
+        }
+      >
         {label}
       </p>
 
-      <p className="mt-1 truncate text-[10px] font-medium text-[#d8aa52]">
+      <p
+        className={
+          'mt-1 truncate text-[10px] font-medium ' + 'text-[var(--ds-gold)]'
+        }
+      >
         {value}
       </p>
     </div>

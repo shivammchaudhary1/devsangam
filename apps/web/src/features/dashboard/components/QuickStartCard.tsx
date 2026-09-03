@@ -29,7 +29,7 @@ export function QuickStartCard({
 }: QuickStartCardProps) {
   return (
     <article className="overflow-hidden rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
-      <div className="border-b border-white/[0.055] px-4 py-3">
+      <div className="border-b border-[var(--ds-border-soft)] px-4 py-3">
         <h2 className="font-serif text-[14px] text-[var(--ds-cream)]">
           Quick Start
         </h2>
@@ -45,7 +45,7 @@ export function QuickStartCard({
                 {mantra?.title ?? 'Choose Your Mantra'}
               </p>
 
-              <p className="font-devanagari mx-auto mt-1.5 max-w-[360px] truncate text-[13px] text-[#bba16e]">
+              <p className="font-devanagari mx-auto mt-1.5 max-w-[360px] truncate text-[13px] text-[var(--ds-soft-gold)]">
                 {mantra?.sanskrit ?? 'Begin your Sadhana with intention.'}
               </p>
             </>

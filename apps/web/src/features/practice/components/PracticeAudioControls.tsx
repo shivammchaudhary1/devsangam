@@ -30,17 +30,17 @@ export const PracticeAudioControls = memo(function PracticeAudioControls({
   onToneVolumeChange,
 }: PracticeAudioControlsProps) {
   return (
-    <section className="rounded-[11px] border border-white/[0.06] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_42%),#090f17] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:p-3.5">
+    <section className="rounded-[11px] border border-[var(--ds-border-soft)] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_42%),#090f17] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:p-3.5">
       <div className="mb-3">
         <div className="flex items-center gap-2">
-          <Music2 size={12} strokeWidth={1.7} className="text-[#b98234]" />
+          <Music2 size={12} strokeWidth={1.7} className="text-[var(--ds-bronze)]" />
 
-          <p className="text-[8px] font-semibold uppercase tracking-[0.15em] text-[#a87838]">
+          <p className="text-[8px] font-semibold uppercase tracking-[0.15em] text-[var(--ds-bronze)]">
             Audio
           </p>
         </div>
 
-        <p className="mt-1.5 text-[8px] leading-4 text-[#5e6671]">
+        <p className="mt-1.5 text-[8px] leading-4 text-[var(--ds-muted)]">
           Shape the sound of your practice.
         </p>
       </div>
@@ -110,7 +110,7 @@ const AudioControlRow = memo(function AudioControlRow({
   const volumePercentage = Math.round(volume * 100);
 
   return (
-    <div className="rounded-[9px] border border-white/[0.055] bg-[#070c12] p-2.5">
+    <div className="rounded-[9px] border border-[var(--ds-border-soft)] bg-[var(--ds-sidebar)] p-2.5">
       <div className="flex items-center gap-2.5">
         <button
           type="button"
@@ -123,13 +123,13 @@ const AudioControlRow = memo(function AudioControlRow({
               ? [
                   'border-[#d89a35]/25',
                   'bg-[#d89a35]/[0.065]',
-                  'text-[#dca445]',
+                  'text-[var(--ds-gold)]',
                   'shadow-[0_0_14px_rgba(216,154,53,0.04)]',
                 ].join(' ')
               : [
-                  'border-white/[0.06]',
-                  'bg-white/[0.018]',
-                  'text-[#5c6570]',
+                  'border-[var(--ds-border-soft)]',
+                  'bg-[var(--ds-white-03)]',
+                  'text-[var(--ds-muted)]',
                 ].join(' '),
           ].join(' ')}
         >
@@ -142,13 +142,13 @@ const AudioControlRow = memo(function AudioControlRow({
               <p
                 className={[
                   'truncate text-[10px] font-medium',
-                  enabled ? 'text-[#d7d1c8]' : 'text-[#858d97]',
+                  enabled ? 'text-[var(--ds-soft-gold)]' : 'text-[var(--ds-muted)]',
                 ].join(' ')}
               >
                 {label}
               </p>
 
-              <p className="mt-0.5 truncate text-[7px] text-[#555e69]">
+              <p className="mt-0.5 truncate text-[7px] text-[var(--ds-muted)]">
                 {description}
               </p>
             </div>
@@ -161,7 +161,7 @@ const AudioControlRow = memo(function AudioControlRow({
                 'relative h-5 w-9 shrink-0 rounded-full border transition-all duration-200',
                 enabled
                   ? ['border-[#d89a35]/30', 'bg-[#d89a35]/[0.15]'].join(' ')
-                  : ['border-white/[0.07]', 'bg-white/[0.025]'].join(' '),
+                  : ['border-[var(--ds-border-soft)]', 'bg-[var(--ds-white-03)]'].join(' '),
               ].join(' ')}
             >
               <span
@@ -180,7 +180,7 @@ const AudioControlRow = memo(function AudioControlRow({
             <VolumeX
               size={10}
               strokeWidth={1.6}
-              className="shrink-0 text-[#505864]"
+              className="shrink-0 text-[var(--ds-muted)]"
             />
 
             <input
@@ -198,10 +198,10 @@ const AudioControlRow = memo(function AudioControlRow({
             <Volume2
               size={11}
               strokeWidth={1.6}
-              className="shrink-0 text-[#8f6c39]"
+              className="shrink-0 text-[var(--ds-bronze)]"
             />
 
-            <span className="w-7 shrink-0 text-right font-mono text-[7px] tabular-nums text-[#626b76]">
+            <span className="w-7 shrink-0 text-right font-mono text-[7px] tabular-nums text-[var(--ds-muted)]">
               {volumePercentage}%
             </span>
           </div>

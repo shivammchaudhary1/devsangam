@@ -134,7 +134,7 @@ export function ResetPasswordPage() {
                 max-w-sm
                 text-sm
                 leading-6
-                text-[#919aa8]
+                text-[var(--ds-muted)]
               "
             >
               The reset link is missing its security token or is not valid.
@@ -152,14 +152,14 @@ export function ResetPasswordPage() {
                 gap-2
                 rounded-lg
                 border
-                border-[#343b49]
-                bg-[#0d1118]
+                border-[var(--ds-border-soft)]
+                bg-[var(--ds-night)]
                 text-sm
                 font-medium
                 text-[#d2d7df]
                 transition
-                hover:border-[#4b5565]
-                hover:bg-[#121721]
+                hover:border-[var(--ds-border-gold)]
+                hover:bg-[var(--ds-elevated)]
               "
             >
               <ArrowLeft size={16} />
@@ -213,7 +213,7 @@ export function ResetPasswordPage() {
                 max-w-sm
                 text-sm
                 leading-6
-                text-[#919aa8]
+                text-[var(--ds-muted)]
               "
             >
               Your password has been changed successfully. Sign in again using
@@ -274,7 +274,7 @@ export function ResetPasswordPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               New Password
@@ -290,7 +290,7 @@ export function ResetPasswordPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -327,7 +327,7 @@ export function ResetPasswordPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Confirm Password
@@ -343,7 +343,7 @@ export function ResetPasswordPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -439,9 +439,9 @@ export function ResetPasswordPage() {
             gap-2
             text-xs
             font-medium
-            text-[#8d95a2]
+            text-[var(--ds-muted)]
             transition
-            hover:text-[#e8b647]
+            hover:text-[var(--ds-gold)]
           "
         >
           <ArrowLeft size={15} />

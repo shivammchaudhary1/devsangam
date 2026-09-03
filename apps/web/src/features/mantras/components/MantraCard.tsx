@@ -13,13 +13,13 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
   const image = mantra.image || MANTRA_IMAGES[mantra.slug];
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d1726] transition hover:-translate-y-0.5 hover:border-amber-400/30">
+    <article className="group relative overflow-hidden rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)] transition hover:-translate-y-0.5 hover:border-amber-400/30">
       <div className="absolute right-3 top-3 z-20">
         <FavoriteButton mantra={mantra} isFavorite={isFavorite} />
       </div>
 
       <div className="grid min-h-[250px] grid-cols-[175px_1fr]">
-        <div className="relative min-h-[250px] overflow-hidden bg-white/[0.03]">
+        <div className="relative min-h-[250px] overflow-hidden bg-[var(--ds-white-03)]">
           {image ? (
             <img
               src={image}
@@ -31,7 +31,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
             />
           ) : (
-            <div className="absolute inset-0 bg-white/[0.03]" />
+            <div className="absolute inset-0 bg-[var(--ds-white-03)]" />
           )}
 
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0d1726]/20" />
@@ -45,7 +45,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               </p>
             ) : null}
 
-            <h2 className="mt-1 line-clamp-1 font-serif text-lg font-semibold leading-6 text-white">
+            <h2 className="mt-1 line-clamp-1 font-serif text-lg font-semibold leading-6 text-[var(--ds-cream)]">
               {mantra.title}
             </h2>
 
@@ -61,7 +61,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               {mantra.categories.slice(0, 3).map((item) => (
                 <span
                   key={item}
-                  className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] leading-none text-slate-400"
+                  className="rounded-full border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-2.5 py-1 text-[10px] leading-none text-slate-400"
                 >
                   {item}
                 </span>

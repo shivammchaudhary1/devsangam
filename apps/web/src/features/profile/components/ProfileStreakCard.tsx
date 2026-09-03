@@ -31,7 +31,7 @@ export function ProfileStreakCard({
         <span className="text-[11px] text-[var(--ds-muted)]">days</span>
       </div>
 
-      <div className="mt-5 flex justify-between border-t border-white/[0.05] pt-4 text-[11px]">
+      <div className="mt-5 flex justify-between border-t border-[var(--ds-border-soft)] pt-4 text-[11px]">
         <span className="text-[var(--ds-muted-soft)]">Longest streak</span>
 
         <span className="text-[var(--ds-gold)]">

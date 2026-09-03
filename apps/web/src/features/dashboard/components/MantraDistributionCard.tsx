@@ -30,7 +30,7 @@ export function MantraDistributionCard({
 
   return (
     <article className="overflow-hidden rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
-      <div className="border-b border-white/[0.055] px-4 py-3">
+      <div className="border-b border-[var(--ds-border-soft)] px-4 py-3">
         <h2 className="font-serif text-[14px] text-[var(--ds-cream)]">
           Mantra Distribution
         </h2>
@@ -91,7 +91,7 @@ function DistributionRing({ entries, totalChants }: DistributionRingProps) {
         background: createDistributionGradient(entries),
       }}
     >
-      <div className="flex size-[69px] items-center justify-center rounded-full border border-white/[0.045] bg-[var(--ds-charcoal)] shadow-[inset_0_0_22px_rgba(0,0,0,0.48)]">
+      <div className="flex size-[69px] items-center justify-center rounded-full border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)] shadow-[inset_0_0_22px_rgba(0,0,0,0.48)]">
         <div className="text-center">
           <p className="font-serif text-[17px] leading-none text-[var(--ds-soft-gold)]">
             {formatCompactNumber(totalChants)}

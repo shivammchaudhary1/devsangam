@@ -88,24 +88,44 @@ export const StreakCalendar = memo(function StreakCalendar({
   }, [today]);
 
   return (
-    <section className="relative overflow-hidden rounded-[11px] border border-white/[0.075] bg-[linear-gradient(145deg,rgba(255,255,255,0.022),transparent_40%),#0d131c] p-4 shadow-[0_13px_30px_rgba(0,0,0,0.2)]">
+    <section
+      className={
+        'relative overflow-hidden rounded-[11px] border ' +
+        'border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-gradient-panel-soft)] p-4 ' +
+        'shadow-[var(--ds-shadow-card)]'
+      }
+    >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-14 -top-14 size-36 rounded-full bg-[#d89a35]/[0.035] blur-3xl"
+        className={
+          'pointer-events-none absolute -left-14 -top-14 ' +
+          'size-36 rounded-full bg-[var(--ds-amber-05)] ' +
+          'blur-3xl'
+        }
       />
 
       <div className="relative">
-        <div className="flex items-start justify-between gap-3">
+        <div className={'flex items-start justify-between gap-3'}>
           <div>
-            <div className="flex items-center gap-2">
-              <Flame size={13} strokeWidth={1.7} className="text-[#d89a35]" />
+            <div className={'flex items-center gap-2'}>
+              <Flame
+                size={13}
+                strokeWidth={1.7}
+                className={'text-[var(--ds-gold)]'}
+              />
 
-              <p className="text-[9px] font-semibold uppercase tracking-[0.15em] text-[#747c87]">
+              <p
+                className={
+                  'text-[9px] font-semibold uppercase ' +
+                  'tracking-[0.15em] text-[var(--ds-gold)]'
+                }
+              >
                 Streak Calendar
               </p>
             </div>
 
-            <p className="mt-1 text-[9px] leading-4 text-[#59616c]">
+            <p className={'mt-1 text-[9px] leading-4 text-[var(--ds-muted)]'}>
               Completed Sadhana days
             </p>
           </div>
@@ -113,22 +133,32 @@ export const StreakCalendar = memo(function StreakCalendar({
           {isFetching ? (
             <LoaderCircle
               size={13}
-              className="animate-spin text-[#d89a35]/60"
+              className={'animate-spin text-[var(--ds-gold)] opacity-60'}
             />
           ) : null}
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className={'mt-4 flex items-center justify-between'}>
           <button
             type="button"
             onClick={handlePreviousMonth}
             aria-label="Previous month"
-            className="flex size-7 items-center justify-center rounded-[7px] border border-transparent text-[#78818d] transition hover:border-white/[0.07] hover:bg-white/[0.025] hover:text-[#d3cdc4]"
+            className={
+              'flex size-7 items-center justify-center rounded-[7px] ' +
+              'border border-transparent text-[var(--ds-muted)] ' +
+              'transition hover:border-[var(--ds-border-soft)] ' +
+              'hover:bg-[var(--ds-white-03)] ' +
+              'hover:text-[var(--ds-cream)]'
+            }
           >
             <ChevronLeft size={14} />
           </button>
 
-          <p className="font-serif text-[12px] font-medium text-[#d9d2c8]">
+          <p
+            className={
+              'font-serif text-[12px] font-medium ' + 'text-[var(--ds-cream)]'
+            }
+          >
             {visibleMonthLabel}
           </p>
 
@@ -137,17 +167,27 @@ export const StreakCalendar = memo(function StreakCalendar({
             onClick={handleNextMonth}
             disabled={isCurrentMonth}
             aria-label="Next month"
-            className="flex size-7 items-center justify-center rounded-[7px] border border-transparent text-[#78818d] transition hover:border-white/[0.07] hover:bg-white/[0.025] hover:text-[#d3cdc4] disabled:cursor-not-allowed disabled:opacity-25"
+            className={
+              'flex size-7 items-center justify-center rounded-[7px] ' +
+              'border border-transparent text-[var(--ds-muted)] ' +
+              'transition hover:border-[var(--ds-border-soft)] ' +
+              'hover:bg-[var(--ds-white-03)] ' +
+              'hover:text-[var(--ds-cream)] ' +
+              'disabled:cursor-not-allowed disabled:opacity-25'
+            }
           >
             <ChevronRight size={14} />
           </button>
         </div>
 
-        <div className="mt-4 grid grid-cols-7 gap-1">
+        <div className={'mt-4 grid grid-cols-7 gap-1'}>
           {WEEKDAY_LABELS.map((weekday, index) => (
             <div
               key={`${weekday}-${index}`}
-              className="flex h-5 items-center justify-center text-[7px] font-semibold text-[#69727e]"
+              className={
+                'flex h-5 items-center justify-center ' +
+                'text-[7px] font-semibold text-[var(--ds-muted)]'
+              }
             >
               {weekday}
             </div>
@@ -172,11 +212,18 @@ export const StreakCalendar = memo(function StreakCalendar({
         </div>
 
         {isLoading ? (
-          <div className="mt-4 flex h-8 items-center justify-center">
-            <LoaderCircle className="size-4 animate-spin text-[#d89a35]/60" />
+          <div className={'mt-4 flex h-8 items-center justify-center'}>
+            <LoaderCircle
+              className={'size-4 animate-spin text-[var(--ds-gold)] opacity-60'}
+            />
           </div>
         ) : (
-          <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/[0.055] pt-3">
+          <div
+            className={
+              'mt-4 grid grid-cols-2 gap-2 border-t ' +
+              'border-[var(--ds-border-soft)] pt-3'
+            }
+          >
             <CalendarSummary
               label="Current"
               value={`${formatInsightsNumber(currentStreakDays)} ${
@@ -199,9 +246,7 @@ export const StreakCalendar = memo(function StreakCalendar({
 
 type CalendarDayProps = {
   day: number;
-
   activity: DailyPracticeActivity | null;
-
   isToday: boolean;
 };
 
@@ -219,32 +264,34 @@ const CalendarDay = memo(function CalendarDay({
     : 'No completed practice';
 
   return (
-    <div className="flex aspect-square items-center justify-center">
+    <div className={'flex aspect-square items-center justify-center'}>
       <div
         title={tooltip}
         className={[
-          'relative flex size-[27px] items-center justify-center rounded-full text-[8px] font-medium transition',
+          'relative flex size-[27px] items-center justify-center',
+          'rounded-full text-[8px] font-medium transition',
+
           hasPractice
             ? [
                 'border',
-                'border-[#e1a33f]/55',
-                'bg-[radial-gradient(circle_at_35%_30%,#e5ae50,#c47e27_72%)]',
+                'border-[var(--ds-border-gold)]',
+                'bg-[var(--ds-gradient-gold)]',
                 'text-[#181007]',
-                'shadow-[0_0_14px_rgba(216,154,53,0.12),inset_0_1px_0_rgba(255,236,190,0.38)]',
+                'shadow-[var(--ds-shadow-gold)]',
               ].join(' ')
             : isToday
               ? [
                   'border',
-                  'border-[#d89a35]/55',
-                  'bg-[#d89a35]/[0.045]',
-                  'text-[#e9bd69]',
+                  'border-[var(--ds-border-gold)]',
+                  'bg-[var(--ds-amber-05)]',
+                  'text-[var(--ds-soft-gold)]',
                 ].join(' ')
               : [
                   'border',
                   'border-transparent',
-                  'text-[#8a929d]',
-                  'hover:border-white/[0.07]',
-                  'hover:bg-white/[0.02]',
+                  'text-[var(--ds-muted)]',
+                  'hover:border-[var(--ds-border-soft)]',
+                  'hover:bg-[var(--ds-white-03)]',
                 ].join(' '),
         ].join(' ')}
       >
@@ -255,7 +302,7 @@ const CalendarDay = memo(function CalendarDay({
             aria-hidden="true"
             className={[
               'absolute -bottom-[3px] size-1 rounded-full',
-              hasPractice ? 'bg-[#f4d995]' : 'bg-[#d89a35]',
+              hasPractice ? 'bg-[#f4d995]' : 'bg-[var(--ds-gold)]',
             ].join(' ')}
           />
         ) : null}
@@ -266,7 +313,6 @@ const CalendarDay = memo(function CalendarDay({
 
 type CalendarSummaryProps = {
   label: string;
-
   value: string;
 };
 
@@ -275,12 +321,24 @@ const CalendarSummary = memo(function CalendarSummary({
   value,
 }: CalendarSummaryProps) {
   return (
-    <div className="rounded-[8px] border border-white/[0.05] bg-white/[0.014] px-2.5 py-2">
-      <p className="text-[7px] font-semibold uppercase tracking-[0.1em] text-[#59616c]">
+    <div
+      className={
+        'rounded-[8px] border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-white-03)] px-2.5 py-2'
+      }
+    >
+      <p
+        className={
+          'text-[7px] font-semibold uppercase tracking-[0.1em] ' +
+          'text-[var(--ds-muted)]'
+        }
+      >
         {label}
       </p>
 
-      <p className="mt-1 font-serif text-[10px] text-[#cfc8bd]">{value}</p>
+      <p className={'mt-1 font-serif text-[10px] text-[var(--ds-text)]'}>
+        {value}
+      </p>
     </div>
   );
 });

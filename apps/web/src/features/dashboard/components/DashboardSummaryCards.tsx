@@ -147,7 +147,7 @@ export function MobileTodaySummary({
 }: MobileTodaySummaryProps) {
   return (
     <article className="rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
-      <div className="border-b border-white/[0.055] px-4 py-3">
+      <div className="border-b border-[var(--ds-border-soft)] px-4 py-3">
         <h2 className="font-serif text-[14px] text-[var(--ds-cream)]">
           Today&apos;s Summary
         </h2>

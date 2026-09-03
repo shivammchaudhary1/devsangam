@@ -22,17 +22,17 @@ export const PracticeSessionControls = memo(function PracticeSessionControls({
   onReset,
 }: PracticeSessionControlsProps) {
   return (
-    <section className="rounded-[11px] border border-white/[0.06] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_42%),#090f17] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:p-3.5">
+    <section className="rounded-[11px] border border-[var(--ds-border-soft)] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_42%),#090f17] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.015)] sm:p-3.5">
       <div className="mb-3">
         <div className="flex items-center gap-2">
-          <Waves size={12} strokeWidth={1.7} className="text-[#b98234]" />
+          <Waves size={12} strokeWidth={1.7} className="text-[var(--ds-bronze)]" />
 
-          <p className="text-[8px] font-semibold uppercase tracking-[0.15em] text-[#a87838]">
+          <p className="text-[8px] font-semibold uppercase tracking-[0.15em] text-[var(--ds-bronze)]">
             Session Controls
           </p>
         </div>
 
-        <p className="mt-1.5 text-[8px] leading-4 text-[#5e6671]">
+        <p className="mt-1.5 text-[8px] leading-4 text-[var(--ds-muted)]">
           Pause, reset, or adjust tactile feedback.
         </p>
       </div>
@@ -116,13 +116,13 @@ const ControlButton = memo(function ControlButton({
           ? [
               'border-[#d89a35]/22',
               'bg-[#d89a35]/[0.055]',
-              'text-[#d5a34b]',
+              'text-[var(--ds-gold)]',
               'shadow-[0_0_14px_rgba(216,154,53,0.035)]',
             ].join(' ')
           : [
-              'border-white/[0.055]',
-              'bg-[#070c12]',
-              'text-[#7b8490]',
+              'border-[var(--ds-border-soft)]',
+              'bg-[var(--ds-sidebar)]',
+              'text-[var(--ds-muted)]',
               'hover:border-[#d89a35]/15',
               'hover:bg-[#d89a35]/[0.025]',
               'hover:text-[#c89a50]',
@@ -139,7 +139,7 @@ const ControlButton = memo(function ControlButton({
       <span
         className={[
           'mt-0.5 text-[7px]',
-          active ? 'text-[#98723b]' : 'text-[#535c67]',
+          active ? 'text-[var(--ds-bronze)]' : 'text-[var(--ds-muted)]',
         ].join(' ')}
       >
         {value}

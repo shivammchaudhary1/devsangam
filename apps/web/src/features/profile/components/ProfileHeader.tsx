@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 export function ProfileHeader() {
   return (
-    <header className="flex items-start justify-between gap-4 border-b border-white/[0.055] pb-5">
+    <header className="flex items-start justify-between gap-4 border-b border-[var(--ds-border-soft)] pb-5">
       <div>
         <div className="flex items-center gap-2">
           <Sparkles

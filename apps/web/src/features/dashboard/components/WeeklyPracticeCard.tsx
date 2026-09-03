@@ -24,7 +24,7 @@ export function WeeklyPracticeCard({
 
   return (
     <article className="overflow-hidden rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
-      <div className="flex items-center justify-between border-b border-white/[0.055] px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[var(--ds-border-soft)] px-4 py-3">
         <h2 className="font-serif text-[14px] text-[var(--ds-cream)]">
           Weekly Practice
         </h2>
@@ -43,7 +43,7 @@ export function WeeklyPracticeCard({
           <div className="relative h-[135px]">
             <div className="pointer-events-none absolute inset-x-0 bottom-[24px] top-0 flex flex-col justify-between">
               {[0, 1, 2, 3].map((line) => (
-                <div key={line} className="border-t border-white/[0.035]" />
+                <div key={line} className="border-t border-[var(--ds-border-soft)]" />
               ))}
             </div>
 

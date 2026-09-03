@@ -8,7 +8,7 @@ export function Skeleton({ className = '' }: SkeletonProps) {
       aria-hidden="true"
       className={[
         'animate-pulse rounded-[8px]',
-        'bg-white/[0.025]',
+        'bg-[var(--ds-white-03)]',
         className,
       ].join(' ')}
     />

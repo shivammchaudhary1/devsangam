@@ -86,7 +86,7 @@ export function MantraLibraryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#07111f] px-4 pb-16 pt-6 text-white md:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--ds-obsidian)] px-4 pb-16 pt-6 text-[var(--ds-cream)] md:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <section className="mb-6">
           <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.22em] text-amber-400">
@@ -115,7 +115,7 @@ export function MantraLibraryPage() {
               value={search}
               onChange={(event) => handleSearchChange(event.target.value)}
               placeholder="Search mantras, deity, purpose..."
-              className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.04] pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-amber-400/50 focus:bg-white/[0.06]"
+              className="h-11 w-full rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] pl-11 pr-4 text-sm text-[var(--ds-cream)] outline-none transition placeholder:text-slate-500 focus:border-amber-400/50 focus:bg-[var(--ds-white-03)]"
             />
           </div>
 
@@ -133,7 +133,7 @@ export function MantraLibraryPage() {
 
                     active
                       ? 'border-amber-400/60 bg-amber-400/10 text-amber-300'
-                      : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/20 hover:text-white',
+                      : 'border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] text-slate-400 hover:border-white/20 hover:text-[var(--ds-cream)]',
                   ].join(' ')}
                 >
                   {item}
@@ -150,7 +150,7 @@ export function MantraLibraryPage() {
             }).map((_, index) => (
               <div
                 key={index}
-                className="h-[250px] animate-pulse rounded-2xl border border-white/10 bg-white/[0.04]"
+                className="h-[250px] animate-pulse rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)]"
               />
             ))}
           </section>
@@ -169,8 +169,8 @@ export function MantraLibraryPage() {
         ) : null}
 
         {!isLoading && !isError && mantras.length === 0 ? (
-          <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
-            <h2 className="font-serif text-xl text-white">No mantras found</h2>
+          <section className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-8 text-center">
+            <h2 className="font-serif text-xl text-[var(--ds-cream)]">No mantras found</h2>
 
             <p className="mt-2 text-sm text-slate-400">
               Try another search term or category.
@@ -205,7 +205,7 @@ export function MantraLibraryPage() {
                   type="button"
                   onClick={handlePreviousPage}
                   disabled={currentPage === 1}
-                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-medium text-slate-300 transition hover:border-amber-400/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-3 text-xs font-medium text-slate-300 transition hover:border-amber-400/30 hover:text-[var(--ds-cream)] disabled:cursor-not-allowed disabled:opacity-35"
                 >
                   <ChevronLeft size={15} />
                   Previous
@@ -225,7 +225,7 @@ export function MantraLibraryPage() {
                   type="button"
                   onClick={handleNextPage}
                   disabled={currentPage === totalPages}
-                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 text-xs font-medium text-slate-300 transition hover:border-amber-400/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                  className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-3 text-xs font-medium text-slate-300 transition hover:border-amber-400/30 hover:text-[var(--ds-cream)] disabled:cursor-not-allowed disabled:opacity-35"
                 >
                   Next
                   <ChevronRight size={15} />

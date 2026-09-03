@@ -2,7 +2,7 @@ import { Settings } from 'lucide-react';
 
 export function SettingsHeader() {
   return (
-    <header className="border-b border-white/[0.055] pb-5">
+    <header className="border-b border-[var(--ds-border-soft)] pb-5">
       <div className="flex items-center gap-2">
         <Settings
           size={14}

@@ -8,11 +8,17 @@
 
     background: var(--ds-obsidian);
 
-    color-scheme: dark;
-
     scroll-behavior: smooth;
 
     scrollbar-gutter: stable;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.light {
+    color-scheme: light;
   }
 
   html,
@@ -93,36 +99,30 @@
   }
 
   ::selection {
-    background: rgb(216 154 53 / 0.3);
-    color: #fff8e8;
+    background: var(--ds-selection);
+
+    color: var(--ds-selection-text);
   }
 
   :focus-visible {
-    outline: 2px solid rgb(216 154 53 / 0.72);
+    outline: 2px solid var(--ds-focus);
+
     outline-offset: 3px;
   }
 
-  /*
-   * Refined dark scrollbars.
-   *
-   * Firefox
-   */
   * {
-    scrollbar-color: rgb(216 154 53 / 0.28) rgb(255 255 255 / 0.025);
+    scrollbar-color: var(--ds-scrollbar) var(--ds-scrollbar-track);
 
     scrollbar-width: thin;
   }
 
-  /*
-   * Chromium / Safari
-   */
   *::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   *::-webkit-scrollbar-track {
-    background: rgb(255 255 255 / 0.018);
+    background: var(--ds-scrollbar-track);
   }
 
   *::-webkit-scrollbar-thumb {
@@ -130,12 +130,15 @@
 
     border-radius: 999px;
 
-    background: linear-gradient(rgb(216 154 53 / 0.28), rgb(216 154 53 / 0.28))
+    background: linear-gradient(var(--ds-scrollbar), var(--ds-scrollbar))
       padding-box;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(rgb(216 154 53 / 0.42), rgb(216 154 53 / 0.42))
+    background: linear-gradient(
+        var(--ds-scrollbar-hover),
+        var(--ds-scrollbar-hover)
+      )
       padding-box;
   }
 }

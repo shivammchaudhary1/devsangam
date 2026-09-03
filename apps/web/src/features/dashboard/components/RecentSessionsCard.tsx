@@ -27,7 +27,7 @@ export function RecentSessionsCard({
 }: RecentSessionsCardProps) {
   return (
     <article className="overflow-hidden rounded-[10px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
-      <div className="flex items-center justify-between border-b border-white/[0.055] px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[var(--ds-border-soft)] px-4 py-3">
         <h2 className="font-serif text-[14px] text-[var(--ds-cream)]">
           Recent Sessions
         </h2>
@@ -82,7 +82,7 @@ function RecentSessionRow({ session, mantra }: RecentSessionRowProps) {
   const artwork = mantra?.image || MANTRA_IMAGES[session.mantraSlug];
 
   return (
-    <div className="flex min-h-[64px] items-center gap-3 rounded-[8px] border border-white/[0.045] bg-[var(--ds-white-02)] px-3 py-2">
+    <div className="flex min-h-[64px] items-center gap-3 rounded-[8px] border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] px-3 py-2">
       <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)]">
         {artwork ? (
           <img
@@ -136,7 +136,7 @@ function RecentSessionsLoading() {
   return (
     <div className="space-y-2">
       {[0, 1, 2].map((item) => (
-        <Skeleton key={item} className="h-[64px] border border-white/[0.04]" />
+        <Skeleton key={item} className="h-[64px] border border-[var(--ds-border-soft)]" />
       ))}
     </div>
   );

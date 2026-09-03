@@ -35,8 +35,8 @@ export const InsightsRangeSelector = memo(function InsightsRangeSelector({
   onChange,
 }: InsightsRangeSelectorProps) {
   return (
-    <div className="flex max-w-full items-center gap-1 overflow-x-auto rounded-[9px] border border-white/[0.075] bg-[#0b1119] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.018)]">
-      <div className="hidden size-7 shrink-0 items-center justify-center text-[#7d858f] sm:flex">
+    <div className="flex max-w-full items-center gap-1 overflow-x-auto rounded-[9px] border border-[var(--ds-border-soft)] bg-[var(--ds-elevated)] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.018)]">
+      <div className="hidden size-7 shrink-0 items-center justify-center text-[var(--ds-muted)] sm:flex">
         <CalendarDays size={13} strokeWidth={1.6} />
       </div>
 
@@ -54,12 +54,12 @@ export const InsightsRangeSelector = memo(function InsightsRangeSelector({
               isActive
                 ? [
                     'bg-[#d89a35]/[0.095]',
-                    'text-[#efc875]',
+                    'text-[var(--ds-soft-gold)]',
                     'shadow-[inset_0_0_0_1px_rgba(216,154,53,0.18)]',
                   ].join(' ')
                 : [
-                    'text-[#747d88]',
-                    'hover:bg-white/[0.025]',
+                    'text-[var(--ds-muted)]',
+                    'hover:bg-[var(--ds-white-03)]',
                     'hover:text-[#b8bec6]',
                   ].join(' '),
             ].join(' ')}

@@ -24,7 +24,7 @@ export function MantraDetailPage() {
 
   if (isError || !mantra) {
     return (
-      <main className="min-h-screen bg-[#07111f] px-4 py-8 text-white md:px-8">
+      <main className="min-h-screen bg-[var(--ds-obsidian)] px-4 py-8 text-[var(--ds-cream)] md:px-8">
         <div className="mx-auto max-w-5xl">
           <Link
             to={APP_ROUTES.library}
@@ -47,7 +47,7 @@ export function MantraDetailPage() {
 
             <Link
               to={APP_ROUTES.library}
-              className="mt-5 inline-flex rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-slate-200 transition hover:border-amber-400/30 hover:text-amber-300"
+              className="mt-5 inline-flex rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-4 py-2.5 text-sm text-slate-200 transition hover:border-amber-400/30 hover:text-amber-300"
             >
               Return to Library
             </Link>
@@ -72,7 +72,7 @@ export function MantraDetailPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#07111f] px-4 pb-24 pt-6 text-white md:px-6 md:pb-12 lg:px-8">
+    <main className="min-h-screen bg-[var(--ds-obsidian)] px-4 pb-24 pt-6 text-[var(--ds-cream)] md:px-6 md:pb-12 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         {/* Back */}
         <Link
@@ -84,10 +84,10 @@ export function MantraDetailPage() {
         </Link>
 
         {/* Hero */}
-        <section className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-[#0b1523]">
+        <section className="mt-6 overflow-hidden rounded-3xl border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)]">
           <div className="grid lg:grid-cols-[380px_1fr]">
             {/* Image */}
-            <div className="relative min-h-[330px] overflow-hidden bg-white/[0.03] sm:min-h-[400px] lg:min-h-[520px]">
+            <div className="relative min-h-[330px] overflow-hidden bg-[var(--ds-white-03)] sm:min-h-[400px] lg:min-h-[520px]">
               {image ? (
                 <img
                   src={image}
@@ -100,7 +100,7 @@ export function MantraDetailPage() {
                   className="absolute inset-0 h-full w-full object-cover object-center"
                 />
               ) : (
-                <div className="absolute inset-0 bg-white/[0.03]" />
+                <div className="absolute inset-0 bg-[var(--ds-white-03)]" />
               )}
 
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b1523]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0b1523]/60" />
@@ -115,7 +115,7 @@ export function MantraDetailPage() {
               ) : null}
 
               <div className="mt-2 flex items-start justify-between gap-4">
-                <h1 className="font-serif text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-[42px] lg:leading-[1.15]">
+                <h1 className="font-serif text-3xl font-semibold tracking-tight text-[var(--ds-cream)] sm:text-4xl lg:text-[42px] lg:leading-[1.15]">
                   {mantra.title}
                 </h1>
 
@@ -155,26 +155,26 @@ export function MantraDetailPage() {
 
               {/* Practice summary */}
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
+                <div className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-4">
                   <div className="flex items-center gap-2 text-slate-400">
                     <Sparkles size={16} className="text-amber-400" />
 
                     <span className="text-xs">Suggested practice</span>
                   </div>
 
-                  <p className="mt-2 font-serif text-xl text-white">
+                  <p className="mt-2 font-serif text-xl text-[var(--ds-cream)]">
                     {primaryTarget} chants
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4">
+                <div className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-4">
                   <div className="flex items-center gap-2 text-slate-400">
                     <Clock3 size={16} className="text-amber-400" />
 
                     <span className="text-xs">Estimated time</span>
                   </div>
 
-                  <p className="mt-2 font-serif text-xl text-white">
+                  <p className="mt-2 font-serif text-xl text-[var(--ds-cream)]">
                     {estimatedMinutes ? `~${estimatedMinutes} min` : 'Varies'}
                   </p>
                 </div>
@@ -198,7 +198,7 @@ export function MantraDetailPage() {
           <div className="space-y-6">
             {/* About */}
             {mantra.description ? (
-              <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-6">
+              <section className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-5 sm:p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
                   About this mantra
                 </p>
@@ -210,7 +210,7 @@ export function MantraDetailPage() {
             ) : null}
 
             {/* Meaning */}
-            <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-6">
+            <section className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-5 sm:p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
                 Meaning
               </p>
@@ -222,7 +222,7 @@ export function MantraDetailPage() {
 
             {/* Benefits */}
             {mantra.benefits.length > 0 ? (
-              <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-6">
+              <section className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-5 sm:p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
                   Benefits
                 </p>
@@ -231,7 +231,7 @@ export function MantraDetailPage() {
                   {mantra.benefits.map((benefit) => (
                     <div
                       key={benefit}
-                      className="flex gap-3 rounded-xl border border-white/[0.07] bg-white/[0.02] p-4"
+                      className="flex gap-3 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-4"
                     >
                       <Sparkles
                         size={16}
@@ -270,9 +270,9 @@ export function MantraDetailPage() {
                   return (
                     <div
                       key={target}
-                      className="min-w-[88px] rounded-xl border border-white/[0.08] bg-[#07111f]/70 px-3 py-3 text-center"
+                      className="min-w-[88px] rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3 py-3 text-center"
                     >
-                      <p className="font-serif text-lg text-white">{target}</p>
+                      <p className="font-serif text-lg text-[var(--ds-cream)]">{target}</p>
 
                       <p className="mt-1 text-[10px] text-slate-500">
                         {minutes ? `~${minutes} min` : 'chants'}
@@ -284,14 +284,14 @@ export function MantraDetailPage() {
             </section>
 
             {/* Mantra details */}
-            <section className="rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+            <section className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-400">
                 Mantra details
               </p>
 
               <dl className="mt-4 space-y-4">
                 {mantra.deity ? (
-                  <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] pb-3">
+                  <div className="flex items-center justify-between gap-4 border-b border-[var(--ds-border-soft)] pb-3">
                     <dt className="text-xs text-slate-500">Deity</dt>
 
                     <dd className="text-right text-sm text-slate-200">
@@ -300,7 +300,7 @@ export function MantraDetailPage() {
                   </div>
                 ) : null}
 
-                <div className="flex items-center justify-between gap-4 border-b border-white/[0.06] pb-3">
+                <div className="flex items-center justify-between gap-4 border-b border-[var(--ds-border-soft)] pb-3">
                   <dt className="text-xs text-slate-500">Primary target</dt>
 
                   <dd className="text-right text-sm text-slate-200">
@@ -324,27 +324,27 @@ export function MantraDetailPage() {
 
 function MantraDetailSkeleton() {
   return (
-    <main className="min-h-screen bg-[#07111f] px-4 pb-24 pt-6 md:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--ds-obsidian)] px-4 pb-24 pt-6 md:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <div className="h-5 w-32 animate-pulse rounded bg-white/[0.06]" />
+        <div className="h-5 w-32 animate-pulse rounded bg-[var(--ds-white-03)]" />
 
-        <div className="mt-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
+        <div className="mt-6 overflow-hidden rounded-3xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)]">
           <div className="grid lg:grid-cols-[380px_1fr]">
-            <div className="h-[360px] animate-pulse bg-white/[0.05] lg:h-[520px]" />
+            <div className="h-[360px] animate-pulse bg-[var(--ds-white-03)] lg:h-[520px]" />
 
             <div className="space-y-5 p-7 lg:p-10">
-              <div className="h-3 w-24 animate-pulse rounded bg-white/[0.06]" />
+              <div className="h-3 w-24 animate-pulse rounded bg-[var(--ds-white-03)]" />
 
-              <div className="h-10 w-3/4 animate-pulse rounded bg-white/[0.06]" />
+              <div className="h-10 w-3/4 animate-pulse rounded bg-[var(--ds-white-03)]" />
 
-              <div className="h-24 animate-pulse rounded bg-white/[0.05]" />
+              <div className="h-24 animate-pulse rounded bg-[var(--ds-white-03)]" />
 
-              <div className="h-16 animate-pulse rounded bg-white/[0.05]" />
+              <div className="h-16 animate-pulse rounded bg-[var(--ds-white-03)]" />
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="h-20 animate-pulse rounded-2xl bg-white/[0.05]" />
+                <div className="h-20 animate-pulse rounded-2xl bg-[var(--ds-white-03)]" />
 
-                <div className="h-20 animate-pulse rounded-2xl bg-white/[0.05]" />
+                <div className="h-20 animate-pulse rounded-2xl bg-[var(--ds-white-03)]" />
               </div>
             </div>
           </div>

@@ -102,7 +102,7 @@ export function ForgotPasswordPage() {
                   mt-2
                   text-sm
                   leading-6
-                  text-[#9ca5b2]
+                  text-[var(--ds-muted)]
                 "
               >
                 {successMessage}
@@ -116,7 +116,7 @@ export function ForgotPasswordPage() {
                   text-center
                   text-[11px]
                   leading-5
-                  text-[#697280]
+                  text-[var(--ds-muted)]
                 "
               >
                 Development mode: check the API terminal for the generated reset
@@ -136,14 +136,14 @@ export function ForgotPasswordPage() {
                 gap-2
                 rounded-lg
                 border
-                border-[#343b49]
-                bg-[#0d1118]
+                border-[var(--ds-border-soft)]
+                bg-[var(--ds-night)]
                 text-sm
                 font-medium
                 text-[#d2d7df]
                 transition
-                hover:border-[#4b5565]
-                hover:bg-[#121721]
+                hover:border-[var(--ds-border-gold)]
+                hover:bg-[var(--ds-elevated)]
               "
             >
               <ArrowLeft size={16} />
@@ -161,7 +161,7 @@ export function ForgotPasswordPage() {
                     block
                     text-[13px]
                     font-medium
-                    text-[#e4e7ec]
+                    text-[var(--ds-cream)]
                   "
                 >
                   Email
@@ -177,7 +177,7 @@ export function ForgotPasswordPage() {
                       top-1/2
                       z-10
                       -translate-y-1/2
-                      text-[#788396]
+                      text-[var(--ds-muted)]
                     "
                   />
 
@@ -190,13 +190,13 @@ export function ForgotPasswordPage() {
                     className="
                       h-[50px]
                       rounded-lg
-                      border-[#343b49]
-                      bg-[#0d1118]
+                      border-[var(--ds-border-soft)]
+                      bg-[var(--ds-night)]
                       pl-11
-                      text-[#f8fafc]
-                      placeholder:text-[#657080]
-                      hover:border-[#454e5d]
-                      focus-visible:border-[#c99836]/80
+                      text-[var(--ds-cream)]
+                      placeholder:text-[var(--ds-muted)]
+                      hover:border-[var(--ds-border-gold)]
+                      focus-visible:border-[var(--ds-border-gold)]
                       focus-visible:ring-[3px]
                       focus-visible:ring-amber-500/[0.08]
                     "
@@ -282,9 +282,9 @@ export function ForgotPasswordPage() {
                 gap-2
                 text-xs
                 font-medium
-                text-[#8d95a2]
+                text-[var(--ds-muted)]
                 transition
-                hover:text-[#e8b647]
+                hover:text-[var(--ds-gold)]
               "
             >
               <ArrowLeft size={15} />

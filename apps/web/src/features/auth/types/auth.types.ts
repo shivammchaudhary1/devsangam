@@ -1,3 +1,5 @@
+import type { ThemePreference } from '@/features/theme/types/theme.types';
+
 export type ProfileIntention =
   | 'Peace'
   | 'Focus'
@@ -25,7 +27,7 @@ export interface AuthUser {
   preferences: {
     language: string;
 
-    theme: 'dark' | 'light';
+    theme: ThemePreference;
 
     soundEnabled: boolean;
 

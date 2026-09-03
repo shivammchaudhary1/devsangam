@@ -19,10 +19,19 @@ export function SettingToggle({
       disabled={pending}
       onClick={() => void onToggle()}
       className={[
-        'relative flex h-[24px] w-[42px] items-center rounded-full border transition-all duration-200',
+        'relative flex h-[24px] w-[42px] items-center',
+        'rounded-full border transition-all duration-200',
+
         enabled
-          ? 'border-[#e1a541]/45 bg-[linear-gradient(90deg,#b96f22,#dda13e)]'
-          : 'border-white/[0.09] bg-white/[0.055]',
+          ? [
+              'border-[var(--ds-border-gold)]',
+              'bg-[var(--ds-gradient-gold)]',
+              'shadow-[var(--ds-shadow-gold-inset)]',
+            ].join(' ')
+          : ['border-[var(--ds-border-soft)]', 'bg-[var(--ds-white-06)]'].join(
+              ' '
+            ),
+
         pending ? 'cursor-not-allowed opacity-60' : '',
       ].join(' ')}
     >
@@ -30,15 +39,29 @@ export function SettingToggle({
         <LoadingSpinner
           size={10}
           label="Saving preference"
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          className={[
+            'absolute left-1/2 top-1/2',
+            '-translate-x-1/2 -translate-y-1/2',
+          ].join(' ')}
         />
       ) : (
         <span
+          aria-hidden="true"
           className={[
-            'block size-[17px] rounded-full shadow transition-transform duration-200',
+            'block size-[17px] rounded-full',
+            'transition-all duration-200',
+
             enabled
-              ? 'translate-x-[21px] bg-[#fff1ce]'
-              : 'translate-x-[3px] bg-[#858b94]',
+              ? [
+                  'translate-x-[21px]',
+                  'bg-[#fff8e8]',
+                  'shadow-[0_1px_5px_rgb(0_0_0/0.2)]',
+                ].join(' ')
+              : [
+                  'translate-x-[3px]',
+                  'bg-[var(--ds-muted-soft)]',
+                  'shadow-[0_1px_3px_rgb(0_0_0/0.12)]',
+                ].join(' '),
           ].join(' ')}
         />
       )}

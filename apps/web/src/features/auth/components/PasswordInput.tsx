@@ -16,13 +16,13 @@ export function PasswordInput({ className, ...props }: PasswordInputProps) {
           `
             h-[50px]
             rounded-lg
-            border-[#343b49]
-            bg-[#0d1118]
+            border-[var(--ds-border-soft)]
+            bg-[var(--ds-night)]
             pr-12
-            text-[#f8fafc]
-            placeholder:text-[#657080]
-            hover:border-[#454e5d]
-            focus-visible:border-[#c99836]/80
+            text-[var(--ds-cream)]
+            placeholder:text-[var(--ds-muted)]
+            hover:border-[var(--ds-border-gold)]
+            focus-visible:border-[var(--ds-border-gold)]
             focus-visible:ring-[3px]
             focus-visible:ring-amber-500/[0.08]
           `,
@@ -47,9 +47,9 @@ export function PasswordInput({ className, ...props }: PasswordInputProps) {
           items-center
           justify-center
           rounded-md
-          text-[#758092]
+          text-[var(--ds-muted)]
           transition
-          hover:bg-white/[0.04]
+          hover:bg-[var(--ds-white-03)]
           hover:text-[#e0b859]
         "
       >

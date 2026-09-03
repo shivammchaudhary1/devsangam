@@ -61,11 +61,19 @@ export function PasswordSettings({
           autoComplete="new-password"
         />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <div
+          className={
+            'flex flex-wrap items-center justify-between ' + 'gap-3 pt-1'
+          }
+        >
           <button
             type="button"
             onClick={() => onShowPasswordsChange(!showPasswords)}
-            className="flex items-center gap-2 text-[10px] text-[var(--ds-muted)] transition hover:text-[var(--ds-text)]"
+            className={
+              'flex items-center gap-2 text-[10px] ' +
+              'text-[var(--ds-muted)] transition ' +
+              'hover:text-[var(--ds-text)]'
+            }
           >
             {showPasswords ? (
               <EyeOff size={13} strokeWidth={1.7} />
@@ -79,7 +87,15 @@ export function PasswordSettings({
           <button
             type="submit"
             disabled={pending}
-            className="flex h-9 items-center justify-center gap-2 rounded-[7px] border border-[var(--ds-border-gold)] bg-[var(--ds-amber-08)] px-4 text-[11px] font-medium text-[var(--ds-soft-gold)] transition hover:bg-[var(--ds-amber-14)] disabled:cursor-not-allowed disabled:opacity-60"
+            className={
+              'flex h-9 items-center justify-center gap-2 ' +
+              'rounded-[7px] border ' +
+              'border-[var(--ds-border-gold)] ' +
+              'bg-[var(--ds-amber-08)] px-4 text-[11px] ' +
+              'font-medium text-[var(--ds-soft-gold)] ' +
+              'transition hover:bg-[var(--ds-amber-14)] ' +
+              'disabled:cursor-not-allowed disabled:opacity-60'
+            }
           >
             {pending ? (
               <Loader2 size={13} className="animate-spin" />
@@ -90,7 +106,7 @@ export function PasswordSettings({
           </button>
         </div>
 
-        <p className="text-[9px] leading-4 text-[var(--ds-muted-soft)]">
+        <p className={'text-[9px] leading-4 ' + 'text-[var(--ds-muted-soft)]'}>
           Use at least 10 characters. Changing your password closes your other
           signed-in sessions.
         </p>
@@ -116,7 +132,7 @@ function PasswordField({
 }: PasswordFieldProps) {
   return (
     <label className="block">
-      <span className="text-[10px] font-medium text-[var(--ds-text)]">
+      <span className={'text-[10px] font-medium ' + 'text-[var(--ds-text)]'}>
         {label}
       </span>
 
@@ -126,7 +142,14 @@ function PasswordField({
         autoComplete={autoComplete}
         maxLength={128}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-1.5 h-10 w-full rounded-[7px] border border-white/[0.08] bg-[var(--ds-night)] px-3 text-[12px] text-[var(--ds-cream)] outline-none transition focus:border-[var(--ds-border-gold)] focus:shadow-[0_0_0_2px_var(--ds-amber-05)]"
+        className={
+          'mt-1.5 h-10 w-full rounded-[7px] border ' +
+          'border-[var(--ds-border-soft)] ' +
+          'bg-[var(--ds-night)] px-3 text-[12px] ' +
+          'text-[var(--ds-cream)] outline-none transition ' +
+          'focus:border-[var(--ds-border-gold)] ' +
+          'focus:shadow-[0_0_0_2px_var(--ds-amber-05)]'
+        }
       />
     </label>
   );

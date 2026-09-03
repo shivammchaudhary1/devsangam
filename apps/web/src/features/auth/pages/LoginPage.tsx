@@ -73,8 +73,8 @@ export function LoginPage() {
           grid-cols-2
           rounded-lg
           border
-          border-white/[0.07]
-          bg-[#11151d]
+          border-[var(--ds-border-soft)]
+          bg-[var(--ds-elevated)]
           p-1
           lg:hidden
         "
@@ -94,7 +94,7 @@ export function LoginPage() {
             to-[#604018]/80
             text-xs
             font-semibold
-            text-[#f7d891]
+            text-[var(--ds-soft-gold)]
             shadow-[0_0_15px_rgba(245,158,11,0.14)]
           "
         >
@@ -111,7 +111,7 @@ export function LoginPage() {
             rounded-md
             text-xs
             font-medium
-            text-[#afb6c1]
+            text-[var(--ds-muted)]
           "
         >
           Sign Up
@@ -135,7 +135,7 @@ export function LoginPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Email
@@ -151,7 +151,7 @@ export function LoginPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -164,13 +164,13 @@ export function LoginPage() {
                 className="
                   h-[50px]
                   rounded-lg
-                  border-[#343b49]
-                  bg-[#0d1118]
+                  border-[var(--ds-border-soft)]
+                  bg-[var(--ds-night)]
                   pl-11
-                  text-[#f8fafc]
-                  placeholder:text-[#657080]
-                  hover:border-[#454e5d]
-                  focus-visible:border-[#c99836]/80
+                  text-[var(--ds-cream)]
+                  placeholder:text-[var(--ds-muted)]
+                  hover:border-[var(--ds-border-gold)]
+                  focus-visible:border-[var(--ds-border-gold)]
                   focus-visible:ring-[3px]
                   focus-visible:ring-amber-500/[0.08]
                 "
@@ -203,7 +203,7 @@ export function LoginPage() {
                 block
                 text-[13px]
                 font-medium
-                text-[#e4e7ec]
+                text-[var(--ds-cream)]
               "
             >
               Password
@@ -219,7 +219,7 @@ export function LoginPage() {
                   top-1/2
                   z-10
                   -translate-y-1/2
-                  text-[#788396]
+                  text-[var(--ds-muted)]
                 "
               />
 
@@ -265,13 +265,13 @@ export function LoginPage() {
                 items-center
                 gap-2
                 text-xs
-                text-[#a8b0bc]
+                text-[var(--ds-muted)]
               "
             >
               <Checkbox
                 defaultChecked
                 className="
-                  border-[#6d7582]
+                  border-[var(--ds-border-soft)]
                   data-[state=checked]:border-[#f0a928]
                   data-[state=checked]:bg-[#f0a928]
                   data-[state=checked]:text-black
@@ -285,7 +285,7 @@ export function LoginPage() {
               className="
                 text-xs
                 font-medium
-                text-[#edb43f]
+                text-[var(--ds-gold)]
                 transition
                 hover:text-[#ffd16c]
               "
@@ -372,14 +372,14 @@ export function LoginPage() {
               className="
                 h-px
                 flex-1
-                bg-white/[0.09]
+                bg-[var(--ds-white-03)]
               "
             />
 
             <span
               className="
                 text-[11px]
-                text-[#7f8794]
+                text-[var(--ds-muted)]
               "
             >
               or continue with
@@ -389,7 +389,7 @@ export function LoginPage() {
               className="
                 h-px
                 flex-1
-                bg-white/[0.09]
+                bg-[var(--ds-white-03)]
               "
             />
           </div>
@@ -413,9 +413,9 @@ export function LoginPage() {
               className="
                 h-[46px]
                 rounded-lg
-                border-[#343b49]
-                bg-[#0d1118]
-                text-[#d5d9df]
+                border-[var(--ds-border-soft)]
+                bg-[var(--ds-night)]
+                text-[var(--ds-cream)]
                 opacity-80
               "
             >
@@ -423,7 +423,7 @@ export function LoginPage() {
                 className="
                   text-base
                   font-bold
-                  text-[#f0b23f]
+                  text-[var(--ds-gold)]
                 "
               >
                 G
@@ -439,9 +439,9 @@ export function LoginPage() {
               className="
                 h-[46px]
                 rounded-lg
-                border-[#343b49]
-                bg-[#0d1118]
-                text-[#d5d9df]
+                border-[var(--ds-border-soft)]
+                bg-[var(--ds-night)]
+                text-[var(--ds-cream)]
                 opacity-80
               "
             >
@@ -460,7 +460,7 @@ export function LoginPage() {
             mt-7
             text-center
             text-xs
-            text-[#8d95a2]
+            text-[var(--ds-muted)]
             sm:text-sm
           "
         >
@@ -469,7 +469,7 @@ export function LoginPage() {
             to="/auth/register"
             className="
               font-medium
-              text-[#e8b647]
+              text-[var(--ds-gold)]
               transition
               hover:text-[#ffd16c]
             "

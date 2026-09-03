@@ -228,7 +228,7 @@ function ActivePracticeSession({
 
         <div className="absolute right-[-190px] top-[16%] size-[430px] rounded-full border border-[#d89a35]/[0.028]" />
 
-        <div className="absolute bottom-[-240px] left-[-120px] size-[440px] rounded-full border border-white/[0.025]" />
+        <div className="absolute bottom-[-240px] left-[-120px] size-[440px] rounded-full border border-[var(--ds-border-soft)]" />
 
         {image ? (
           <>
@@ -246,14 +246,14 @@ function ActivePracticeSession({
 
       <div className="relative z-10 mx-auto w-full max-w-[820px]">
         <div className="mb-3 flex items-center justify-center gap-2">
-          <Sparkles size={11} strokeWidth={1.7} className="text-[#c88b32]" />
+          <Sparkles size={11} strokeWidth={1.7} className="text-[var(--ds-gold)]" />
 
-          <p className="text-[8px] font-semibold uppercase tracking-[0.18em] text-[#8b6735]">
+          <p className="text-[8px] font-semibold uppercase tracking-[0.18em] text-[var(--ds-bronze)]">
             Digital Japamala
           </p>
         </div>
 
-        <section className="relative overflow-hidden rounded-[14px] border border-white/[0.07] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_32%),rgba(10,16,24,0.76)] px-3 pb-4 pt-3 shadow-[0_24px_60px_rgba(0,0,0,0.24)] backdrop-blur-sm sm:px-4 sm:pb-5 sm:pt-4">
+        <section className="relative overflow-hidden rounded-[14px] border border-[var(--ds-border-soft)] bg-[linear-gradient(145deg,rgba(255,255,255,0.018),transparent_32%),rgba(10,16,24,0.76)] px-3 pb-4 pt-3 shadow-[0_24px_60px_rgba(0,0,0,0.24)] backdrop-blur-sm sm:px-4 sm:pb-5 sm:pt-4">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-x-[12%] top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(216,154,53,0.24),transparent)]"
@@ -320,7 +320,7 @@ function ActivePracticeSession({
         <div className="mt-3 flex items-center justify-center gap-3 px-4 text-center">
           <div className="h-px w-10 bg-[linear-gradient(90deg,transparent,rgba(216,154,53,0.2))]" />
 
-          <p className="font-serif text-[8px] tracking-[0.04em] text-[#7b684a]">
+          <p className="font-serif text-[8px] tracking-[0.04em] text-[var(--ds-bronze)]">
             One chant. One breath. One point of focus.
           </p>
 

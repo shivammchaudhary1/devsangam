@@ -20,8 +20,8 @@ export function AuthCard({ title, description, children }: AuthCardProps) {
 
         lg:rounded-[18px]
         lg:border
-        lg:border-[#313846]
-        lg:bg-[#11151d]/95
+        lg:border-[var(--ds-border-soft)]
+        lg:bg-[var(--ds-elevated)]
         lg:px-10
         lg:pb-9
         lg:pt-10
@@ -40,12 +40,12 @@ export function AuthCard({ title, description, children }: AuthCardProps) {
           gap-2
           rounded-lg
           border
-          border-[#343b48]
-          bg-[#10131a]
+          border-[var(--ds-border-soft)]
+          bg-[var(--ds-elevated)]
           px-3
           py-2
           text-xs
-          text-[#b8bec8]
+          text-[var(--ds-muted)]
           lg:flex
         "
       >
@@ -53,7 +53,7 @@ export function AuthCard({ title, description, children }: AuthCardProps) {
 
         <span>English</span>
 
-        <ChevronDown size={13} className="text-[#747c89]" />
+        <ChevronDown size={13} className="text-[var(--ds-muted)]" />
       </div>
 
       {/* Header */}
@@ -65,7 +65,7 @@ export function AuthCard({ title, description, children }: AuthCardProps) {
             font-medium
             leading-tight
             tracking-[-0.025em]
-            text-[#f3e8d4]
+            text-[var(--ds-cream)]
             sm:text-[2.25rem]
           "
         >
@@ -119,7 +119,7 @@ export function AuthCard({ title, description, children }: AuthCardProps) {
           className="
             text-sm
             leading-6
-            text-[#9aa2af]
+            text-[var(--ds-muted)]
           "
         >
           {description}

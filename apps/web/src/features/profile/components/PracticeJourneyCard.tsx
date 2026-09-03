@@ -20,7 +20,7 @@ export function PracticeJourneyCard({
 }: PracticeJourneyCardProps) {
   return (
     <article className="overflow-hidden rounded-[11px] border border-[var(--ds-border-soft)] bg-[var(--ds-gradient-panel-soft)] shadow-[var(--ds-shadow-card)]">
-      <div className="border-b border-white/[0.055] px-4 py-4">
+      <div className="border-b border-[var(--ds-border-soft)] px-4 py-4">
         <h2 className="font-serif text-[14px] text-[var(--ds-cream)]">
           Practice Journey
         </h2>
@@ -81,7 +81,7 @@ function JourneyStat({
   value,
 }: JourneyStatProps) {
   return (
-    <div className="rounded-[8px] border border-white/[0.045] bg-white/[0.018] p-4">
+    <div className="rounded-[8px] border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-4">
       <p className="font-serif text-[20px] text-[var(--ds-soft-gold)]">
         {value}
       </p>

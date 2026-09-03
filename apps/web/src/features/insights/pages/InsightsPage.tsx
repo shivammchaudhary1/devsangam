@@ -50,45 +50,86 @@ export function InsightsPage() {
   }, [refetch]);
 
   return (
-    <div className="relative min-h-full overflow-hidden bg-[var(--ds-obsidian)] px-4 py-5 sm:px-5 lg:px-7 lg:py-6 xl:px-8">
+    <div
+      className={
+        'relative min-h-full overflow-hidden ' +
+        'bg-[var(--ds-obsidian)] px-4 py-5 ' +
+        'sm:px-5 lg:px-7 lg:py-6 xl:px-8'
+      }
+    >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        className={'pointer-events-none absolute inset-0 overflow-hidden'}
       >
-        <div className="absolute left-[34%] top-[-220px] size-[520px] rounded-full bg-[#d89a35]/[0.025] blur-[120px]" />
+        <div
+          className={
+            'absolute left-[34%] top-[-220px] size-[520px] ' +
+            'rounded-full bg-[var(--ds-amber-03)] blur-[120px]'
+          }
+        />
 
-        <div className="absolute right-[-220px] top-[260px] size-[480px] rounded-full border border-[#d89a35]/[0.025]" />
+        <div
+          className={
+            'absolute right-[-220px] top-[260px] size-[480px] ' +
+            'rounded-full border border-[var(--ds-border-gold)] ' +
+            'opacity-20'
+          }
+        />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1220px]">
-        <header className="flex flex-col gap-4 border-b border-white/[0.065] pb-5 lg:flex-row lg:items-end lg:justify-between">
+      <div className={'relative z-10 mx-auto w-full max-w-[1220px]'}>
+        <header
+          className={
+            'flex flex-col gap-4 border-b ' +
+            'border-[var(--ds-border-soft)] pb-5 ' +
+            'lg:flex-row lg:items-end lg:justify-between'
+          }
+        >
           <div>
-            <div className="flex items-center gap-2">
+            <div className={'flex items-center gap-2'}>
               <Sparkles
                 size={12}
                 strokeWidth={1.7}
-                className="text-[#d89a35]"
+                className={'text-[var(--ds-gold)]'}
               />
 
-              <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-[#c58a32]">
+              <p
+                className={
+                  'text-[9px] font-semibold uppercase ' +
+                  'tracking-[0.18em] text-[var(--ds-gold)]'
+                }
+              >
                 Your Sadhana Journey
               </p>
             </div>
 
-            <h1 className="mt-2 font-serif text-[26px] font-medium tracking-[0.015em] text-[#eee5d8] sm:text-[30px]">
+            <h1
+              className={
+                'mt-2 font-serif text-[26px] font-medium ' +
+                'tracking-[0.015em] text-[var(--ds-cream)] ' +
+                'sm:text-[30px]'
+              }
+            >
               Insights & Progress
             </h1>
 
-            <p className="mt-1.5 max-w-2xl text-[11px] leading-5 text-[#737b86] sm:text-xs">
+            <p
+              className={
+                'mt-1.5 max-w-2xl text-[11px] leading-5 ' +
+                'text-[var(--ds-muted)] sm:text-xs'
+              }
+            >
               Track your chanting journey and grow with every mantra.
             </p>
           </div>
 
-          <div className="flex max-w-full items-center gap-2 md:self-auto">
+          <div className={'flex max-w-full items-center gap-2 md:self-auto'}>
             {isFetching && !isLoading ? (
               <LoaderCircle
                 size={14}
-                className="shrink-0 animate-spin text-[#d89a35]/70"
+                className={
+                  'shrink-0 animate-spin text-[var(--ds-gold)] ' + 'opacity-70'
+                }
               />
             ) : null}
 
@@ -118,25 +159,43 @@ export function InsightsPage() {
             />
 
             <div className="hidden md:block">
-              <div className="mt-5 flex items-center justify-between gap-4">
+              <div className={'mt-5 flex items-center justify-between gap-4'}>
                 <div>
-                  <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-[#69717c]">
+                  <p
+                    className={
+                      'text-[8px] font-semibold uppercase ' +
+                      'tracking-[0.16em] text-[var(--ds-muted)]'
+                    }
+                  >
                     Overview
                   </p>
 
-                  <p className="mt-1 text-[9px] text-[#535c67]">
+                  <p className={'mt-1 text-[9px] text-[var(--ds-muted)]'}>
                     {getInsightsRangeLabel(range)}
                   </p>
                 </div>
 
-                <div className="hidden items-center gap-2 text-[8px] text-[#5e6671] sm:flex">
-                  <span className="size-1.5 rounded-full bg-[#4da779]" />
+                <div
+                  className={
+                    'hidden items-center gap-2 text-[8px] ' +
+                    'text-[var(--ds-muted)] sm:flex'
+                  }
+                >
+                  <span
+                    className={'size-1.5 rounded-full bg-[var(--ds-success)]'}
+                  />
 
                   <span>Synced with completed practice</span>
                 </div>
               </div>
 
-              <section className="mt-3 grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+              <section
+                className={
+                  'mt-3 grid grid-cols-1 gap-2.5 ' +
+                  'min-[420px]:grid-cols-2 lg:grid-cols-3 ' +
+                  'xl:grid-cols-6'
+                }
+              >
                 <InsightMetricCard
                   label="Current Streak"
                   value={`${formatInsightsNumber(
@@ -144,7 +203,7 @@ export function InsightsPage() {
                   )} ${
                     insights.summary.currentStreakDays === 1 ? 'day' : 'days'
                   }`}
-                  description="Your active chain of completed practice days."
+                  description={'Your active chain of completed practice days.'}
                   icon={Flame}
                   emphasized
                 />
@@ -152,7 +211,7 @@ export function InsightsPage() {
                 <InsightMetricCard
                   label="Malas Completed"
                   value={formatInsightsNumber(insights.summary.totalMalas)}
-                  description="Full sets of 108 repetitions completed."
+                  description={'Full sets of 108 repetitions completed.'}
                   icon={Trophy}
                   emphasized
                 />
@@ -160,7 +219,7 @@ export function InsightsPage() {
                 <InsightMetricCard
                   label="Total Chants"
                   value={formatInsightsNumber(insights.summary.totalChants)}
-                  description="Completed mantra repetitions in this period."
+                  description={'Completed mantra repetitions in this period.'}
                   icon={Sparkles}
                 />
 
@@ -169,7 +228,7 @@ export function InsightsPage() {
                   value={formatInsightsNumber(
                     insights.summary.totalCompletedSessions
                   )}
-                  description="Completed Sadhana sessions."
+                  description={'Completed Sadhana sessions.'}
                   icon={BarChart3}
                 />
 
@@ -178,7 +237,7 @@ export function InsightsPage() {
                   value={formatInsightsDuration(
                     insights.summary.totalPracticeSeconds
                   )}
-                  description="Active time spent in completed practice."
+                  description={'Active time spent in completed practice.'}
                   icon={Clock3}
                 />
 
@@ -189,12 +248,16 @@ export function InsightsPage() {
                   )} ${
                     insights.summary.longestStreakDays === 1 ? 'day' : 'days'
                   }`}
-                  description="Your longest consecutive practice streak."
+                  description={'Your longest consecutive practice streak.'}
                   icon={Trophy}
                 />
               </section>
 
-              <section className="mt-4 grid gap-3 xl:grid-cols-[0.72fr_1.35fr_0.78fr]">
+              <section
+                className={
+                  'mt-4 grid gap-3 ' + 'xl:grid-cols-[0.72fr_1.35fr_0.78fr]'
+                }
+              >
                 <StreakCalendar
                   currentStreakDays={insights.summary.currentStreakDays}
                   longestStreakDays={insights.summary.longestStreakDays}
@@ -213,14 +276,29 @@ export function InsightsPage() {
 
               <PracticeHistoryPanel />
 
-              <div className="mt-7 hidden items-center gap-4 pb-2 lg:flex">
-                <div className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(216,154,53,0.24))]" />
+              <div className={'mt-7 hidden items-center gap-4 pb-2 lg:flex'}>
+                <div
+                  className={
+                    'h-px flex-1 bg-gradient-to-r ' +
+                    'from-transparent to-[var(--ds-border-gold)]'
+                  }
+                />
 
-                <p className="font-serif text-[10px] tracking-[0.05em] text-[#a97a38]">
+                <p
+                  className={
+                    'font-serif text-[10px] tracking-[0.05em] ' +
+                    'text-[var(--ds-bronze)]'
+                  }
+                >
                   Consistency in chanting transforms practice into discipline.
                 </p>
 
-                <div className="h-px flex-1 bg-[linear-gradient(90deg,rgba(216,154,53,0.24),transparent)]" />
+                <div
+                  className={
+                    'h-px flex-1 bg-gradient-to-r ' +
+                    'from-[var(--ds-border-gold)] to-transparent'
+                  }
+                />
               </div>
             </div>
           </>
@@ -233,29 +311,53 @@ export function InsightsPage() {
 function InsightsLoadingState() {
   return (
     <div className="mt-6">
-      <div className="flex items-center gap-2 text-[10px] text-[#69717c]">
-        <LoaderCircle size={14} className="animate-spin text-[#d89a35]" />
+      <div
+        className={
+          'flex items-center gap-2 text-[10px] ' + 'text-[var(--ds-muted)]'
+        }
+      >
+        <LoaderCircle
+          size={14}
+          className={'animate-spin text-[var(--ds-gold)]'}
+        />
 
         <span>Gathering your practice insights...</span>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2.5 lg:grid-cols-3 xl:grid-cols-6">
+      <div
+        className={
+          'mt-4 grid grid-cols-2 gap-2.5 ' + 'lg:grid-cols-3 xl:grid-cols-6'
+        }
+      >
         {Array.from({
           length: 6,
         }).map((_, index) => (
           <div
             key={index}
-            className="h-[118px] animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]"
+            className={
+              'h-[118px] animate-pulse rounded-[11px] border ' +
+              'border-[var(--ds-border-soft)] ' +
+              'bg-[var(--ds-white-03)]'
+            }
           />
         ))}
       </div>
 
-      <div className="mt-4 grid gap-3 xl:grid-cols-[0.72fr_1.35fr_0.78fr]">
-        <div className="h-72 animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]" />
-
-        <div className="h-72 animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]" />
-
-        <div className="h-72 animate-pulse rounded-[11px] border border-white/[0.06] bg-white/[0.022]" />
+      <div
+        className={'mt-4 grid gap-3 ' + 'xl:grid-cols-[0.72fr_1.35fr_0.78fr]'}
+      >
+        {Array.from({
+          length: 3,
+        }).map((_, index) => (
+          <div
+            key={index}
+            className={
+              'h-72 animate-pulse rounded-[11px] border ' +
+              'border-[var(--ds-border-soft)] ' +
+              'bg-[var(--ds-white-03)]'
+            }
+          />
+        ))}
       </div>
     </div>
   );
@@ -268,17 +370,35 @@ type InsightsErrorStateProps = {
 
 function InsightsErrorState({ message, onRetry }: InsightsErrorStateProps) {
   return (
-    <div className="mt-6 rounded-[11px] border border-red-400/15 bg-red-400/[0.028] px-5 py-8 text-center">
-      <p className="font-serif text-lg text-[#ded8cf]">Insights unavailable</p>
+    <div
+      className={
+        'mt-6 rounded-[11px] border border-red-400/15 ' +
+        'bg-red-400/[0.028] px-5 py-8 text-center'
+      }
+    >
+      <p className={'font-serif text-lg text-[var(--ds-cream)]'}>
+        Insights unavailable
+      </p>
 
-      <p className="mx-auto mt-2 max-w-lg text-[10px] leading-5 text-[#737b86]">
+      <p
+        className={
+          'mx-auto mt-2 max-w-lg text-[10px] leading-5 ' +
+          'text-[var(--ds-muted)]'
+        }
+      >
         {message}
       </p>
 
       <button
         type="button"
         onClick={onRetry}
-        className="mt-4 inline-flex items-center gap-2 rounded-[8px] border border-[#d89a35]/20 bg-[#d89a35]/[0.065] px-3.5 py-2.5 text-[10px] font-medium text-[#efc875] transition hover:bg-[#d89a35]/[0.1]"
+        className={
+          'mt-4 inline-flex items-center gap-2 rounded-[8px] ' +
+          'border border-[var(--ds-border-gold)] ' +
+          'bg-[var(--ds-amber-05)] px-3.5 py-2.5 ' +
+          'text-[10px] font-medium text-[var(--ds-soft-gold)] ' +
+          'transition hover:bg-[var(--ds-amber-10)]'
+        }
       >
         <RotateCcw size={13} />
         Try again

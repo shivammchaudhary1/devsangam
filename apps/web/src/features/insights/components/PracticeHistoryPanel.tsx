@@ -99,8 +99,8 @@ export const PracticeHistoryPanel = memo(function PracticeHistoryPanel() {
   }, [refetch]);
 
   return (
-    <section className="mt-6 rounded-2xl border border-white/[0.07] bg-[#09121e] p-4 sm:p-5">
-      <header className="flex flex-col gap-4 border-b border-white/[0.06] pb-5 sm:flex-row sm:items-start sm:justify-between">
+    <section className="mt-6 rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-charcoal)] p-4 sm:p-5">
+      <header className="flex flex-col gap-4 border-b border-[var(--ds-border-soft)] pb-5 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
             <History size={14} strokeWidth={1.7} className="text-amber-400" />
@@ -128,7 +128,7 @@ export const PracticeHistoryPanel = memo(function PracticeHistoryPanel() {
           ) : null}
 
           {history ? (
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-right">
+            <div className="rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-3 py-2 text-right">
               <p className="text-[8px] uppercase tracking-[0.1em] text-slate-600">
                 Sessions
               </p>
@@ -161,10 +161,10 @@ export const PracticeHistoryPanel = memo(function PracticeHistoryPanel() {
                         'text-amber-200',
                       ].join(' ')
                     : [
-                        'border-white/[0.05]',
-                        'bg-white/[0.015]',
+                        'border-[var(--ds-border-soft)]',
+                        'bg-[var(--ds-white-03)]',
                         'text-slate-500',
-                        'hover:border-white/[0.09]',
+                        'hover:border-[var(--ds-border-soft)]',
                         'hover:text-slate-300',
                       ].join(' '),
                 ].join(' ')}
@@ -201,7 +201,7 @@ export const PracticeHistoryPanel = memo(function PracticeHistoryPanel() {
             ))}
           </div>
 
-          <footer className="mt-5 flex flex-col gap-3 border-t border-white/[0.06] pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <footer className="mt-5 flex flex-col gap-3 border-t border-[var(--ds-border-soft)] pt-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-[10px] text-slate-600">
               Page{' '}
               <span className="text-slate-400">{history.pagination.page}</span>{' '}
@@ -216,7 +216,7 @@ export const PracticeHistoryPanel = memo(function PracticeHistoryPanel() {
                 type="button"
                 onClick={handlePreviousPage}
                 disabled={isFetching || !history.pagination.hasPreviousPage}
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-white/[0.07] bg-white/[0.02] px-3 text-[10px] font-medium text-slate-400 transition hover:border-white/[0.12] hover:text-slate-200 disabled:cursor-not-allowed disabled:opacity-35"
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-3 text-[10px] font-medium text-slate-400 transition hover:border-[var(--ds-border-soft)] hover:text-slate-200 disabled:cursor-not-allowed disabled:opacity-35"
               >
                 <ChevronLeft size={13} />
                 Previous
@@ -260,9 +260,9 @@ const PracticeHistoryRow = memo(function PracticeHistoryRow({
   const title = mantra?.title ?? formatMantraSlug(session.mantraSlug);
 
   return (
-    <article className="rounded-xl border border-white/[0.055] bg-white/[0.015] p-3.5 transition hover:border-white/[0.09] hover:bg-white/[0.022] sm:p-4">
+    <article className="rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-3.5 transition hover:border-[var(--ds-border-soft)] hover:bg-[var(--ds-white-03)] sm:p-4">
       <div className="flex items-start gap-3">
-        <div className="size-11 shrink-0 overflow-hidden rounded-xl border border-white/[0.07] bg-[#070f19]">
+        <div className="size-11 shrink-0 overflow-hidden rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)]">
           {mantra?.image ? (
             <img
               src={mantra.image}
@@ -306,7 +306,7 @@ const PracticeHistoryRow = memo(function PracticeHistoryRow({
               </span>
             </div>
 
-            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/[0.05]">
+            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[var(--ds-white-03)]">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-[#9b631a] via-[#c68a2e] to-[#e4bc58]"
                 style={{
@@ -387,7 +387,7 @@ function PracticeHistoryLoadingState() {
       }).map((_, index) => (
         <div
           key={index}
-          className="h-32 animate-pulse rounded-xl border border-white/[0.05] bg-white/[0.02]"
+          className="h-32 animate-pulse rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)]"
         />
       ))}
     </div>
@@ -432,7 +432,7 @@ function PracticeHistoryEmptyState({
   statusFilter,
 }: PracticeHistoryEmptyStateProps) {
   return (
-    <div className="mt-5 flex min-h-44 items-center justify-center rounded-xl border border-dashed border-white/[0.07] bg-white/[0.012] px-6 text-center">
+    <div className="mt-5 flex min-h-44 items-center justify-center rounded-xl border border-dashed border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] px-6 text-center">
       <div>
         <History size={22} className="mx-auto text-amber-400/40" />
 

@@ -9,23 +9,16 @@ import { memo, useMemo } from 'react';
 
 type PracticeActivityChartProps = {
   activity: DailyPracticeActivity[];
-
   range: InsightsRange;
 };
 
 type ActivityBucket = {
   key: string;
-
   label: string;
-
   tooltipLabel: string;
-
   chants: number;
-
   completedSessions: number;
-
   activeDurationSeconds: number;
-
   completedMalas: number;
 };
 
@@ -77,27 +70,47 @@ export const PracticeActivityChart = memo(function PracticeActivityChart({
   const chartMinWidth = getChartMinWidth(buckets.length, range);
 
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-[#09121e] p-4 sm:p-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <section
+      className={
+        'rounded-2xl border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-gradient-panel-soft)] p-4 ' +
+        'shadow-[var(--ds-shadow-card)] sm:p-5'
+      }
+    >
+      <div
+        className={
+          'flex flex-col gap-4 sm:flex-row ' +
+          'sm:items-start sm:justify-between'
+        }
+      >
         <div>
-          <div className="flex items-center gap-2">
-            <Activity size={14} strokeWidth={1.7} className="text-amber-400" />
+          <div className={'flex items-center gap-2'}>
+            <Activity
+              size={14}
+              strokeWidth={1.7}
+              className={'text-[var(--ds-gold)]'}
+            />
 
-            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <p
+              className={
+                'text-[10px] font-semibold uppercase ' +
+                'tracking-[0.16em] text-[var(--ds-gold)]'
+              }
+            >
               Practice Activity
             </p>
           </div>
 
-          <h2 className="mt-1 font-serif text-lg text-slate-200">
+          <h2 className={'mt-1 font-serif text-lg text-[var(--ds-cream)]'}>
             Chanting consistency
           </h2>
 
-          <p className="mt-1 text-[11px] leading-5 text-slate-600">
+          <p className={'mt-1 text-[11px] leading-5 text-[var(--ds-muted)]'}>
             Your completed chanting activity across the selected period.
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className={'flex gap-2'}>
           <ActivitySummaryItem
             label="Active days"
             value={formatInsightsNumber(chartSummary.activeDays)}
@@ -116,9 +129,9 @@ export const PracticeActivityChart = memo(function PracticeActivityChart({
         </div>
       </div>
 
-      <div className="mt-6 overflow-x-auto pb-2">
+      <div className={'mt-6 overflow-x-auto pb-2'}>
         <div
-          className="flex h-[220px] items-end gap-1.5 sm:gap-2"
+          className={'flex h-[220px] items-end gap-1.5 sm:gap-2'}
           style={{
             minWidth: chartMinWidth,
           }}
@@ -129,40 +142,61 @@ export const PracticeActivityChart = memo(function PracticeActivityChart({
             return (
               <div
                 key={bucket.key}
-                className="group flex h-full min-w-0 flex-1 flex-col justify-end"
+                className={
+                  'group flex h-full min-w-0 flex-1 ' + 'flex-col justify-end'
+                }
               >
-                <div className="relative flex min-h-0 flex-1 items-end justify-center">
+                <div
+                  className={
+                    'relative flex min-h-0 flex-1 ' + 'items-end justify-center'
+                  }
+                >
                   <div
                     title={buildBucketTooltip(bucket)}
                     className={[
-                      'relative w-full max-w-8 rounded-t-md border transition-all duration-300',
+                      'relative w-full max-w-8 rounded-t-md',
+                      'border transition-all duration-300',
+
                       bucket.chants > 0
                         ? [
-                            'border-amber-300/20',
+                            'border-[var(--ds-border-gold)]',
                             'bg-gradient-to-t',
                             'from-[#9c651b]',
                             'via-[#c88b2d]',
                             'to-[#e5bd58]',
-                            'shadow-[0_-5px_20px_rgba(245,158,11,0.05)]',
+                            'shadow-[var(--ds-shadow-gold)]',
                             'group-hover:brightness-110',
                           ].join(' ')
-                        : ['border-white/[0.04]', 'bg-white/[0.035]'].join(' '),
+                        : [
+                            'border-[var(--ds-border-soft)]',
+                            'bg-[var(--ds-white-03)]',
+                          ].join(' '),
                     ].join(' ')}
                     style={{
                       height,
                     }}
                   >
                     {bucket.chants > 0 ? (
-                      <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg border border-white/[0.08] bg-[#060d17] px-2.5 py-2 text-[9px] shadow-xl group-hover:block">
-                        <p className="font-medium text-amber-200">
+                      <div
+                        className={
+                          'pointer-events-none absolute bottom-full ' +
+                          'left-1/2 z-20 mb-2 hidden -translate-x-1/2 ' +
+                          'whitespace-nowrap rounded-lg border ' +
+                          'border-[var(--ds-border-soft)] ' +
+                          'bg-[var(--ds-elevated)] px-2.5 py-2 ' +
+                          'text-[9px] shadow-[var(--ds-shadow-card)] ' +
+                          'group-hover:block'
+                        }
+                      >
+                        <p className={'font-medium text-[var(--ds-soft-gold)]'}>
                           {bucket.tooltipLabel}
                         </p>
 
-                        <p className="mt-1 text-slate-400">
+                        <p className={'mt-1 text-[var(--ds-text)]'}>
                           {formatInsightsNumber(bucket.chants)} chants
                         </p>
 
-                        <p className="text-slate-500">
+                        <p className={'text-[var(--ds-muted)]'}>
                           {bucket.completedSessions} sessions ·{' '}
                           {formatInsightsDuration(bucket.activeDurationSeconds)}
                         </p>
@@ -171,8 +205,12 @@ export const PracticeActivityChart = memo(function PracticeActivityChart({
                   </div>
                 </div>
 
-                <div className="mt-2 h-8 text-center">
-                  <span className="text-[8px] text-slate-600 sm:text-[9px]">
+                <div className={'mt-2 h-8 text-center'}>
+                  <span
+                    className={
+                      'text-[8px] text-[var(--ds-muted)] sm:text-[9px]'
+                    }
+                  >
                     {bucket.label}
                   </span>
                 </div>
@@ -182,17 +220,26 @@ export const PracticeActivityChart = memo(function PracticeActivityChart({
         </div>
       </div>
 
-      <div className="mt-2 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
-        <div className="flex items-center gap-2 text-[10px] text-slate-600">
-          <span className="size-2 rounded-sm bg-[#d29a38]" />
+      <div
+        className={
+          'mt-2 flex flex-wrap items-center justify-between ' +
+          'gap-3 border-t border-[var(--ds-border-soft)] pt-4'
+        }
+      >
+        <div
+          className={
+            'flex items-center gap-2 text-[10px] ' + 'text-[var(--ds-muted)]'
+          }
+        >
+          <span className={'size-2 rounded-sm bg-[var(--ds-gold)]'} />
 
           <span>Completed chants</span>
         </div>
 
         {chartSummary.peakDay && chartSummary.peakDay.chants > 0 ? (
-          <p className="text-[10px] text-slate-600">
+          <p className={'text-[10px] text-[var(--ds-muted)]'}>
             Best day:{' '}
-            <span className="text-slate-400">
+            <span className={'text-[var(--ds-text)]'}>
               {formatFullDateKey(chartSummary.peakDay.date)} ·{' '}
               {formatInsightsNumber(chartSummary.peakDay.chants)} chants
             </span>
@@ -205,9 +252,7 @@ export const PracticeActivityChart = memo(function PracticeActivityChart({
 
 type ActivitySummaryItemProps = {
   label: string;
-
   value: string;
-
   icon: LucideIcon;
 };
 
@@ -217,44 +262,86 @@ const ActivitySummaryItem = memo(function ActivitySummaryItem({
   icon: Icon,
 }: ActivitySummaryItemProps) {
   return (
-    <div className="min-w-[90px] rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5">
-      <div className="flex items-center gap-1.5">
-        <Icon size={11} strokeWidth={1.7} className="text-amber-400/70" />
+    <div
+      className={
+        'min-w-[90px] rounded-xl border ' +
+        'border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-white-03)] px-3 py-2.5'
+      }
+    >
+      <div className={'flex items-center gap-1.5'}>
+        <Icon
+          size={11}
+          strokeWidth={1.7}
+          className={'text-[var(--ds-gold)] opacity-70'}
+        />
 
-        <p className="text-[8px] uppercase tracking-[0.1em] text-slate-600">
+        <p
+          className={
+            'text-[8px] uppercase tracking-[0.1em] ' + 'text-[var(--ds-muted)]'
+          }
+        >
           {label}
         </p>
       </div>
 
-      <p className="mt-1 font-serif text-base text-slate-300">{value}</p>
+      <p className={'mt-1 font-serif text-base text-[var(--ds-cream)]'}>
+        {value}
+      </p>
     </div>
   );
 });
 
 function PracticeActivityEmptyState() {
   return (
-    <section className="rounded-2xl border border-white/[0.07] bg-[#09121e] p-5">
-      <div className="flex items-center gap-2">
-        <Activity size={14} className="text-amber-400" />
+    <section
+      className={
+        'rounded-2xl border border-[var(--ds-border-soft)] ' +
+        'bg-[var(--ds-gradient-panel-soft)] p-5 ' +
+        'shadow-[var(--ds-shadow-card)]'
+      }
+    >
+      <div className={'flex items-center gap-2'}>
+        <Activity size={14} className={'text-[var(--ds-gold)]'} />
 
-        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <p
+          className={
+            'text-[10px] font-semibold uppercase ' +
+            'tracking-[0.16em] text-[var(--ds-gold)]'
+          }
+        >
           Practice Activity
         </p>
       </div>
 
-      <h2 className="mt-1 font-serif text-lg text-slate-200">
+      <h2 className={'mt-1 font-serif text-lg text-[var(--ds-cream)]'}>
         Chanting consistency
       </h2>
 
-      <div className="mt-5 flex min-h-40 items-center justify-center rounded-xl border border-dashed border-white/[0.07] bg-white/[0.015] px-6 text-center">
+      <div
+        className={
+          'mt-5 flex min-h-40 items-center justify-center ' +
+          'rounded-xl border border-dashed ' +
+          'border-[var(--ds-border-soft)] ' +
+          'bg-[var(--ds-white-03)] px-6 text-center'
+        }
+      >
         <div>
-          <Sparkles size={20} className="mx-auto text-amber-400/50" />
+          <Sparkles
+            size={20}
+            className={'mx-auto text-[var(--ds-gold)] opacity-60'}
+          />
 
-          <p className="mt-3 font-serif text-base text-slate-300">
+          <p className={'mt-3 font-serif text-base text-[var(--ds-text)]'}>
             Your journey begins here
           </p>
 
-          <p className="mx-auto mt-2 max-w-sm text-[11px] leading-5 text-slate-600">
+          <p
+            className={
+              'mx-auto mt-2 max-w-sm text-[11px] leading-5 ' +
+              'text-[var(--ds-muted)]'
+            }
+          >
             Complete a Sadhana session and your chanting activity will appear
             here.
           </p>
