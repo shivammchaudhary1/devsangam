@@ -8,6 +8,18 @@ const profileIntentionSchema = z.enum([
   'Devotion',
 ]);
 
+function isValidTimezone(value: string) {
+  try {
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: value,
+    }).format();
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 const updatePreferencesSchema = z
   .object({
     language: z
@@ -42,6 +54,7 @@ const updatePreferencesSchema = z
       .trim()
       .min(1, 'Timezone is required.')
       .max(100, 'Timezone value is too long.')
+      .refine(isValidTimezone, 'Timezone must be a valid IANA timezone.')
       .optional(),
 
     defaultTarget: z

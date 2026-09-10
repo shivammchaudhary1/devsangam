@@ -1,4 +1,4 @@
-import * as webPush from 'web-push';
+import webPush from 'web-push';
 
 let configured = false;
 
@@ -28,9 +28,7 @@ export function getWebPushClient() {
   }
 
   const subject = getRequiredEnv('VAPID_SUBJECT');
-
   const publicKey = getRequiredEnv('VAPID_PUBLIC_KEY');
-
   const privateKey = getRequiredEnv('VAPID_PRIVATE_KEY');
 
   validateVapidSubject(subject);

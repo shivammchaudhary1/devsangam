@@ -14,6 +14,10 @@ export default defineConfig({
 
       includeManifestIcons: false,
 
+      devOptions: {
+        enabled: true,
+      },
+
       manifest: {
         id: '/',
 
@@ -67,6 +71,8 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
 
         globPatterns: ['**/*.{js,css,html,svg,png,webp,jpg,jpeg,woff,woff2}'],
+
+        importScripts: ['/push-sw.js'],
 
         runtimeCaching: [
           {

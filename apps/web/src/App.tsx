@@ -3,6 +3,7 @@ import { PwaUpdateManager } from '@/components/pwa/PwaUpdateManager';
 import { RouteLoadingFallback } from '@/components/shared/RouteLoadingFallback';
 import { GuestRoute } from '@/features/auth/components/GuestRoute';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
+import { PushSubscriptionManager } from '@/features/push/components/PushSubscriptionManager';
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
 
@@ -88,6 +89,8 @@ function App() {
   return (
     <>
       <PwaUpdateManager />
+
+      <PushSubscriptionManager />
 
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>

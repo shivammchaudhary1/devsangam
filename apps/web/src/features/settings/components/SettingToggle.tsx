@@ -3,20 +3,24 @@ import { LoadingSpinner } from '@/components/loading/LoadingSpinner';
 type SettingToggleProps = {
   enabled: boolean;
   pending: boolean;
+  disabled?: boolean;
   onToggle: () => void | Promise<void>;
 };
 
 export function SettingToggle({
   enabled,
   pending,
+  disabled = false,
   onToggle,
 }: SettingToggleProps) {
+  const unavailable = pending || disabled;
+
   return (
     <button
       type="button"
       role="switch"
       aria-checked={enabled}
-      disabled={pending}
+      disabled={unavailable}
       onClick={() => void onToggle()}
       className={[
         'relative flex h-[24px] w-[42px] items-center',
@@ -32,7 +36,7 @@ export function SettingToggle({
               ' '
             ),
 
-        pending ? 'cursor-not-allowed opacity-60' : '',
+        unavailable ? 'cursor-not-allowed opacity-60' : '',
       ].join(' ')}
     >
       {pending ? (

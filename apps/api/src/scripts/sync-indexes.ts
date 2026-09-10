@@ -1,6 +1,7 @@
 import { connectDatabase } from '../config/database.ts';
 import { MantraModel } from '../models/mantra.model.ts';
 import { PracticeSessionModel } from '../models/practice-session.model.ts';
+import { PushReminderDispatchModel } from '../models/push-reminder-dispatch.model.ts';
 import { PushSubscriptionModel } from '../models/push-subscription.model.ts';
 import mongoose from 'mongoose';
 
@@ -10,14 +11,20 @@ async function syncIndexes() {
 
     console.log('Synchronizing DevSangam indexes...');
 
-    const [droppedMantraIndexes, droppedPracticeIndexes, droppedPushIndexes] =
-      await Promise.all([
-        MantraModel.syncIndexes(),
+    const [
+      droppedMantraIndexes,
+      droppedPracticeIndexes,
+      droppedPushIndexes,
+      droppedReminderDispatchIndexes,
+    ] = await Promise.all([
+      MantraModel.syncIndexes(),
 
-        PracticeSessionModel.syncIndexes(),
+      PracticeSessionModel.syncIndexes(),
 
-        PushSubscriptionModel.syncIndexes(),
-      ]);
+      PushSubscriptionModel.syncIndexes(),
+
+      PushReminderDispatchModel.syncIndexes(),
+    ]);
 
     console.log('Dropped old mantra indexes:', droppedMantraIndexes);
 
@@ -25,12 +32,24 @@ async function syncIndexes() {
 
     console.log('Dropped old push indexes:', droppedPushIndexes);
 
-    const [mantraIndexes, practiceIndexes, pushIndexes] = await Promise.all([
+    console.log(
+      'Dropped old push reminder indexes:',
+      droppedReminderDispatchIndexes
+    );
+
+    const [
+      mantraIndexes,
+      practiceIndexes,
+      pushIndexes,
+      reminderDispatchIndexes,
+    ] = await Promise.all([
       MantraModel.collection.indexes(),
 
       PracticeSessionModel.collection.indexes(),
 
       PushSubscriptionModel.collection.indexes(),
+
+      PushReminderDispatchModel.collection.indexes(),
     ]);
 
     console.log('Current mantra indexes:');
@@ -48,6 +67,12 @@ async function syncIndexes() {
     console.log('Current push-subscription indexes:');
 
     for (const index of pushIndexes) {
+      console.log(`- ${index.name}`);
+    }
+
+    console.log('Current push-reminder indexes:');
+
+    for (const index of reminderDispatchIndexes) {
       console.log(`- ${index.name}`);
     }
 

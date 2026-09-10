@@ -10,6 +10,7 @@ import {
 } from '../storage/auth-session.storage';
 import type { AuthUser } from '../types/auth.types';
 import { AuthContext } from './AuthContext';
+import { cleanupPushSubscriptionForLogout } from '@/features/push/services/push-notifications.service';
 import { isApiError } from '@/services/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { type ReactNode, useCallback, useEffect, useMemo } from 'react';
@@ -130,6 +131,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async () => {
     try {
+      await cleanupPushSubscriptionForLogout();
       await logoutUser();
     } finally {
       clearCachedAuthUser();

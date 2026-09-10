@@ -1,5 +1,6 @@
 import { AccountSessionSettings } from '../components/AccountSessionSettings';
 import { AppearanceSettings } from '../components/AppearanceSettings';
+import { NotificationSettings } from '../components/NotificationSettings';
 import { PasswordSettings } from '../components/PasswordSettings';
 import { PracticeDefaultsSettings } from '../components/PracticeDefaultsSettings';
 import { SettingsBackground } from '../components/SettingsBackground';
@@ -79,6 +80,8 @@ function SettingsContent({ user, setUser }: SettingsContentProps) {
             onSoundToggle={settings.handleSoundToggle}
             onHapticToggle={settings.handleHapticToggle}
           />
+
+          <NotificationSettings user={user} setUser={setUser} />
 
           <PasswordSettings
             currentPassword={settings.currentPassword}

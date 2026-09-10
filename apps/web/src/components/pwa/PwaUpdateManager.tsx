@@ -67,7 +67,7 @@ export function PwaUpdateManager() {
           'md:right-5 md:mx-0 md:w-[390px]'
         }
       >
-        <div className={'flex items-start gap-3'}>
+        <div className="flex items-start gap-3">
           <div
             className={
               'flex size-9 shrink-0 items-center justify-center ' +
@@ -83,19 +83,11 @@ export function PwaUpdateManager() {
           </div>
 
           <div className="min-w-0 flex-1">
-            <p
-              className={
-                'font-serif text-[13px] ' + 'text-[var(--ds-soft-gold)]'
-              }
-            >
+            <p className={'font-serif text-[13px] text-[var(--ds-soft-gold)]'}>
               DevSangam update ready
             </p>
 
-            <p
-              className={
-                'mt-1 text-[9px] leading-4 ' + 'text-[var(--ds-muted)]'
-              }
-            >
+            <p className={'mt-1 text-[9px] leading-4 text-[var(--ds-muted)]'}>
               {isPracticeSession
                 ? 'Your Sadhana is in progress. ' +
                   'Finish or exit the session before updating.'
@@ -119,11 +111,11 @@ export function PwaUpdateManager() {
           </button>
         </div>
 
-        <div className={'mt-3 flex justify-end gap-2'}>
+        <div className="mt-3 flex justify-end gap-2">
           <button
             type="button"
             onClick={() => setNeedRefresh(false)}
-            className={'ds-secondary-button min-h-9 px-3 text-[9px]'}
+            className="ds-secondary-button min-h-9 px-3 text-[9px]"
           >
             Later
           </button>
@@ -176,11 +168,11 @@ export function PwaUpdateManager() {
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className={'text-[10px] font-medium ' + 'text-[var(--ds-text)]'}>
+          <p className="text-[10px] font-medium text-[var(--ds-text)]">
             Ready for offline practice
           </p>
 
-          <p className={'mt-0.5 text-[8px] ' + 'text-[var(--ds-muted)]'}>
+          <p className="mt-0.5 text-[8px] text-[var(--ds-muted)]">
             DevSangam can now load without a connection.
           </p>
         </div>
