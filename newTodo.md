@@ -84,7 +84,7 @@ Completed:
 ## 4. Code cleanup
 - [x] Remove old commented `forgotPassword()` implementation
 - [x] Clean active forgot-password controller formatting
-- [ ] Review remaining console logging before release
+- [x] Review remaining console logging before release
 - [ ] Investigate Mongoose deprecation warning if it reappears during final QA
 
 ## 5. Repository cleanup
@@ -95,7 +95,7 @@ Completed:
 - [x] Revoke the exposed test authentication session
 - [x] Ignore future local cookie-jar files
 - [x] Confirm local `.env` files are ignored
-- [ ] Run final tracked-secret scan before merge
+- [x] Run final tracked-secret scan before merge
 
 ---
 

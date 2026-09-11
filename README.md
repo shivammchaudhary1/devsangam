@@ -6,7 +6,7 @@
 
 **Chant. Connect. Transform.**
 
-[devsangam.me](https://devsangam.me) · [Product Requirements](./PRD.md)
+[devsangam.me](https://devsangam.me)
 
 ![Node](https://img.shields.io/badge/Node.js-26.7.0-339933?logo=node.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)
@@ -28,7 +28,7 @@ The application combines a curated mantra library, digital Japamala practice ses
 
 DevSangam is designed as a **single React Progressive Web App** rather than separate web and native applications. The same product adapts its navigation and interaction patterns across desktop and mobile while sharing one frontend codebase.
 
-> Project status: **pre-release**. Core product flows are implemented and the project is being prepared for production deployment and CI hardening.
+> Project status: **v0.1 pre-release**. Core product flows are implemented and the project is in final regression QA, production hardening, and deployment preparation.
 
 ---
 
@@ -146,7 +146,7 @@ The current curated seed contains **14 mantra records**.
 ## Profile
 
 - Name
-- Avatar URL foundation
+- Cloudinary avatar upload, replacement and removal
 - Biography
 - Spiritual intention
 - Preferences
@@ -161,6 +161,18 @@ Supported spiritual intentions currently include:
 - Discipline
 - Devotion
 
+## Settings
+
+- Dark / Light / System appearance
+- Default practice target
+- Sound preference
+- Haptic preference
+- Device timezone
+- Daily reminder configuration
+- Push notification controls
+- Password change
+- Logout/session controls
+
 ## Progressive Web App
 
 - Installable application manifest
@@ -171,6 +183,12 @@ Supported spiritual intentions currently include:
 - Runtime caching for mantra GET requests
 - Runtime image caching
 - Expired-cache cleanup
+- Local-first practice persistence with IndexedDB/Dexie
+- Offline-to-online practice synchronization
+- Push subscription reconciliation
+- Test push notifications
+- Timezone-aware daily Sadhana reminders
+- Notification click navigation
 
 ---
 
@@ -307,12 +325,12 @@ All application data flows through the Express API so authentication, validation
 
 | Service | Role |
 |---|---|
-| Cloudflare | Authoritative DNS and edge/frontend deployment path |
+| Cloudflare | Authoritative DNS; final application hosting remains deployment-specific |
 | MongoDB Atlas | Managed application database |
-| Cloudinary | Mantra image CDN |
+| Cloudinary | Mantra images and profile-avatar media |
 | Zoho Mail | Domain mail and application SMTP |
 | Namecheap | Domain registrar |
-| GitHub | Source control and automation |
+| GitHub | Source control |
 
 ---
 
@@ -320,9 +338,6 @@ All application data flows through the Express API so authentication, validation
 
 ```text
 devsangam/
-|
-|-- .github/
-|   `-- workflows/
 |
 |-- apps/
 |   |-- web/
@@ -359,7 +374,6 @@ devsangam/
 |   |-- shared/
 |   `-- types/
 |
-|-- PRD.md
 |-- README.md
 |-- package.json
 |-- package-lock.json
@@ -420,6 +434,7 @@ Current route groups:
 /api/v1/mantras
 /api/v1/practice
 /api/v1/insights
+/api/v1/push
 ```
 
 Authentication routes include:
@@ -431,6 +446,15 @@ POST /api/v1/auth/refresh
 POST /api/v1/auth/logout
 POST /api/v1/auth/forgot-password
 POST /api/v1/auth/reset-password
+```
+
+Push routes require an authenticated active session:
+
+```text
+GET    /api/v1/push/public-key
+POST   /api/v1/push/subscriptions
+DELETE /api/v1/push/subscriptions
+POST   /api/v1/push/test
 ```
 
 Backend inputs are validated before controller execution.
@@ -533,6 +557,14 @@ EMAIL_USER=
 EMAIL_PASSWORD=
 EMAIL_FROM_NAME=DevSangam
 EMAIL_FROM_ADDRESS=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+
+VAPID_SUBJECT=mailto:hello@devsangam.me
+VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
 ```
 
 | Variable | Required | Description |
@@ -549,6 +581,12 @@ EMAIL_FROM_ADDRESS=
 | `EMAIL_PASSWORD` | Yes for email | Zoho application-specific password |
 | `EMAIL_FROM_NAME` | No | Friendly sender name |
 | `EMAIL_FROM_ADDRESS` | No | From address; falls back to `EMAIL_USER` |
+| `CLOUDINARY_CLOUD_NAME` | Yes for media | Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | Yes for media | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Yes for media | Cloudinary API secret |
+| `VAPID_SUBJECT` | Yes for push | Web Push VAPID contact subject |
+| `VAPID_PUBLIC_KEY` | Yes for push | Public VAPID key exposed to the browser |
+| `VAPID_PRIVATE_KEY` | Yes for push | Private VAPID key; server-only secret |
 
 Generate strong independent token secrets:
 
@@ -720,6 +758,9 @@ Current security architecture includes:
 - Zod request validation
 - non-enumerating forgot-password responses
 - CORS tied to `WEB_ORIGIN`
+- Helmet security headers
+- global API rate limiting
+- stricter rate limiting on registration, login, forgot-password and reset-password routes
 - ignored local `.env` secrets
 
 Before production:
@@ -785,6 +826,18 @@ This favors fresh server data while allowing cached read-only mantra content whe
 Images use **Cache First**, reducing repeat media downloads for relatively stable content imagery.
 
 Dynamic mutation endpoints are not broadly cached.
+
+## Push notifications and daily reminders
+
+DevSangam uses the browser Push API together with Web Push/VAPID.
+
+The frontend service worker receives push payloads, displays notifications, and focuses or opens the relevant DevSangam route when a notification is clicked.
+
+The API stores browser push subscriptions and removes invalid subscriptions when Web Push reports that they are no longer usable.
+
+Daily Sadhana reminders use the user's saved timezone and reminder time. Reminder dispatch records prevent duplicate delivery for the same local date.
+
+The reminder scheduler currently runs inside the API process. Production API hosting therefore needs to remain continuously available unless reminder scheduling is moved to an external cron, queue or scheduler.
 
 ---
 
@@ -937,6 +990,12 @@ EMAIL_USER
 EMAIL_PASSWORD
 EMAIL_FROM_NAME
 EMAIL_FROM_ADDRESS
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+VAPID_SUBJECT
+VAPID_PUBLIC_KEY
+VAPID_PRIVATE_KEY
 ```
 
 Credentials and secrets belong in the hosting platform's environment/secret manager.
@@ -1102,9 +1161,9 @@ Password: application-specific password
 - deployment model
 - troubleshooting
 
-`PRD.md` contains deeper product requirements and product direction.
+`newTodo.md` tracks the remaining v0.1 release work and regression checklist.
 
-Keeping those responsibilities separate prevents the README from becoming a stale product backlog.
+Product planning and future-scope ideas are intentionally kept separate from the engineering setup documented here.
 
 ---
 
@@ -1133,9 +1192,14 @@ Before a production release:
 18. Test desktop UI
 19. Test mobile UI
 20. Test PWA installation and update flow
-21. Test cookies and CORS on the real domain
-22. Verify production email delivery
-23. Monitor the replacement deployment
+21. Test offline practice and reconnect synchronization
+22. Test profile-avatar upload, replacement and removal
+23. Test push subscription and test notification
+24. Test scheduled daily reminder
+25. Test cookies and CORS on the real domain
+26. Verify production email delivery
+27. Verify Cloudinary media operations
+28. Monitor the production deployment
 ```
 
 Do not retire an existing working production environment until its replacement has passed production smoke tests and monitoring.
@@ -1146,14 +1210,15 @@ Do not retire an existing working production environment until its replacement h
 
 Near-term engineering work includes:
 
-- GitHub Actions CI
 - final regression QA
-- production frontend deployment
-- final backend-host compatibility decision
+- final frontend and backend hosting decision
 - production secret configuration
+- production deployment
 - deployment smoke testing
-- profile-avatar upload pipeline when required
-- continued offline/local-persistence improvements where they add real value
+- production push/reminder verification
+- release tagging for v0.1.0
+
+GitHub Actions CI and broader automated test coverage can be added after the initial v0.1 release workflow is stable.
 
 DevSangam remains intentionally focused on improving the quality and reliability of the Sadhana experience before expanding into unrelated product areas.
 
