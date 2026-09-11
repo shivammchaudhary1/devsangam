@@ -182,69 +182,15 @@ export async function logout(request: Request, response: Response) {
   });
 }
 
-// export async function forgotPassword(
-//   request: Request<ParamsDictionary, unknown, ForgotPasswordInput>,
-//   response: Response
-// ) {
-//   const { email } = request.body;
-
-//   const user = await UserModel.findOne({
-//     email,
-//   }).select('_id name email');
-
-//   /*
-//    * Do not reveal whether
-//    * the account exists.
-//    */
-//   if (user) {
-//     const { resetUrl } = await createPasswordReset({
-//       userId: user._id.toString(),
-
-//       email: user.email,
-
-//       name: user.name,
-//     });
-
-//     await sendPasswordResetEmail({
-//       email: user.email,
-
-//       name: user.name,
-
-//       resetUrl,
-//     });
-//   }
-
-//   response.json({
-//     success: true,
-
-//     data: {
-//       message:
-//         'If an account exists for that email, password reset instructions have been sent.',
-//     },
-//   });
-// }
-
 export async function forgotPassword(
-  request: Request<
-    ParamsDictionary,
-    unknown,
-    ForgotPasswordInput
-  >,
-  response: Response,
+  request: Request<ParamsDictionary, unknown, ForgotPasswordInput>,
+  response: Response
 ) {
-  const {
-    email,
-  } =
-    request.body;
+  const { email } = request.body;
 
-  const user =
-    await UserModel
-      .findOne({
-        email,
-      })
-      .select(
-        "_id name email",
-      );
+  const user = await UserModel.findOne({
+    email,
+  }).select('_id name email');
 
   /*
    * Always return the same
@@ -252,29 +198,20 @@ export async function forgotPassword(
    * account existence.
    */
   if (user) {
-    const {
-      resetUrl,
-    } =
-      await createPasswordReset({
-        userId:
-          user._id.toString(),
-      });
+    const { resetUrl } = await createPasswordReset({
+      userId: user._id.toString(),
+    });
 
     try {
       await sendPasswordResetEmail({
-        email:
-          user.email,
+        email: user.email,
 
-        name:
-          user.name,
+        name: user.name,
 
         resetUrl,
       });
     } catch (error) {
-      console.error(
-        "Password reset email failed:",
-        error,
-      );
+      console.error('Password reset email failed:', error);
     }
   }
 
@@ -283,7 +220,7 @@ export async function forgotPassword(
 
     data: {
       message:
-        "If an account exists for that email, password reset instructions have been sent.",
+        'If an account exists for that email, password reset instructions have been sent.',
     },
   });
 }

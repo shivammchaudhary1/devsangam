@@ -61,5 +61,9 @@ dist-ssr
 apps/web/dev-dist/
 
 
-#todo
+# todo
 todo.md
+
+# Local HTTP cookie jars
+cookies.txt
+*.cookies.txt
