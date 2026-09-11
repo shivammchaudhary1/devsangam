@@ -52,135 +52,97 @@ Completed:
 
 # Phase 1 — Development Infrastructure
 
-## 1. Fix frontend typecheck command
-- [ ] Add `typecheck` script to `apps/web/package.json`
-- [ ] Confirm root `npm run typecheck` checks both API and Web
-- [ ] Run:
-  - [ ] `npm run lint`
-  - [ ] `npm run typecheck`
-  - [ ] `npm run build`
+## 1. Frontend typecheck
+- [x] Add `typecheck` script to `apps/web/package.json`
+- [x] Confirm root `npm run typecheck` checks API and Web
+- [x] `npm run lint` passes
+- [x] `npm run typecheck` passes
+- [x] `npm run build` passes
 
-## 2. Replace obsolete AWS deployment workflow
-Old AWS/EC2 deployment has been deleted.
-
-- [ ] Remove old automatic EC2 deployment from GitHub Actions
-- [ ] Create CI-only workflow for `main`
-- [ ] CI should run:
-  - [ ] `npm ci`
-  - [ ] `npm run lint`
-  - [ ] `npm run typecheck`
-  - [ ] `npm run build`
-- [ ] Confirm GitHub Actions passes on `main`
+## 2. GitHub Actions
+- [x] Remove obsolete AWS/EC2 deployment workflow
+- [x] Keep GitHub Actions disabled for the current v0.1 finalization workflow
+- [ ] Add CI after the release/deployment workflow is finalized
 
 ---
 
 # Phase 2 — Codebase Cleanup & Security
 
 ## 3. Production security hardening
-- [ ] Add Helmet/security headers
-- [ ] Add API rate limiting
-- [ ] Apply stricter rate limiting to:
-  - [ ] Login
-  - [ ] Register
-  - [ ] Forgot password
-  - [ ] Reset password
-- [ ] Verify existing CORS configuration
-- [ ] Verify production cookie configuration
-- [ ] Review error responses for accidental sensitive-data exposure
+- [x] Add Helmet/security headers
+- [x] Add global API rate limiting
+- [x] Add stricter login rate limiting
+- [x] Add stricter registration rate limiting
+- [x] Add stricter forgot-password rate limiting
+- [x] Add stricter reset-password rate limiting
+- [x] Review CORS implementation
+- [x] Review API error responses for sensitive-data exposure
+- [ ] Verify production CORS on the real deployment domain
+- [ ] Verify production cookie behavior on the real deployment domain
+- [ ] Configure proxy trust only if required by the selected production host
 
 ## 4. Code cleanup
-- [ ] Remove old commented `forgotPassword()` implementation
-- [ ] Remove unused/dead code
-- [ ] Review console logging before production
-- [ ] Fix remaining Mongoose deprecation warnings where applicable
+- [x] Remove old commented `forgotPassword()` implementation
+- [x] Clean active forgot-password controller formatting
+- [ ] Review remaining console logging before release
+- [ ] Investigate Mongoose deprecation warning if it reappears during final QA
 
 ## 5. Repository cleanup
-- [ ] Remove `README copy.md`
-- [ ] Resolve license mismatch
-  - Current `LICENSE` file = MIT
-  - README/package metadata currently references ISC
-- [ ] Choose one license and make every file consistent
-- [ ] Confirm `.env` files remain ignored
-- [ ] Check repository for accidentally committed secrets
+- [x] Confirm stale `README copy.md` is not present
+- [x] Standardize project license on MIT
+- [x] Align `LICENSE`, README and root package metadata
+- [x] Remove committed `cookies.txt`
+- [x] Revoke the exposed test authentication session
+- [x] Ignore future local cookie-jar files
+- [x] Confirm local `.env` files are ignored
+- [ ] Run final tracked-secret scan before merge
 
 ---
 
 # Phase 3 — Documentation Refresh
 
-## 6. Update README
-- [ ] Add Push API documentation
-- [ ] Add push-notification architecture
-- [ ] Add daily reminder behavior
-- [ ] Document VAPID variables
-- [ ] Document Cloudinary variables
-- [ ] Document profile avatar upload
-- [ ] Update Settings features
-- [ ] Update PWA section
-- [ ] Remove outdated roadmap items already completed
-- [ ] Update release checklist
-- [ ] Update deployment section after final hosting is selected
+## 6. README
+- [x] Document Push API routes
+- [x] Document push-notification architecture
+- [x] Document daily reminder behavior
+- [x] Document VAPID variables
+- [x] Document Cloudinary variables
+- [x] Document profile avatar support
+- [x] Document current Settings features
+- [x] Update PWA/offline section
+- [x] Remove obsolete PRD/workflow references
+- [x] Remove already-completed roadmap items
+- [x] Update release checklist
+- [x] Document current deployment constraints
+- [ ] Add provider-specific production deployment details after hosting is selected
 
-## 7. Review `.env.example`
-Ensure it contains all required variables:
-
-- [ ] `PORT`
-- [ ] `WEB_ORIGIN`
-- [ ] `MONGODB_URI`
-- [ ] `ACCESS_TOKEN_SECRET`
-- [ ] `REFRESH_TOKEN_SECRET`
-- [ ] `NODE_ENV`
-- [ ] Zoho SMTP variables
-- [ ] Cloudinary variables
-- [ ] `VAPID_SUBJECT`
-- [ ] `VAPID_PUBLIC_KEY`
-- [ ] `VAPID_PRIVATE_KEY`
-
-No real secret values should be committed.
+## 7. `.env.example`
+- [x] Port / CORS variables
+- [x] MongoDB variable
+- [x] Access and refresh secrets
+- [x] Node environment
+- [x] Zoho SMTP variables
+- [x] Cloudinary variables
+- [x] VAPID subject/public/private keys
+- [x] No real secret values committed in `.env.example`
 
 ---
 
 # Phase 4 — v0.1 Scope Decisions
 
-## 8. Goals feature decision
-Current application supports:
-- Practice target per session
-- Default target preference
+## 8. Goals
+- [x] Keep persistent daily/weekly Goals out of v0.1
+- [x] Keep existing default target and per-session target behavior
+- [ ] Revisit persistent Goals after v0.1
 
-But there is no persistent daily/weekly goal system.
+## 9. Reminder days
+- [x] Keep the current daily reminder model for v0.1
+- [x] Do not add weekday selection before the first release
+- [ ] Consider weekday selection after v0.1
 
-Choose one:
-
-- [ ] Option A — Keep Goals out of v0.1
-- [ ] Option B — Implement persistent Goals before v0.1
-
-If implementing:
-- [ ] Goal model
-- [ ] Goal API
-- [ ] Daily/weekly goal type
-- [ ] Progress calculation
-- [ ] Goal UI
-- [ ] Dashboard integration
-
-## 9. Reminder days decision
-Current reminder works every day at the configured time.
-
-Choose one:
-
-- [ ] Option A — Daily reminder only for v0.1
-- [ ] Option B — Add selectable reminder days
-
-If implementing:
-- [ ] Store selected weekdays
-- [ ] Add weekday selector to Settings
-- [ ] Validate reminder days in API
-- [ ] Scheduler respects selected days
-- [ ] Test timezone + weekday boundaries
-
-## 10. Language preference
-Backend currently stores language preference but localization is not implemented.
-
-- [ ] Keep localization deferred for post-v0.1
-- [ ] Hide/remove any misleading language controls if necessary
+## 10. Localization
+- [x] Keep localization deferred for post-v0.1
+- [x] Do not expose a language selector until translations exist
 
 ---
 
