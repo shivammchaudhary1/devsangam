@@ -14,7 +14,7 @@
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-enabled-5A0FC8?logo=pwa&logoColor=white)
-![License](https://img.shields.io/badge/License-ISC-blue)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 </div>
 
@@ -1161,7 +1161,7 @@ DevSangam remains intentionally focused on improving the quality and reliability
 
 # License
 
-DevSangam is distributed under the **ISC License**.
+DevSangam is distributed under the **MIT License**.
 
 See [`LICENSE`](./LICENSE) for the full license text.
 

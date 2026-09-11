@@ -1,13 +1,17 @@
 import {
+  forgotPassword,
   login,
   logout,
   refresh,
   register,
-} from '../controllers/auth.controller.ts';
-import {
-  forgotPassword,
   resetPassword,
 } from '../controllers/auth.controller.ts';
+import {
+  forgotPasswordRateLimiter,
+  loginRateLimiter,
+  registerRateLimiter,
+  resetPasswordRateLimiter,
+} from '../middleware/rate-limiters.ts';
 import { validateBody } from '../middleware/validate-body.ts';
 import { forgotPasswordSchema } from '../validators/auth/forgot-password.schema.ts';
 import { loginSchema } from '../validators/auth/login.schema.ts';
@@ -20,6 +24,8 @@ export const authRouter = Router();
 authRouter.post(
   '/register',
 
+  registerRateLimiter,
+
   validateBody(registerSchema),
 
   register
@@ -27,6 +33,8 @@ authRouter.post(
 
 authRouter.post(
   '/login',
+
+  loginRateLimiter,
 
   validateBody(loginSchema),
 
@@ -48,6 +56,8 @@ authRouter.post(
 authRouter.post(
   '/forgot-password',
 
+  forgotPasswordRateLimiter,
+
   validateBody(forgotPasswordSchema),
 
   forgotPassword
@@ -55,6 +65,8 @@ authRouter.post(
 
 authRouter.post(
   '/reset-password',
+
+  resetPasswordRateLimiter,
 
   validateBody(resetPasswordSchema),
 

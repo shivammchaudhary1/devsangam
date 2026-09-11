@@ -1,13 +1,17 @@
 import { API_BASE_PATH } from './constants/routes.constants.ts';
 import { errorHandler } from './middleware/error-handler.ts';
+import { apiRateLimiter } from './middleware/rate-limiters.ts';
 import { allRoutes } from './routes/allRoutes.ts';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import helmet from 'helmet';
 
 export const app = express();
 
 app.disable('x-powered-by');
+
+app.use(helmet());
 
 app.use(
   cors({
@@ -15,6 +19,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(API_BASE_PATH, apiRateLimiter);
 
 app.use(cookieParser());
 
