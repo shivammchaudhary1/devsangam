@@ -4,7 +4,7 @@
   "description": "DevSangam is a devotional PWA for mantra practice, digital mala counting, practice history, insights, offline sessions, and reminders.",
   "private": true,
   "engines": {
-    "node": "26.7.0"
+    "node": "24.0.0"
   },
   "workspaces": [
     "apps/*",
