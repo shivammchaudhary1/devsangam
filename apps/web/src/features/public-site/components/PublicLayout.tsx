@@ -8,17 +8,17 @@ export function PublicLayout() {
   const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    if (hash) {
-      document.getElementById(hash.slice(1))?.scrollIntoView();
-    } else {
-      window.scrollTo(0, 0);
-    }
+    if (hash) document.getElementById(hash.slice(1))?.scrollIntoView();
+    else window.scrollTo(0, 0);
     mainRef.current?.focus({ preventScroll: true });
   }, [pathname, hash]);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background text-foreground">
-      <a href="#public-content" className="sr-only focus:not-sr-only focus:p-4">
+    <div className="min-h-dvh bg-[var(--ds-gradient-page)] text-[var(--ds-cream)]">
+      <a
+        href="#public-content"
+        className="sr-only z-[100] rounded-lg bg-background p-3 focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+      >
         Skip to content
       </a>
       <PublicNavbar />
@@ -26,7 +26,7 @@ export function PublicLayout() {
         ref={mainRef}
         id="public-content"
         tabIndex={-1}
-        className="mx-auto w-full max-w-6xl flex-1 px-5 py-12 outline-none sm:px-8 sm:py-16"
+        className="min-h-[60dvh] w-full outline-none"
       >
         <Outlet />
       </main>
