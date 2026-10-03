@@ -1,4 +1,5 @@
 import { MantraModel } from '../models/mantra.model.ts';
+import { serializeMantra } from '../services/content-access.service.ts';
 import { AppError } from '../utils/app-error.ts';
 import type { Request, Response } from 'express';
 
@@ -32,11 +33,19 @@ export async function listMantras(request: Request, response: Response) {
     })
     .lean();
 
+  const visible = await Promise.all(
+    mantras.map((mantra) => serializeMantra(mantra, request.auth?.userId))
+  );
+  const cacheable = !visible.some(
+    (mantra) => mantra.accessType === 'paid' && !mantra.locked
+  );
+  response.set('Cache-Control', cacheable ? 'public, max-age=60' : 'no-store');
+  response.set('X-DevSangam-Public', cacheable ? 'true' : 'false');
   response.status(200).json({
     success: true,
 
     data: {
-      mantras,
+      mantras: visible,
     },
   });
 }
@@ -59,11 +68,19 @@ export async function getMantraBySlug(request: Request, response: Response) {
     );
   }
 
+  response.set(
+    'Cache-Control',
+    mantra.accessType === 'paid' ? 'no-store' : 'public, max-age=60'
+  );
+  response.set(
+    'X-DevSangam-Public',
+    mantra.accessType === 'paid' ? 'false' : 'true'
+  );
   response.status(200).json({
     success: true,
 
     data: {
-      mantra,
+      mantra: await serializeMantra(mantra, request.auth?.userId),
     },
   });
 }

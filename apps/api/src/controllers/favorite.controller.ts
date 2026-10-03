@@ -1,5 +1,6 @@
 import { MantraModel } from '../models/mantra.model.ts';
 import { UserModel } from '../models/user.model.ts';
+import { serializeMantra } from '../services/content-access.service.ts';
 import { AppError } from '../utils/app-error.ts';
 import type { Request, Response } from 'express';
 
@@ -36,13 +37,16 @@ export async function getFavoriteMantras(request: Request, response: Response) {
     .select('-__v')
     .sort({
       title: 1,
-    });
+    })
+    .lean();
 
   response.status(200).json({
     success: true,
 
     data: {
-      mantras,
+      mantras: await Promise.all(
+        mantras.map((mantra) => serializeMantra(mantra, userId))
+      ),
     },
   });
 }

@@ -80,6 +80,8 @@ const mantraSchema = new Schema(
       default: true,
       index: true,
     },
+    accessType: { type: String, enum: ['free', 'paid'], default: 'free' },
+    pricePaise: { type: Number, default: 0, min: 0 },
   },
   {
     timestamps: true,

@@ -394,7 +394,18 @@ devsangam/
 
 | Route | Access | Purpose |
 |---|---|---|
-| `/` | Protected | Dashboard |
+| `/` | Guest / authenticated | Public landing for guests; existing Dashboard for authenticated users |
+| `/about` | Public | Purpose and product philosophy |
+| `/how-it-works` | Public | Practice walkthrough |
+| `/contact` | Public | Validated contact form with server storage and email fallback |
+| `/astro` | Public | Empty reserved Astro section |
+| `/store` | Public | Published digital resources |
+| `/store/:slug` | Public | Product, price and server-derived access state |
+| `/digital-library` | Protected | Owned resources and free reading |
+| `/digital-library/purchases` | Protected | Orders and provider reconciliation |
+| `/admin/*` | Server-authorized admin | Analytics, mantras, products, orders, users, contact, entitlements and audit |
+| `/privacy` | Public | Privacy draft pending professional legal review |
+| `/terms` | Public | Terms draft pending professional legal review |
 | `/auth/login` | Guest | Login |
 | `/auth/register` | Guest | Registration |
 | `/auth/forgot-password` | Guest | Request password reset |
@@ -414,6 +425,13 @@ A mantra can be pre-selected when entering practice:
 ```
 
 Route pages are lazy-loaded with React `lazy()` and `Suspense`.
+
+The V2 public site uses a separate layout with the existing visual tokens and
+ThemeProvider. Authenticated `/` keeps the existing AppShell and offline sync
+manager. `/library` remains the protected V1 mantra library. `/store` and
+`/digital-library` are additive. Paid content requires an active server session
+and database entitlement. The contact form reports receipt only after MongoDB
+storage succeeds. Checkout loads on demand; Razorpay secrets stay on the API.
 
 ---
 
@@ -1162,6 +1180,18 @@ Password: application-specific password
 - troubleshooting
 
 `newTodo.md` tracks the remaining v0.1 release work and regression checklist.
+
+`DEV_SANGAM_V2_CODEX_MASTER_INSTRUCTIONS.md` is the V2 implementation contract.
+`docs/V2_TODO.md` records the baseline, public route strategy, checks and next tasks.
+`scripts/public-site-smoke.mjs` exercises public routes and V1 route guards with
+mocked API sessions against a built preview; setup is documented in the V2 tracker.
+`npm test` runs isolated MongoDB integration and loopback SMTP tests without
+production data. `scripts/v2-ui-smoke.mjs`, `scripts/v2-e2e.mjs` and
+`scripts/v1-offline-smoke.mjs` cover V2 screens, actual local browser/API/DB flows,
+and the real service worker/Dexie offline path. See `docs/V2_DEPLOYMENT.md` for
+configuration, API endpoints, payment architecture and exact provider release checks.
+Razorpay Test Mode and Azure private storage verification remain external blockers;
+payments/private downloads are disabled by default. Policy pages remain review drafts.
 
 Product planning and future-scope ideas are intentionally kept separate from the engineering setup documented here.
 

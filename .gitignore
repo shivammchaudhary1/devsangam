@@ -67,3 +67,6 @@ todo.md
 # Local HTTP cookie jars
 cookies.txt
 *.cookies.txt
+
+# Private development PDF storage
+.private-assets/

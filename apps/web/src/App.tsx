@@ -1,8 +1,10 @@
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import { PwaUpdateManager } from '@/components/pwa/PwaUpdateManager';
 import { RouteLoadingFallback } from '@/components/shared/RouteLoadingFallback';
+import { AuthLoadingScreen } from '@/features/auth/components/AuthLoadingScreen';
 import { GuestRoute } from '@/features/auth/components/GuestRoute';
 import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { PushSubscriptionManager } from '@/features/push/components/PushSubscriptionManager';
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router';
@@ -10,6 +12,86 @@ import { Route, Routes } from 'react-router';
 const AppShell = lazy(() =>
   import('@/components/layout/AppShell').then((module) => ({
     default: module.AppShell,
+  }))
+);
+
+const PublicLayout = lazy(() =>
+  import('@/features/public-site/components/PublicLayout').then((module) => ({
+    default: module.PublicLayout,
+  }))
+);
+const AstroPage = lazy(() =>
+  import('@/features/public-site/pages/AstroPage').then((module) => ({
+    default: module.AstroPage,
+  }))
+);
+const AdminShell = lazy(() =>
+  import('@/features/admin/AdminShell').then((module) => ({
+    default: module.AdminShell,
+  }))
+);
+
+const AdminPage = lazy(() =>
+  import('@/features/admin/AdminPage').then((module) => ({
+    default: module.AdminPage,
+  }))
+);
+const StorePage = lazy(() =>
+  import('@/features/store/StorePage').then((module) => ({
+    default: module.StorePage,
+  }))
+);
+const ProductPage = lazy(() =>
+  import('@/features/store/ProductPage').then((module) => ({
+    default: module.ProductPage,
+  }))
+);
+const DigitalLibraryPage = lazy(() =>
+  import('@/features/digital-library/DigitalLibraryPage').then((module) => ({
+    default: module.DigitalLibraryPage,
+  }))
+);
+
+// The existing auth context includes V1 offline bootstrap/session reconciliation.
+// Keep both experiences at / without changing any protected deep-link paths.
+function HomeLayout() {
+  const auth = useAuth();
+  if (auth.isLoading) return <AuthLoadingScreen />;
+  return auth.isAuthenticated ? <AppShell /> : <PublicLayout />;
+}
+
+function HomePage() {
+  return useAuth().isAuthenticated ? <DashboardPage /> : <LandingPage />;
+}
+
+const LandingPage = lazy(() =>
+  import('@/features/public-site/pages/LandingPage').then((module) => ({
+    default: module.LandingPage,
+  }))
+);
+const AboutPage = lazy(() =>
+  import('@/features/public-site/pages/AboutPage').then((module) => ({
+    default: module.AboutPage,
+  }))
+);
+const ContactPage = lazy(() =>
+  import('@/features/public-site/pages/ContactPage').then((module) => ({
+    default: module.ContactPage,
+  }))
+);
+const PrivacyPolicyPage = lazy(() =>
+  import('@/features/public-site/pages/PrivacyPolicyPage').then((module) => ({
+    default: module.PrivacyPolicyPage,
+  }))
+);
+const TermsPage = lazy(() =>
+  import('@/features/public-site/pages/TermsPage').then((module) => ({
+    default: module.TermsPage,
+  }))
+);
+const HowItWorksPage = lazy(() =>
+  import('@/features/public-site/pages/HowItWorksPage').then((module) => ({
+    default: module.HowItWorksPage,
   }))
 );
 
@@ -94,6 +176,19 @@ function App() {
 
       <Suspense fallback={<RouteLoadingFallback />}>
         <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/store" element={<StorePage />} />
+            <Route path="/store/:slug" element={<ProductPage />} />
+            <Route path="/astro" element={<AstroPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/how-it-works" element={<HowItWorksPage />} />
+          </Route>
+          <Route path="/" element={<HomeLayout />}>
+            <Route index element={<HomePage />} />
+          </Route>
           <Route element={<GuestRoute />}>
             <Route path={APP_ROUTES.auth.login} element={<LoginPage />} />
 
@@ -111,9 +206,16 @@ function App() {
           />
 
           <Route element={<ProtectedRoute />}>
+            <Route path="/admin" element={<AdminShell />}>
+              <Route index element={<AdminPage />} />
+              <Route path=":section" element={<AdminPage />} />
+            </Route>
             <Route element={<AppShell />}>
-              <Route path={APP_ROUTES.home} element={<DashboardPage />} />
-
+              <Route path="/digital-library" element={<DigitalLibraryPage />} />
+              <Route
+                path="/digital-library/purchases"
+                element={<DigitalLibraryPage />}
+              />
               <Route
                 path={APP_ROUTES.practice}
                 element={<PracticeSetupPage />}

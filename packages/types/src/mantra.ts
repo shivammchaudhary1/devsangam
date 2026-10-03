@@ -1,4 +1,7 @@
 export type Mantra = {
+  accessType?: 'free' | 'paid';
+  pricePaise?: number;
+  locked?: boolean;
   _id: string;
   slug: string;
   title: string;

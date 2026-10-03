@@ -4,6 +4,8 @@ import { useFavorites } from '../hooks/useFavorites';
 import { useMantra } from '../hooks/useMantra';
 import { getEstimatedChantMinutes } from '../utils/mantra.utils';
 import { APP_ROUTES, getPracticeRoute } from '@/app/constants/routes.constants';
+import { PurchaseButton } from '@/features/payments/PurchaseButton';
+import { priceLabel } from '@/features/store/commerce.utils';
 import { ArrowLeft, Clock3, Play, Sparkles } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router';
 
@@ -56,6 +58,25 @@ export function MantraDetailPage() {
       </main>
     );
   }
+
+  if (mantra.locked)
+    return (
+      <section className="mx-auto max-w-3xl p-6 sm:p-10">
+        <Link to={APP_ROUTES.library} className="underline">
+          Back to Library
+        </Link>
+        <h1 className="mt-6 font-display text-3xl">{mantra.title}</h1>
+        <p className="my-5">
+          Unlock this mantra for {priceLabel(mantra.pricePaise ?? 0)} to read
+          and practice.
+        </p>
+        <PurchaseButton
+          itemId={mantra._id}
+          itemType="mantra"
+          pricePaise={mantra.pricePaise ?? 0}
+        />
+      </section>
+    );
 
   const isFavorite = favoriteMantras.some(
     (favorite) => favorite._id === mantra._id
@@ -272,7 +293,9 @@ export function MantraDetailPage() {
                       key={target}
                       className="min-w-[88px] rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3 py-3 text-center"
                     >
-                      <p className="font-serif text-lg text-[var(--ds-cream)]">{target}</p>
+                      <p className="font-serif text-lg text-[var(--ds-cream)]">
+                        {target}
+                      </p>
 
                       <p className="mt-1 text-[10px] text-slate-500">
                         {minutes ? `~${minutes} min` : 'chants'}

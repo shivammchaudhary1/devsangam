@@ -5,7 +5,7 @@ import { LogoutButton } from '@/features/auth/components/LogoutButton';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useInsightsOverview } from '@/features/insights/hooks/useInsightsOverview';
 import { PracticeSyncManager } from '@/features/practice/components/PracticeSyncManager';
-import { Bell, Flame, Settings, Sparkles } from 'lucide-react';
+import { Bell, BookOpen, Flame, Settings, Sparkles } from 'lucide-react';
 import { NavLink, Outlet } from 'react-router';
 
 export function AppShell() {
@@ -112,7 +112,7 @@ function SidebarBrand() {
 
 function SidebarNavigation() {
   return (
-    <nav className="space-y-1.5 px-3">
+    <nav className="min-h-0 space-y-1.5 overflow-y-auto px-3">
       {APP_NAVIGATION.map(({ label, path, icon: Icon }) => (
         <NavLink
           key={path}
@@ -158,6 +158,20 @@ function SidebarNavigation() {
           </>
         )}
       </NavLink>
+      <NavLink
+        to="/digital-library"
+        className={({ isActive }) => getDesktopNavClass(isActive)}
+      >
+        <BookOpen size={17} />
+        <span>Digital library</span>
+      </NavLink>
+      <NavLink
+        to="/store"
+        className={({ isActive }) => getDesktopNavClass(isActive)}
+      >
+        <Sparkles size={17} />
+        <span>Digital store</span>
+      </NavLink>
     </nav>
   );
 }
@@ -179,6 +193,11 @@ function SidebarFooter() {
 
   return (
     <div className="mt-auto px-4 pb-4">
+      {user?.role === 'admin' && (
+        <NavLink to="/admin" className="mb-3 block text-sm underline">
+          Administration
+        </NavLink>
+      )}
       <div
         className={
           'mb-3 flex h-11 items-center justify-between ' +
@@ -250,6 +269,13 @@ function MobileHeader() {
       </div>
 
       <div className="flex items-center gap-2">
+        <NavLink
+          to="/digital-library"
+          aria-label="Digital library"
+          className="rounded-full border border-[var(--ds-border-soft)] p-2"
+        >
+          <BookOpen size={14} />
+        </NavLink>
         <div
           className={
             'hidden items-center gap-1.5 rounded-full border ' +

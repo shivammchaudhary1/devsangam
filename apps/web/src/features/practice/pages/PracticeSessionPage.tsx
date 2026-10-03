@@ -19,10 +19,12 @@ import {
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
 import { useMantra } from '@/features/mantras/hooks/useMantra';
+import { PurchaseButton } from '@/features/payments/PurchaseButton';
+import { apiRequest } from '@/services/api/client';
 import type { Mantra, PracticeSession } from '@devsangam/types';
 import { Sparkles } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 export function PracticeSessionPage() {
   const { mantraSlug, sessionId } = useParams<{
@@ -73,12 +75,62 @@ export function PracticeSessionPage() {
     return <AbandonedPracticeSession />;
   }
 
+  if (mantra.locked)
+    return <LockedPracticeSession session={session} mantra={mantra} />;
+
   return (
     <ActivePracticeSession
       key={session._id}
       session={session}
       mantra={mantra}
     />
+  );
+}
+
+function LockedPracticeSession({
+  session,
+  mantra,
+}: {
+  session: PracticeSession;
+  mantra: Mantra;
+}) {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
+  const [busy, setBusy] = useState(false);
+  return (
+    <section className="mx-auto max-w-3xl p-6">
+      <h1 className="font-display text-2xl">{mantra.title}</h1>
+      <p className="my-5">
+        Access to this mantra is locked. Unlock it or close this session to
+        choose another mantra.
+      </p>
+      <PurchaseButton
+        itemId={mantra._id}
+        itemType="mantra"
+        pricePaise={mantra.pricePaise ?? 0}
+      />
+      <button
+        className="mt-5 rounded-lg border border-border p-3"
+        disabled={busy}
+        onClick={() => {
+          setBusy(true);
+          void apiRequest(`/practice/sessions/${session._id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status: 'abandoned' }),
+          })
+            .then(() => navigate('/practice'))
+            .catch(() =>
+              setMessage('The session could not be closed. Please retry.')
+            )
+            .finally(() => setBusy(false));
+        }}
+      >
+        Close session
+      </button>
+      <p role="status" className="mt-3">
+        {message}
+      </p>
+    </section>
   );
 }
 
@@ -246,7 +298,11 @@ function ActivePracticeSession({
 
       <div className="relative z-10 mx-auto w-full max-w-[820px]">
         <div className="mb-3 flex items-center justify-center gap-2">
-          <Sparkles size={11} strokeWidth={1.7} className="text-[var(--ds-gold)]" />
+          <Sparkles
+            size={11}
+            strokeWidth={1.7}
+            className="text-[var(--ds-gold)]"
+          />
 
           <p className="text-[8px] font-semibold uppercase tracking-[0.18em] text-[var(--ds-bronze)]">
             Digital Japamala

@@ -12,7 +12,10 @@
     "start": "node --env-file-if-exists=.env dist/server.js",
     "seed:mantras": "node --env-file-if-exists=.env src/scripts/seed-mantras.ts",
     "sync:mantra-indexes": "node --env-file-if-exists=.env src/scripts/sync-mantra-indexes.ts",
-    "sync:indexes": "node --env-file-if-exists=.env src/scripts/sync-indexes.ts"
+    "sync:indexes": "node --env-file-if-exists=.env src/scripts/sync-indexes.ts",
+    "test": "node --test --test-concurrency=1 src/tests/*.test.ts",
+    "admin:promote": "node --env-file-if-exists=.env src/scripts/promote-admin.ts",
+    "v2:indexes": "node --env-file-if-exists=.env src/scripts/v2-indexes.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -26,10 +29,12 @@
     "eslint": "^10.9.0",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "globals": "^17.11.0",
+    "mongodb-memory-server": "^11.3.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.34.0",
     "@devsangam/types": "^0.1.0",
     "cloudinary": "^2.11.0",
     "cookie-parser": "^1.4.7",
@@ -40,7 +45,7 @@
     "jose": "^6.2.9",
     "mongoose": "^9.9.3",
     "multer": "^2.3.0",
-    "nodemailer": "^9.0.5",
+    "nodemailer": "^10.0.13",
     "web-push": "^3.6.7",
     "zod": "^4.4.3"
   }

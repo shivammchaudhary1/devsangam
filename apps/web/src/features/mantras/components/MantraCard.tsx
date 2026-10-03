@@ -50,7 +50,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
             </h2>
 
             <p className="mt-2 line-clamp-2 font-serif text-sm leading-6 text-amber-50">
-              {mantra.sanskrit}
+              {mantra.locked ? 'Premium · Locked' : mantra.sanskrit}
             </p>
 
             <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-400">
@@ -79,7 +79,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 transition group-hover:text-amber-200"
               aria-label={`View ${mantra.title}`}
             >
-              View mantra
+              {mantra.locked ? 'Unlock mantra' : 'View mantra'}
               <span aria-hidden="true">→</span>
             </Link>
           </div>
