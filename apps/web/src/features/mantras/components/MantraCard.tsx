@@ -1,8 +1,10 @@
+'use client';
+
 import { MANTRA_IMAGES } from '../constants/mantra-images';
 import { FavoriteButton } from './FavoriteButton';
 import { getMantraDetailRoute } from '@/app/constants/routes.constants';
+import { Link } from '@/lib/navigation';
 import type { Mantra } from '@devsangam/types';
-import { Link } from 'react-router';
 
 type MantraCardProps = {
   mantra: Mantra;

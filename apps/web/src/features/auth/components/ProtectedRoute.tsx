@@ -1,8 +1,10 @@
+'use client';
+
 import { useAuth } from '../hooks/useAuth';
 import { AuthLoadingScreen } from './AuthLoadingScreen';
-import { Navigate, Outlet, useLocation } from 'react-router';
+import { Navigate, useLocation } from '@/lib/navigation';
 
-export function ProtectedRoute() {
+export function ProtectedRoute({ children }: { children: import('react').ReactNode }) {
   const auth = useAuth();
 
   const location = useLocation();
@@ -23,5 +25,5 @@ export function ProtectedRoute() {
     );
   }
 
-  return <Outlet />;
+  return children;
 }

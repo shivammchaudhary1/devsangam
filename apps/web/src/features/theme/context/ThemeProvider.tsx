@@ -1,3 +1,5 @@
+'use client';
+
 import {
   readThemePreference,
   resolveThemePreference,
@@ -12,6 +14,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
 } from 'react';
 
 type ThemeProviderProps = {
@@ -48,6 +51,7 @@ function applyResolvedTheme(theme: ResolvedTheme) {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const auth = useAuth();
+  const hydrated = useSyncExternalStore(subscribeHydration, () => true, () => false);
 
   const [localPreference, setLocalPreference] =
     useState<ThemePreference>(readThemePreference);
@@ -64,7 +68,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
    * Before that, the locally stored value
    * prevents a startup theme flash.
    */
-  const preference = accountPreference ?? localPreference;
+  const preference = hydrated ? accountPreference ?? localPreference : 'dark';
 
   const resolvedTheme =
     preference === 'system'
@@ -116,8 +120,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
    * external DOM synchronization effect.
    */
   useEffect(() => {
+    if (!hydrated) return;
     applyResolvedTheme(resolvedTheme);
-  }, [resolvedTheme]);
+  }, [resolvedTheme, hydrated]);
 
   const setThemePreference = useCallback((nextPreference: ThemePreference) => {
     writeThemePreference(nextPreference);
@@ -138,3 +143,5 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
+
+const subscribeHydration = () => () => undefined;

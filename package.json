@@ -4,7 +4,7 @@
   "description": "DevSangam is a devotional PWA for mantra practice, digital mala counting, practice history, insights, offline sessions, and reminders.",
   "private": true,
   "engines": {
-    "node": "24.0.0"
+    "node": ">=26.7.0 <27"
   },
   "workspaces": [
     "apps/*",
@@ -29,9 +29,19 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint -w @devsangam/web && npm run lint -w @devsangam/api",
     "lint:fix": "npm run lint:fix -w @devsangam/web && npm run lint:fix -w @devsangam/api",
-    "test": "npm run test -w @devsangam/api"
+    "test": "npm run test -w @devsangam/api",
+    "test:e2e": "tsx --tsconfig apps/api/tsconfig.json scripts/v2-e2e.mjs",
+    "test:public": "node scripts/public-site-smoke.mjs",
+    "test:ui": "node scripts/v2-ui-smoke.mjs",
+    "test:offline": "node scripts/v1-offline-smoke.mjs",
+    "test:ssr": "node scripts/ssr-smoke.mjs",
+    "test:e2e:built": "npm run build -w @devsangam/api && node scripts/v2-e2e.mjs --compiled",
+    "test:visual": "node scripts/migration-visual-smoke.mjs after --compare",
+    "test:pwa": "node scripts/pwa-update-smoke.mjs"
   },
   "devDependencies": {
-    "concurrently": "^10.0.5"
+    "@playwright/test": "^1.64.0",
+    "concurrently": "^10.0.5",
+    "pixelmatch": "^8.0.0"
   }
 }

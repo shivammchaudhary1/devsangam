@@ -1,7 +1,20 @@
 # DevSangam V2 tracker
 
+Next.js/NestJS migration authorized on 10 October 2026 is tracked in
+`NEXT_NEST_MIGRATION.md`. Same UI/functionality, native frameworks and SSR/SEO;
+deployment is explicitly deferred. MIG-001 through MIG-005 are complete locally:
+native Next frontend, native Nest API, public SSR/SEO and compatibility regression.
+Final checks and limitations are recorded in `NEXT_NEST_MIGRATION.md`; the complete
+file inventory is in `NEXT_NEST_MIGRATION_FILES.md`.
+MIG-006 resolves the reproduced local development HMR reload loop using Webpack;
+the web README documents stale Vite service-worker recovery without deleting Dexie data.
+MIG-007 is complete: removed 18 unused files and obsolete Vite/Express build output;
+root checks, 13 API tests and 16 visual comparisons pass. Exact acceptance results
+are recorded in the migration report.
+Prior implementation records below are historical.
+
 Implementation contract: `../DEV_SANGAM_V2_CODEX_MASTER_INSTRUCTIONS.md`.
-Updated: 3 October 2026 (Asia/Calcutta). User authorized remaining V2 frontend/backend in the current run, plus an empty Astro page.
+Updated: 10 October 2026 (Asia/Calcutta). User authorized the full Next/Nest migration with existing UI/functionality preserved; deployment deferred. Earlier V2 work includes the empty Astro page.
 
 Current implementation: all safe local V2 frontend/backend work exists. Provider/device/business verification remains BLOCKED, not complete. See `V2_DEPLOYMENT.md` for exact steps. Historical first-run notes below describe the earlier foundation-only scope and are superseded where the current run added APIs/commerce.
 

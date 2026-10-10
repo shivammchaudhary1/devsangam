@@ -1,3 +1,5 @@
+'use client';
+
 import type { InsightsRange } from '@devsangam/types';
 import { CalendarDays } from 'lucide-react';
 import { memo } from 'react';

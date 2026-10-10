@@ -1,3 +1,5 @@
+'use client';
+
 import { SettingsCard } from './SettingsCard';
 import type {
   ResolvedTheme,

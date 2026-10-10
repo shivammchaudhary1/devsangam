@@ -1,4 +1,5 @@
-import { app } from './app.ts';
+import { createApiApplication } from './app.ts';
+import { ApiLifecycle } from './common/lifecycle.ts';
 import { connectDatabase } from './config/database.ts';
 import { validateProductionEnvironment } from './config/env.ts';
 import { ensureV2Indexes } from './config/v2-indexes.ts';
@@ -12,11 +13,12 @@ async function bootstrap() {
     await connectDatabase();
     await ensureV2Indexes();
 
-    startPushReminderScheduler();
+    const stopReminders = startPushReminderScheduler();
 
-    app.listen(PORT, () => {
-      console.log(`✓ DevSangam API running on port ${PORT}`);
-    });
+    const app = await createApiApplication();
+    app.get(ApiLifecycle).configure(stopReminders);
+    await app.listen(PORT, '0.0.0.0');
+    console.log(`✓ DevSangam Nest API running on port ${PORT}`);
   } catch (error) {
     console.error(
       'Failed to start DevSangam API:',

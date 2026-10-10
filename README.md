@@ -11,7 +11,8 @@
 ![Node](https://img.shields.io/badge/Node.js-26.7.0-339933?logo=node.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=111827)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs)
+![NestJS](https://img.shields.io/badge/NestJS-12-E0234E?logo=nestjs)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-enabled-5A0FC8?logo=pwa&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue)
@@ -27,6 +28,8 @@ DevSangam is a responsive spiritual-practice application built around a simple i
 The application combines a curated mantra library, digital Japamala practice sessions, progress tracking, streaks, insights, profile preferences, and installable PWA behavior in one responsive web application.
 
 DevSangam is designed as a **single React Progressive Web App** rather than separate web and native applications. The same product adapts its navigation and interaction patterns across desktop and mobile while sharing one frontend codebase.
+
+> `version2` now runs Next.js App Router and NestJS. Public pages render on the server with SEO metadata; established UI/domain logic, sessions and offline data remain. Hosting migration is deferred. See the [migration report](docs/NEXT_NEST_MIGRATION.md).
 
 > Project status: **v0.1 pre-release**. Core product flows are implemented and the project is in final regression QA, production hardening, and deployment preparation.
 
@@ -77,7 +80,7 @@ The product is intended to help a user:
 9. Use the application comfortably on desktop and mobile.
 10. Install the experience as a PWA.
 
-The first release deliberately avoids unrelated complexity. Social feeds, leaderboards, payments, chat, guru/follower systems, and AI spiritual advice are outside the current core scope.
+The practice core avoids social feeds, leaderboards, chat, guru/follower systems and AI spiritual advice. V2 also provides admin tools and server-verified PDF/mantra commerce behind the existing provider feature flags.
 
 ---
 
@@ -179,7 +182,7 @@ Supported spiritual intentions currently include:
 - Standalone display mode
 - PWA update handling
 - Generated service worker
-- SPA navigation fallback
+- Cached anonymous Next HTML and a generic offline navigation fallback
 - Runtime caching for mantra GET requests
 - Runtime image caching
 - Expired-cache cleanup
@@ -196,14 +199,14 @@ Supported spiritual intentions currently include:
 
 ```mermaid
 flowchart TD
-    U[User] --> WEB[React + TypeScript PWA]
+    U[User] --> WEB[Next.js + React PWA]
 
-    WEB --> ROUTER[React Router]
+    WEB --> ROUTER[Next App Router / SSR]
     WEB --> QUERY[TanStack Query]
     WEB --> UI[Tailwind + Radix/shadcn]
     WEB --> SW[Service Worker / Workbox]
 
-    QUERY --> API[Express REST API]
+    QUERY --> API[NestJS REST API]
 
     API --> AUTH[Authentication + Sessions]
     API --> VALIDATION[Zod Validation]
@@ -225,14 +228,14 @@ Browser / Installed PWA
         v
 React 19 + TypeScript
         |
-        +---- React Router
+        +---- Next App Router / SSR
         +---- TanStack Query
         |
         v
 REST API /api/v1
         |
         v
-Express 5
+NestJS 12 with Express adapter
         |
         +---- Zod validation
         +---- Auth/session services
@@ -282,7 +285,7 @@ Benefits:
 
 The browser never talks directly to MongoDB.
 
-All application data flows through the Express API so authentication, validation, business rules, and database access remain centralized on the server.
+All application data flows through the NestJS API so authentication, validation, business rules, and database access remain centralized on the server. Nest modules/controllers/guards reuse the established domain services and Mongoose schemas.
 
 ---
 
@@ -294,8 +297,8 @@ All application data flows through the Express API so authentication, validation
 |---|---|---|
 | React 19 | UI | Reusable components for a highly interactive product |
 | TypeScript 6 | Static typing | Safer contracts and refactors |
-| Vite 8 | Dev/build tooling | Fast local development and optimized production builds |
-| React Router 8 | Routing | Guest/protected routes and route-driven sessions |
+| Next.js 16 | SSR, routing and builds | Server-rendered public pages and native file routes |
+| Next App Router | Routing | Same guest/protected URLs and route-driven sessions |
 | TanStack Query 5 | Server state | Caching, invalidation, loading and refetching |
 | Tailwind CSS 4 | Styling | Consistent responsive design without large CSS layers |
 | Radix UI | Accessible primitives | Strong accessibility foundation without visual lock-in |
@@ -304,14 +307,14 @@ All application data flows through the Express API so authentication, validation
 | Zod | Validation | Typed client-side validation |
 | Lucide React | Icons | Consistent lightweight iconography |
 | Dexie | IndexedDB foundation | Local/offline persistence foundation |
-| vite-plugin-pwa | PWA | Manifest and service-worker generation |
+| Workbox build/window | PWA | Next asset precache, offline navigation and update prompts |
 
 ## Backend
 
 | Technology | Purpose | Why |
 |---|---|---|
 | Node.js 26.7.0 | Runtime | Modern JavaScript/TypeScript server runtime |
-| Express 5 | REST API | Simple, mature and well-suited to the product |
+| NestJS 12 | REST API | Native modules, controllers, guards and lifecycle; Express adapter |
 | TypeScript 6 | Backend typing | Safer services, controllers and models |
 | MongoDB Atlas | Database | Managed document database |
 | Mongoose 9 | ODM | Modeling, indexes, projections and database queries |
@@ -352,7 +355,7 @@ devsangam/
 |   |   |   |-- services/
 |   |   |   `-- styles/
 |   |   |-- package.json
-|   |   `-- vite.config.ts
+|   |   `-- next.config.ts
 |   |
 |   `-- api/
 |       |-- src/
@@ -361,7 +364,8 @@ devsangam/
 |       |   |-- controllers/
 |       |   |-- middleware/
 |       |   |-- models/
-|       |   |-- routes/
+|       |   |-- modules/
+|       |   |-- common/
 |       |   |-- scripts/
 |       |   |-- services/
 |       |   |-- types/
@@ -371,7 +375,6 @@ devsangam/
 |       `-- package.json
 |
 |-- packages/
-|   |-- shared/
 |   `-- types/
 |
 |-- README.md
@@ -382,11 +385,9 @@ devsangam/
 
 `apps/web` is the React PWA. It is organized primarily by feature.
 
-`apps/api` is the Express API. It separates routing, validation, controllers, services, models, configuration and utilities.
+`apps/api` is the NestJS API. It separates feature modules, native controllers/guards, validation, domain services, models, configuration and utilities.
 
 `packages/types` contains contracts shared across workspace boundaries.
-
-`packages/shared` is available for logic genuinely shared by multiple workspaces.
 
 ---
 
@@ -424,7 +425,7 @@ A mantra can be pre-selected when entering practice:
 /practice?mantra=<mantra-slug>
 ```
 
-Route pages are lazy-loaded with React `lazy()` and `Suspense`.
+Routes are native Next App Router files under `src/app`. Interactive client components also render on the server. Private account data loads through the original cookie API; public store metadata is fetched anonymously on the server.
 
 The V2 public site uses a separate layout with the existing visual tokens and
 ThemeProvider. Authenticated `/` keeps the existing AppShell and offline sync
@@ -554,6 +555,8 @@ npm run dev:api
 ---
 
 # Environment configuration
+
+Web template: `apps/web/.env.example`. `NEXT_PUBLIC_API_URL` is the browser API base, `NEXT_PUBLIC_SITE_URL` sets the canonical origin, and `API_INTERNAL_URL` optionally overrides the server-only anonymous API base. Public variables are fixed at build time and must never contain secrets. Existing `VITE_API_URL` is accepted temporarily for compatibility.
 
 Template:
 
@@ -802,7 +805,9 @@ Before production:
 PWA configuration:
 
 ```text
-apps/web/vite.config.ts
+apps/web/scripts/build-pwa.mjs
+apps/web/src/lib/register-sw.ts
+apps/web/src/app/manifest.webmanifest/route.ts
 ```
 
 The manifest defines DevSangam as a standalone installable application with dedicated PWA icons and a dark theme.
@@ -835,7 +840,7 @@ GET requests beginning with:
 /api/v1/mantras
 ```
 
-use **Network First**.
+use **Network First** only when the API marks the response `X-DevSangam-Public: true`. Paid text/private responses are excluded.
 
 This favors fresh server data while allowing cached read-only mantra content when the network is unavailable or slow.
 
@@ -920,6 +925,8 @@ apps/api/.env
 
 # Deployment model
 
+Deployment is deferred by the migration instruction. Existing host workflows/configuration were not changed. Next SSR requires a server-capable runtime; the previous static Pages artifact cannot serve this branch unchanged. Review staging/runtime routing before a release.
+
 ```text
 Namecheap
    |
@@ -963,14 +970,14 @@ npm run build -w @devsangam/web
 Output:
 
 ```text
-apps/web/dist
+apps/web/.next/standalone
 ```
 
 A frontend host must:
 
-- serve static Vite assets
+- run the Next Node server for SSR and file routes
 - support HTTPS
-- support SPA fallback to `index.html`
+- serve `public` and `/_next/static` (assembled by the build)
 - serve the generated PWA files correctly
 
 ## API
@@ -987,7 +994,7 @@ Start:
 npm run start -w @devsangam/api
 ```
 
-The final API host must support the Node runtime and the features required by Express, Mongoose, Nodemailer, cookies, and outbound MongoDB/SMTP connections.
+The final API host must support the Node runtime and the features required by NestJS/Express, Mongoose, Nodemailer, cookies, and outbound MongoDB/SMTP connections.
 
 Do not assume every edge-worker runtime is fully Node-compatible. Verify compatibility before choosing a backend deployment target.
 
@@ -1072,7 +1079,7 @@ Cross-workspace contracts should live in the shared types workspace instead of b
 
 ## Frontend secrets
 
-Never expose server secrets through browser code or public Vite configuration.
+Never expose server secrets through browser code or public Next environment variables.
 
 Anything delivered to the browser must be treated as public.
 
@@ -1133,13 +1140,7 @@ or the exact final production frontend origin.
 
 ## Frontend deep links return 404
 
-Configure the static host to route unknown frontend paths to:
-
-```text
-/index.html
-```
-
-React Router must receive routes such as `/library/<slug>`, `/profile` and `/insights`.
+Run the built Next server (`npm run start -w @devsangam/web`) and route frontend requests to it. A static `index.html` fallback does not provide SSR. Deployment/provider configuration is deferred; test `/library/<slug>`, `/profile` and `/insights` on staging before rollout.
 
 ## PWA version appears stale
 

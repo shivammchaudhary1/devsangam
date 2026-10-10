@@ -1,13 +1,16 @@
 # DevSangam V2 operation and release verification
 
 V2 adds public pages, Astro, contact storage, admin tools and PDF commerce to V1.
-The original authenticated `/`, `/library`, practice, auth/session and deployment
-paths stay in place. This document does not mark a deployed release verified.
+The original authenticated `/`, `/library`, practice and auth/session paths stay
+in place. This branch uses Next SSR/Nest; deployment migration is explicitly
+deferred. This document does not mark a deployed release verified.
 
 ## Configuration
 
-Use the existing Azure App Service application settings for API secrets and
-Cloudflare Pages for the web build. Do not put secrets in `VITE_*`, Git, screenshots
+Existing production hosts were not changed. Retain API secrets in the host secret
+manager. Next SSR requires a server-capable frontend runtime; review staging before
+changing the previous static Pages deployment. Do not put secrets in
+`NEXT_PUBLIC_*`/`VITE_*`, Git, screenshots
 or command arguments. `apps/api/.env.example` contains names and safe defaults only.
 
 | Setting | Meaning |
@@ -154,37 +157,38 @@ fixture and a Razorpay network fixture. No production credentials/database are u
 MongoMemoryServer downloads its local MongoDB binary on first use. Production install
 must include API runtime dependencies; test dependencies can be omitted after building.
 
-Browser scripts use installed Edge with Playwright in a **temporary QA directory**;
-no Playwright package is added to app dependencies:
+Playwright is a repository dev dependency; no production app dependency is added:
 
 ```powershell
-$qaDir = Join-Path $env:TEMP 'devsangam-v2-qa'
-npm install --prefix $qaDir --no-package-lock playwright
-$env:V2_QA_MODULE_ROOT = $qaDir
+npm ci
 npm run build
-# Start in another terminal:
-npm run preview -w @devsangam/web -- --host 127.0.0.1 --port 4173 --strictPort
+# Start in another terminal, foreground local QA server:
+npm run preview -w @devsangam/web
+# Windows uses installed Edge; other platforms install Chromium first:
+npm exec playwright -- install chromium
 # Run against that preview:
-node scripts/public-site-smoke.mjs
-node scripts/v2-ui-smoke.mjs
-# Run these sequentially; each owns a temporary loopback API on port 4000:
-node scripts/v1-offline-smoke.mjs
-node scripts/v2-e2e.mjs
+npm run test:public
+npm run test:ui
+# Sequential: each owns API port 4000; PWA also owns proxy port 4174.
+npm run test:ssr
+npm run test:offline
+npm run test:pwa
+npm run test:e2e:built
 ```
 
-The last two scripts require a preview built with the existing development
-`VITE_API_URL=http://localhost:4000/api/v1`. `v2-e2e.mjs` uses the preview at
+Use a preview built with `NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1`
+and no production `API_INTERNAL_URL`. `v2-e2e.mjs` uses the preview at
 `http://localhost:4173` for same-site real cookies. Do not run another API on port
 4000 during these tests; scripts fail rather than kill another process.
 Screenshots remain outside the repository. Mock UI tests are separate from actual
-Express/MongoDB browser integration and from real SW/Dexie offline verification.
+Nest/MongoDB browser integration and from real SW/Dexie offline verification.
+Browser selection can be set through `V2_QA_BROWSER_CHANNEL`.
 
 The quality-only GitHub workflow runs lint/typecheck/tests/build/audit on PRs and
 manual dispatch. It has no deployment or provider secrets and does not change the
 Cloudflare/Azure deployment model. Its first hosted run is still unverified.
-The pre-existing root engine says Node 24, while README/.nvmrc use 26.7; local tests
-use installed Node 26.10. CI follows `.nvmrc`. That discrepancy is recorded, not
-silently changed.
+The migration aligns the root engine with the existing `.nvmrc` family (>=26.7 <27).
+Local tests use installed Node 26.10; CI follows `.nvmrc`. See the migration report.
 
 ## External verification — BLOCKED until configured
 
@@ -205,7 +209,7 @@ for live sales:
 - Approve professional Privacy/Terms review and the business license/refund policy.
   Publish final policy text before enabling real purchases. Replace placeholders
   only with approved images. No refund promise or legal certification is invented.
-- On the existing Cloudflare/Azure deployment, verify SPA deep links, exact CORS/origin,
+- On the selected Next SSR staging runtime, verify deep links, exact CORS/origin,
   secure cookies, refresh/logout/reset through real Zoho SMTP, real Cloudinary avatar
   upload/delete, settings and push delivery/reminders. Check the proxy hop count before
   enabling forwarded-IP trust. Rate limit stores are per process; use one instance or

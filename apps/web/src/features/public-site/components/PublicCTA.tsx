@@ -1,7 +1,9 @@
+'use client';
+
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { Link } from 'react-router';
+import { Link } from '@/lib/navigation';
 
 export function PublicCTA() {
   const { isAuthenticated } = useAuth();

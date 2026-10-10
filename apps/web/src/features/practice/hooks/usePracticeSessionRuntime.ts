@@ -17,9 +17,9 @@ import {
 import { useCompletePracticeSession } from './useCompletePracticeSession';
 import { useUpdatePracticeSession } from './useUpdatePracticeSession';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { useNavigate } from '@/lib/navigation';
 import type { PracticeSession } from '@devsangam/types';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 type UsePracticeSessionRuntimeOptions = {
   session: PracticeSession;

@@ -1,3 +1,5 @@
+'use client';
+
 import { SettingsCard, SettingsRow } from './SettingsCard';
 import { SettingToggle } from './SettingToggle';
 import { Vibrate, Volume2 } from 'lucide-react';

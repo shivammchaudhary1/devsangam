@@ -1,7 +1,7 @@
 import { AUTH_EXPIRED_EVENT } from '@/features/auth/constants/auth.constants';
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_URL ?? 'http://localhost:4000/api/v1';
+  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000/api/v1';
 
 export type ApiError = Error & {
   status: number;

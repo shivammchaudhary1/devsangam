@@ -1,3 +1,5 @@
+'use client';
+
 import { PracticeJourneyCard } from '../components/PracticeJourneyCard';
 import { ProfileBackground } from '../components/ProfileBackground';
 import { ProfileHeader } from '../components/ProfileHeader';

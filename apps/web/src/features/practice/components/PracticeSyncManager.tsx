@@ -1,3 +1,5 @@
+'use client';
+
 import { syncPendingPracticeSessions } from '../offline/practice-sync.service';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useEffect } from 'react';

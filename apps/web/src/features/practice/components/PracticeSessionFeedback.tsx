@@ -1,6 +1,8 @@
+'use client';
+
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { useNavigate } from '@/lib/navigation';
 import { Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router';
 
 export function PracticeSessionLoading() {
   return (

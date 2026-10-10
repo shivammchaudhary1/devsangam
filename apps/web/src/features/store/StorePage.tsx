@@ -1,6 +1,9 @@
+'use client';
+
 import { priceLabel } from './commerce.utils';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { PublicPageShell } from '@/features/public-site/components/PublicPageShell';
+import { Link } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type { ApiResult, DigitalProduct } from '@devsangam/types';
 import { useQuery } from '@tanstack/react-query';
@@ -13,7 +16,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
 
 const STORE_TRUST_POINTS = [
   {
@@ -33,10 +35,13 @@ const STORE_TRUST_POINTS = [
   },
 ] as const;
 
-export function StorePage() {
+type StoreResult = ApiResult<{ products: DigitalProduct[]; total: number }>;
+export function StorePage({ initialData }: { initialData?: StoreResult }) {
   const [page, setPage] = useState(1);
   const result = useQuery({
     queryKey: ['store', page],
+    initialData: page === 1 ? initialData : undefined,
+    staleTime: 0,
     queryFn: () =>
       apiRequest<ApiResult<{ products: DigitalProduct[]; total: number }>>(
         `/store?page=${page}&limit=12`

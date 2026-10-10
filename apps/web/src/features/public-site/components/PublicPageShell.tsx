@@ -1,3 +1,5 @@
+'use client';
+
 import { type ReactNode, useEffect } from 'react';
 
 type PublicPageShellProps = {

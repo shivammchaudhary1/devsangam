@@ -1,6 +1,8 @@
+'use client';
+
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { useNavigate } from '@/lib/navigation';
 import { memo } from 'react';
-import { useNavigate } from 'react-router';
 
 export const AbandonedPracticeSession = memo(
   function AbandonedPracticeSession() {

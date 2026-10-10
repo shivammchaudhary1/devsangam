@@ -1,10 +1,12 @@
+'use client';
+
 import { formatNumber } from '../utils/dashboard-formatters';
 import { ProgressRing } from './ProgressRing';
 import { getPracticeRoute } from '@/app/constants/routes.constants';
 import { Skeleton } from '@/components/loading/Skeleton';
+import { Link } from '@/lib/navigation';
 import type { Mantra } from '@devsangam/types';
 import { Play } from 'lucide-react';
-import { Link } from 'react-router';
 
 type QuickStartCardProps = {
   mantra: Mantra | null;

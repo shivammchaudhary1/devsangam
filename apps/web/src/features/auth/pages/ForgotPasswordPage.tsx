@@ -1,3 +1,5 @@
+'use client';
+
 import { forgotPassword } from '../api/auth.api';
 import { AuthCard } from '../components/AuthCard';
 import { AuthLayout } from '../components/AuthLayout';
@@ -7,6 +9,7 @@ import {
 } from '../schemas/forgot-password.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Link } from '@/lib/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import {
@@ -14,7 +17,6 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
 
 export function ForgotPasswordPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -109,7 +111,7 @@ export function ForgotPasswordPage() {
               </p>
             </div>
 
-            {import.meta.env.DEV && (
+            {process.env.NODE_ENV === 'development' && (
               <p
                 className="
                   mt-4

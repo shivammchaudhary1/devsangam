@@ -2,6 +2,6 @@ import logoSymbolImage from '@/assets/Images/common/logoSymbol.webp';
 import sidebarBackgroundImage from '@/assets/Images/common/sideBar-background.webp';
 
 export const LAYOUT_ASSETS = {
-  logoSymbol: logoSymbolImage,
-  sidebarBackground: sidebarBackgroundImage,
+  logoSymbol: logoSymbolImage.src,
+  sidebarBackground: sidebarBackgroundImage.src,
 } as const;

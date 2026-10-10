@@ -1,3 +1,5 @@
+'use client';
+
 import { BEAD_COUNT } from '../utils/practice-session.utils';
 import { Pause, Sparkles } from 'lucide-react';
 import { memo } from 'react';

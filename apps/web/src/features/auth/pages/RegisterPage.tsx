@@ -1,3 +1,5 @@
+'use client';
+
 import { registerUser } from '../api/auth.api';
 import { AuthCard } from '../components/AuthCard';
 import { AuthLayout } from '../components/AuthLayout';
@@ -9,6 +11,7 @@ import {
 } from '../schemas/register.schema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Link, useNavigate } from '@/lib/navigation';
 import { isApiError } from '@/services/api/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +19,6 @@ import {
  Loader2, LockKeyhole, Mail, Sparkles, User 
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
 
 export function RegisterPage() {
   const navigate = useNavigate();

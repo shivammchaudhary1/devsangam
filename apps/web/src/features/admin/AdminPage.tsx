@@ -1,4 +1,7 @@
+'use client';
+
 import { parseRupees, priceLabel } from '@/features/store/commerce.utils';
+import { Link, useParams } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type { ApiResult, PagedItems } from '@devsangam/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -26,7 +29,6 @@ import {
   X,
 } from 'lucide-react';
 import { type FormEvent, type ReactNode, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router';
 
 type RecordItem = Record<string, unknown> & { _id: string };
 

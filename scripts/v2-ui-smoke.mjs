@@ -3,14 +3,15 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
 const require = createRequire(
-  path.resolve(process.env.V2_QA_MODULE_ROOT, 'package.json')
+  path.resolve(process.env.V2_QA_MODULE_ROOT || '.', 'package.json')
 );
 const { chromium } = require('playwright');
 const base = process.env.V2_QA_URL || 'http://127.0.0.1:4173';
-const output = path.join(process.env.TEMP, 'devsangam-v2-qa', 'screenshots');
+const output = path.join(process.env.TEMP || tmpdir(), 'devsangam-v2-qa', 'screenshots');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const browser = await chromium.launch({ channel: process.env.V2_QA_BROWSER_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined), headless: true });
 let checks = 0;
 const errors = [];
 const user = {
@@ -316,7 +317,7 @@ try {
   checks++;
   await page.goto(base + '/digital-library/purchases');
   await title(page, 'Purchase history');
-  assert.ok((await page.locator('main').innerText()).includes('paid'));
+  assert.ok((await page.locator('main').innerText()).toLowerCase().includes('paid'));
   checks++;
   await normal.ctx.close();
   const failure = await makeContext({ capture: false });

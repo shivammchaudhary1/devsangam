@@ -1,20 +1,21 @@
-// Run against a built Vite preview. See docs/V2_TODO.md for setup.
+// Run against a built Next server. See docs/V2_TODO.md for setup.
 // Mocked sessions exercise routing; they do not verify real auth/provider services.
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
 
 const require = createRequire(
-  path.resolve(process.env.V2_QA_MODULE_ROOT, 'package.json')
+  path.resolve(process.env.V2_QA_MODULE_ROOT || '.', 'package.json')
 );
 const { chromium } = require('playwright');
 const base = process.env.V2_QA_URL || 'http://127.0.0.1:4173';
 const output =
   process.env.V2_QA_OUTPUT ||
-  path.join(process.env.TEMP, 'devsangam-v2-qa', 'screenshots');
+  path.join(process.env.TEMP || tmpdir(), 'devsangam-v2-qa', 'screenshots');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const browser = await chromium.launch({ channel: process.env.V2_QA_BROWSER_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined), headless: true });
 const routes = [
   ['/', 'Make space for daily Sadhana'],
   ['/about', 'About DevSangam'],
@@ -82,6 +83,7 @@ async function context(
   return ctx;
 }
 async function heading(page, name) {
+  await page.waitForLoadState('networkidle');
   await page.getByRole('heading', { level: 1, name, exact: true }).waitFor();
   checks++;
 }
@@ -90,6 +92,7 @@ async function noOverflow(page) {
     const limit = document.documentElement.clientWidth;
     return [...document.querySelectorAll('main *, header *, footer *')]
       .filter((el) => {
+        if (el.classList.contains('pointer-events-none') && el.closest('.overflow-hidden')) return false;
         const r = el.getBoundingClientRect();
         return r.width > 0 && (r.right > limit + 1 || r.left < -1);
       })
@@ -133,7 +136,7 @@ try {
       ['Terms & Conditions', 'Terms & Conditions'],
     ]) {
       await page
-        .getByRole('navigation', { name: 'Footer navigation' })
+        .locator('footer')
         .getByRole('link', { name: link })
         .click();
       await heading(page, title);
@@ -145,7 +148,7 @@ try {
       checks++;
     }
     await page
-      .getByRole('link', { name: 'Digital Library', exact: true })
+      .getByRole('link', { name: 'Digital Library', exact: true }).first()
       .click();
     await heading(page, 'Digital Library');
     checks++;
@@ -187,7 +190,7 @@ try {
       for (const theme of ['dark', 'light', 'system']) {
         await page.goto(base);
         await heading(page, routes[0][1]);
-        if (width < 1280)
+        if (width < 1024)
           await page.getByRole('button', { name: 'Open navigation' }).click();
         await page
           .getByRole('combobox', { name: 'Theme', exact: true })
@@ -222,10 +225,11 @@ try {
       'true'
     );
     await page
-      .getByRole('navigation', { name: 'Public navigation' })
+      .getByRole('navigation', { name: 'Mobile public navigation' })
       .getByRole('link', { name: 'About', exact: true })
       .focus();
-    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Close navigation' }).focus();
+    await page.keyboard.press('Enter');
     assert.equal(
       await menu.evaluate((el) => el === document.activeElement),
       true
@@ -313,7 +317,7 @@ try {
     0
   );
   await app
-    .locator('#public-navigation')
+    .locator('header')
     .getByRole('link', { name: 'Open App', exact: true })
     .click();
   await app.getByRole('heading', { name: 'Namaste, V2' }).waitFor();

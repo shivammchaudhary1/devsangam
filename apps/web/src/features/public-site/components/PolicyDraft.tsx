@@ -1,5 +1,7 @@
+'use client';
+
 import { PublicPageShell } from './PublicPageShell';
-import { Link } from 'react-router';
+import { Link } from '@/lib/navigation';
 
 type PolicySection = { title: string; text: string };
 

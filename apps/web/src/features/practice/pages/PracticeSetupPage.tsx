@@ -1,3 +1,5 @@
+'use client';
+
 import {
   MAX_CUSTOM_PRACTICE_TARGET,
   MIN_CUSTOM_PRACTICE_TARGET,
@@ -16,6 +18,7 @@ import { useMantra } from '@/features/mantras/hooks/useMantra';
 import { useMantras } from '@/features/mantras/hooks/useMantras';
 import { PurchaseButton } from '@/features/payments/PurchaseButton';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { useNavigate, useSearchParams } from '@/lib/navigation';
 import type { Mantra } from '@devsangam/types';
 import {
   ArrowRight,
@@ -30,7 +33,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
 
 const PRACTICE_MANTRA_LIMIT = 5;
 

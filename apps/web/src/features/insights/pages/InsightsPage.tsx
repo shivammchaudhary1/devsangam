@@ -1,3 +1,5 @@
+'use client';
+
 import { InsightMetricCard } from '../components/InsightMetricCard';
 import { InsightsRangeSelector } from '../components/InsightsRangeSelector';
 import { MantraBreakdownPanel } from '../components/MantraBreakdownPanel';

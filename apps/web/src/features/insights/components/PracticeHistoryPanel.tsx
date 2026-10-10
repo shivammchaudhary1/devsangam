@@ -1,3 +1,5 @@
+'use client';
+
 import { usePracticeHistory } from '../hooks/usePracticeHistory';
 import {
   formatInsightsDuration,
@@ -5,6 +7,7 @@ import {
 } from '../utils/insights-format.utils';
 import { getMantraDetailRoute } from '@/app/constants/routes.constants';
 import { useMantras } from '@/features/mantras/hooks/useMantras';
+import { Link } from '@/lib/navigation';
 import type {
   Mantra,
   PracticeSession,
@@ -21,7 +24,6 @@ import {
   Target,
 } from 'lucide-react';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { Link } from 'react-router';
 
 const HISTORY_PAGE_SIZE = 8;
 

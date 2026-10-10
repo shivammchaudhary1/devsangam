@@ -1,3 +1,5 @@
+'use client';
+
 import { PublicCTA } from '../components/PublicCTA';
 import { PublicPageShell } from '../components/PublicPageShell';
 

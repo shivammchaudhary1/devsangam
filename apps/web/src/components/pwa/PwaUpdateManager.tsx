@@ -1,8 +1,10 @@
+'use client';
+
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { matchPath, useLocation } from '@/lib/navigation';
+import { registerSW } from '@/lib/register-sw';
 import { Check, Download, RefreshCw, X } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { matchPath, useLocation } from 'react-router';
-import { registerSW } from 'virtual:pwa-register';
 
 type UpdateServiceWorker = (reloadPage?: boolean) => Promise<void>;
 

@@ -1,9 +1,11 @@
+'use client';
+
 import { PublicFooter } from './PublicFooter';
 import { PublicNavbar } from './PublicNavbar';
+import { useLocation } from '@/lib/navigation';
 import { useEffect, useRef } from 'react';
-import { Outlet, useLocation } from 'react-router';
 
-export function PublicLayout() {
+export function PublicLayout({ children }: { children: import('react').ReactNode }) {
   const { pathname, hash } = useLocation();
   const mainRef = useRef<HTMLElement>(null);
 
@@ -28,7 +30,7 @@ export function PublicLayout() {
         tabIndex={-1}
         className="min-h-[60dvh] w-full outline-none"
       >
-        <Outlet />
+        {children}
       </main>
       <PublicFooter />
     </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import type { Mantra } from '@devsangam/types';
 import { ArrowLeft, CloudOff, Sparkles } from 'lucide-react';
 import { memo } from 'react';

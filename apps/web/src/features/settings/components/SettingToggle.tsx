@@ -1,3 +1,5 @@
+'use client';
+
 import { LoadingSpinner } from '@/components/loading/LoadingSpinner';
 
 type SettingToggleProps = {

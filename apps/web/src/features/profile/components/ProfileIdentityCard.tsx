@@ -1,3 +1,5 @@
+'use client';
+
 import { formatMemberSince } from '../utils/profile-formatters';
 import { ProfileAvatar } from './ProfileAvatar';
 import type {

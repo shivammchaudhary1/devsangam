@@ -1,4 +1,7 @@
+'use client';
+
 import logoSymbol from '@/assets/Images/common/logoSymbol.webp';
+import { Link, NavLink, useLocation } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -15,7 +18,6 @@ import {
   X,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router';
 
 const ADMIN_NAVIGATION = [
   { key: 'analytics', label: 'Analytics', description: 'Growth, practice and revenue', icon: BarChart3 },
@@ -71,7 +73,7 @@ function AdminBrand() {
   return (
     <div className="border-b border-[var(--ds-border-soft)] px-5 py-5">
       <Link to="/" className="flex items-center gap-3">
-        <img src={logoSymbol} alt="" aria-hidden="true" className="size-11 rounded-full object-contain" />
+        <img src={logoSymbol.src} alt="" aria-hidden="true" className="size-11 rounded-full object-contain" />
         <div className="min-w-0">
           <p className="ds-gold-text truncate font-display text-[17px] font-semibold">DevSangam</p>
           <p className="mt-0.5 text-[9px] uppercase tracking-[0.18em] text-[var(--ds-muted)]">Administration</p>
@@ -99,7 +101,7 @@ function SidebarFooter() {
   );
 }
 
-export function AdminShell() {
+export function AdminShell({ children }: { children: import('react').ReactNode }) {
   const authorization = useQuery({
     queryKey: ['admin', 'session'],
     queryFn: () => apiRequest('/admin/session'),
@@ -179,7 +181,7 @@ export function AdminShell() {
           </header>
 
           <main className="min-w-0 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 xl:px-10">
-            <div className="mx-auto w-full max-w-[1500px]"><Outlet /></div>
+            <div className="mx-auto w-full max-w-[1500px]">{children}</div>
           </main>
         </div>
       </div>

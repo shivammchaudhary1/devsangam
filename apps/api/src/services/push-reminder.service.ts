@@ -190,4 +190,6 @@ export function startPushReminderScheduler() {
   }, REMINDER_SWEEP_INTERVAL_MS);
 
   interval.unref();
+
+  return () => clearInterval(interval);
 }

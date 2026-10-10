@@ -1,12 +1,14 @@
+'use client';
+
 import { PUBLIC_NAVIGATION } from '../constants/public-routes';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import logoSymbol from '@/assets/Images/common/logoSymbol.webp';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTheme } from '@/features/theme/hooks/useTheme';
+import { Link, NavLink, useLocation } from '@/lib/navigation';
 import { Menu, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router';
 
 function NavigationLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
@@ -55,7 +57,7 @@ export function PublicNavbar() {
     <header className="sticky top-0 z-50 border-b border-[var(--ds-border-soft)] bg-[var(--ds-sidebar)]/92 backdrop-blur-xl">
       <div className="mx-auto flex min-h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="DevSangam home">
-          <img src={logoSymbol} alt="" width={44} height={44} className="size-11 shrink-0 object-contain" />
+          <img src={logoSymbol.src} alt="" width={44} height={44} className="size-11 shrink-0 object-contain" />
           <div className="min-w-0">
             <span className="ds-gold-text block truncate font-display text-[18px] font-semibold sm:text-xl">DevSangam</span>
             <span className="mt-0.5 hidden text-[7px] uppercase tracking-[0.16em] text-[var(--ds-gold)] sm:block">Chant. Connect. Transform.</span>

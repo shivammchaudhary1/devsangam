@@ -1,3 +1,5 @@
+'use client';
+
 import { LoadingSpinner } from './LoadingSpinner';
 import { DevSangamLogo } from '@/components/brand/DevSangamLogo';
 

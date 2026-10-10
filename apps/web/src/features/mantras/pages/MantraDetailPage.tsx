@@ -1,3 +1,5 @@
+'use client';
+
 import { FavoriteButton } from '../components/FavoriteButton';
 import { MANTRA_IMAGES } from '../constants/mantra-images';
 import { useFavorites } from '../hooks/useFavorites';
@@ -6,8 +8,8 @@ import { getEstimatedChantMinutes } from '../utils/mantra.utils';
 import { APP_ROUTES, getPracticeRoute } from '@/app/constants/routes.constants';
 import { PurchaseButton } from '@/features/payments/PurchaseButton';
 import { priceLabel } from '@/features/store/commerce.utils';
+import { Link, useNavigate, useParams } from '@/lib/navigation';
 import { ArrowLeft, Clock3, Play, Sparkles } from 'lucide-react';
-import { Link, useNavigate, useParams } from 'react-router';
 
 export function MantraDetailPage() {
   const { slug } = useParams<{

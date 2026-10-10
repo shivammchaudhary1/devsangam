@@ -1,29 +1,31 @@
+'use client';
+
 import { downloadPdf, priceLabel } from './commerce.utils';
 import { Button } from '@/components/ui/button';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { PurchaseButton } from '@/features/payments/PurchaseButton';
 import { PublicPageShell } from '@/features/public-site/components/PublicPageShell';
+import { Link, useParams } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type { ApiResult, DigitalProduct } from '@devsangam/types';
 import { useQuery } from '@tanstack/react-query';
-import {
-  ArrowLeft,
-  BookOpen,
-  CheckCircle2,
-  FileText,
-  Lock,
-  ShieldCheck,
-} from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle2, FileText, Lock, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useParams } from 'react-router';
 
-export function ProductPage() {
+type ProductResult = ApiResult<{
+  product: DigitalProduct;
+  owned: boolean;
+  paymentsEnabled: boolean;
+}>;
+export function ProductPage({ initialData }: { initialData?: ProductResult }) {
   const { slug } = useParams();
   const auth = useAuth();
   const [message, setMessage] = useState('');
   const result = useQuery({
     queryKey: ['product', slug, auth.user?.id],
+    initialData,
+    staleTime: 0,
     queryFn: () =>
       apiRequest<
         ApiResult<{
@@ -45,21 +47,7 @@ export function ProductPage() {
       </div>
     );
 
-  if (result.isError)
-    return (
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
-        <div className="ds-panel p-8">
-          <h1 className="text-2xl">Resource unavailable</h1>
-          <Link
-            to="/store"
-            className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--ds-soft-gold)]"
-          >
-            <ArrowLeft size={14} />
-            Back to digital library
-          </Link>
-        </div>
-      </div>
-    );
+  if (result.isError) return <ProductUnavailable />;
 
   const { product, owned, paymentsEnabled } = result.data.data;
 
@@ -85,9 +73,7 @@ export function ProductPage() {
             ) : (
               <div className="flex aspect-[4/3] items-center justify-center bg-[var(--ds-gradient-panel-soft)]">
                 <div className="flex size-28 items-center justify-center rounded-full border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)]">
-                  <span className="font-devanagari text-6xl text-[var(--ds-soft-gold)]">
-                    ॐ
-                  </span>
+                  <span className="font-devanagari text-6xl text-[var(--ds-soft-gold)]">ॐ</span>
                 </div>
               </div>
             )}
@@ -95,15 +81,11 @@ export function ProductPage() {
           <div className="relative z-10 mt-4 grid grid-cols-2 gap-3">
             <div className="rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] p-3">
               <FileText size={14} className="text-[var(--ds-gold)]" />
-              <p className="mt-2 text-[9px] font-semibold text-[var(--ds-text)]">
-                PDF resource
-              </p>
+              <p className="mt-2 text-[9px] font-semibold text-[var(--ds-text)]">PDF resource</p>
             </div>
             <div className="rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] p-3">
               <ShieldCheck size={14} className="text-[var(--ds-gold)]" />
-              <p className="mt-2 text-[9px] font-semibold text-[var(--ds-text)]">
-                Account access
-              </p>
+              <p className="mt-2 text-[9px] font-semibold text-[var(--ds-text)]">Account access</p>
             </div>
           </div>
         </div>
@@ -166,9 +148,7 @@ export function ProductPage() {
                       className="min-h-11 w-full"
                       onClick={() => {
                         setMessage('');
-                        void downloadPdf(product._id).catch((error) =>
-                          setMessage(error.message)
-                        );
+                        void downloadPdf(product._id).catch((error) => setMessage(error.message));
                       }}
                     >
                       Download PDF
@@ -232,5 +212,22 @@ export function ProductPage() {
         </article>
       </div>
     </PublicPageShell>
+  );
+}
+
+export function ProductUnavailable() {
+  return (
+    <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+      <div className="ds-panel p-8">
+        <h1 className="text-2xl">Resource unavailable</h1>
+        <Link
+          to="/store"
+          className="mt-5 inline-flex items-center gap-2 text-sm text-[var(--ds-soft-gold)]"
+        >
+          <ArrowLeft size={14} />
+          Back to digital library
+        </Link>
+      </div>
+    </div>
   );
 }

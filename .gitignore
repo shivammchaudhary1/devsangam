@@ -70,3 +70,12 @@ cookies.txt
 
 # Private development PDF storage
 .private-assets/
+
+# Next build and generated PWA artifacts
+.next/
+apps/web/public/sw.js
+apps/web/public/workbox-*.js
+*.tsbuildinfo
+
+apps/web/public/sw.js.map
+apps/web/public/workbox-*.js.map

@@ -1,10 +1,12 @@
+'use client';
+
 import { formatShortPracticeDuration, MALA_SIZE,} from '../utils/practice-session.utils';
 import { PracticeStat } from './PracticeStat';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { useNavigate } from '@/lib/navigation';
 import type { Mantra, PracticeSession } from '@devsangam/types';
 import { Sparkles } from 'lucide-react';
 import { memo } from 'react';
-import { useNavigate } from 'react-router';
 
 type CompletedPracticeSessionProps = {
   session: PracticeSession;

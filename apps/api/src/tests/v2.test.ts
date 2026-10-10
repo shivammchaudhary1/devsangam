@@ -18,12 +18,12 @@ import { signAccessToken } from '../utils/token.ts';
 import { hashToken } from '../utils/token.ts';
 import { registerSchema } from '../validators/auth/register.schema.ts';
 import { smtpFixture } from './smtp-fixture.ts';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { createHmac } from 'node:crypto';
-import { once } from 'node:events';
 import { mkdtemp, rm } from 'node:fs/promises';
 import type { Server } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -33,6 +33,7 @@ import { promisify } from 'node:util';
 
 let mongo: MongoMemoryReplSet;
 let server: Server;
+let application: NestExpressApplication;
 let base: string;
 let adminCookie: string;
 let userCookie: string;
@@ -104,9 +105,10 @@ before(
     mongo = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
     await mongoose.connect(mongo.getUri());
     await ensureV2Indexes();
-    const { app } = await import('../app.ts');
-    server = app.listen(0);
-    await once(server, 'listening');
+    const { createApiApplication } = await import('../app.ts');
+    application = await createApiApplication();
+    await application.listen(0, '127.0.0.1');
+    server = application.getHttpServer();
     base = `http://127.0.0.1:${(server.address() as { port: number }).port}/api/v1`;
     async function account(role: 'user' | 'admin') {
       const user = await UserModel.create({
@@ -136,8 +138,7 @@ before(
 );
 after(async () => {
   globalThis.fetch = originalFetch;
-  if (server)
-    await new Promise<void>((resolve) => server.close(() => resolve()));
+  if (application) await application.close();
   await mongoose.disconnect();
   if (mongo) await mongo.stop();
   if (smtp) await smtp.close();

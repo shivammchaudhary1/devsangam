@@ -1,3 +1,5 @@
+'use client';
+
 import { SettingsCard } from './SettingsCard';
 import { Eye, EyeOff, KeyRound, Loader2, ShieldCheck } from 'lucide-react';
 import type { FormEvent } from 'react';

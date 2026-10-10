@@ -1,11 +1,13 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { priceLabel } from '@/features/store/commerce.utils';
+import { Link } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type { ApiResult } from '@devsangam/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link } from 'react-router';
 
 type CheckoutResponse = {
   razorpay_order_id: string;

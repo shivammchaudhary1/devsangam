@@ -43,7 +43,5 @@ export function getPracticeRoute(mantraSlug?: string) {
 }
 
 export function getPracticeSessionRoute(mantraSlug: string, sessionId: string) {
-  return `/practice/${encodeURIComponent(
-    mantraSlug
-  )}/session/${encodeURIComponent(sessionId)}`;
+  return `/practice/${encodeURIComponent(mantraSlug)}/session/${encodeURIComponent(sessionId)}`;
 }

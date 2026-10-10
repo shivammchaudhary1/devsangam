@@ -1,3 +1,5 @@
+'use client';
+
 import { MantraCard } from '../components/MantraCard';
 import {
   DEFAULT_MANTRA_CATEGORY,

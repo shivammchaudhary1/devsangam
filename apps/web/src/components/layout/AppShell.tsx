@@ -1,3 +1,5 @@
+'use client';
+
 import { LAYOUT_ASSETS } from './constants/layout-assets';
 import { APP_NAVIGATION } from './constants/navigation.constants';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
@@ -5,10 +7,10 @@ import { LogoutButton } from '@/features/auth/components/LogoutButton';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useInsightsOverview } from '@/features/insights/hooks/useInsightsOverview';
 import { PracticeSyncManager } from '@/features/practice/components/PracticeSyncManager';
+import { NavLink } from '@/lib/navigation';
 import { Bell, BookOpen, Flame, Settings, Sparkles } from 'lucide-react';
-import { NavLink, Outlet } from 'react-router';
 
-export function AppShell() {
+export function AppShell({ children }: { children: import('react').ReactNode }) {
   return (
     <div
       className={
@@ -28,7 +30,7 @@ export function AppShell() {
               'min-w-0 flex-1 bg-[var(--ds-obsidian)] ' + 'pb-[88px] md:pb-0'
             }
           >
-            <Outlet />
+            {children}
           </main>
         </div>
 

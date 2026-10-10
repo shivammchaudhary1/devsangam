@@ -1,5 +1,8 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { downloadPdf, priceLabel } from '@/features/store/commerce.utils';
+import { Link, NavLink, useLocation } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type {
   ApiResult,
@@ -19,7 +22,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router';
 
 const LIBRARY_TABS = [
   { to: '/digital-library', label: 'Owned resources', icon: BookOpen },

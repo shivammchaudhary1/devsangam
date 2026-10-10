@@ -1,8 +1,10 @@
+'use client';
+
 import { PUBLIC_ROUTES } from '../constants/public-routes';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import logoSymbol from '@/assets/Images/common/logoSymbol.webp';
+import { Link } from '@/lib/navigation';
 import { BookOpen, Mail, ShieldCheck, Sparkles } from 'lucide-react';
-import { Link } from 'react-router';
 
 export function PublicFooter() {
   return (
@@ -11,7 +13,7 @@ export function PublicFooter() {
         <div className="grid gap-9 md:grid-cols-2 lg:grid-cols-[1.35fr_0.7fr_0.7fr_0.8fr]">
           <div className="max-w-sm">
             <Link to="/" className="inline-flex items-center gap-3">
-              <img src={logoSymbol} alt="" aria-hidden="true" className="size-11 object-contain" />
+              <img src={logoSymbol.src} alt="" aria-hidden="true" className="size-11 object-contain" />
               <div>
                 <p className="ds-gold-text font-display text-xl">DevSangam</p>
                 <p className="mt-1 text-[8px] uppercase tracking-[0.16em] text-[var(--ds-gold)]">Chant. Connect. Transform.</p>

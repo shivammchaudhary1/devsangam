@@ -1,3 +1,5 @@
+'use client';
+
 import { PolicyDraft } from '../components/PolicyDraft';
 
 const SECTIONS = [

@@ -1,3 +1,5 @@
+'use client';
+
 import { AbandonedPracticeSession } from '../components/AbandonedPracticeSession';
 import { CompletedPracticeSession } from '../components/CompletedPracticeSession';
 import { PracticeAudioControls } from '../components/PracticeAudioControls';
@@ -20,11 +22,11 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
 import { useMantra } from '@/features/mantras/hooks/useMantra';
 import { PurchaseButton } from '@/features/payments/PurchaseButton';
+import { useNavigate, useParams } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type { Mantra, PracticeSession } from '@devsangam/types';
 import { Sparkles } from 'lucide-react';
 import { useCallback, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
 
 export function PracticeSessionPage() {
   const { mantraSlug, sessionId } = useParams<{

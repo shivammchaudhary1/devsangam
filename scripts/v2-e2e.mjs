@@ -1,19 +1,19 @@
-// Full browser -> Express -> temporary MongoDB -> private PDF integration.
+// Full browser -> Nest -> temporary MongoDB -> private PDF integration.
 // Only Razorpay's network/Checkout are fixtures. Never connects to a configured DB.
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { createHmac } from 'node:crypto';
-import { once } from 'node:events';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import mongoose from 'mongoose';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 const require = createRequire(
-  path.resolve(process.env.V2_QA_MODULE_ROOT, 'package.json')
+  path.resolve(process.env.V2_QA_MODULE_ROOT || '.', 'package.json')
 );
 const { chromium } = require('playwright');
 const base = 'http://localhost:4173';
+const apiImport = (file) => import('../apps/api/' + (process.argv.includes('--compiled') ? 'dist/' + file.replace(/\.ts$/, '.js') : 'src/' + file));
 const apiBase = 'http://localhost:4000/api/v1';
 Object.assign(process.env, {
   NODE_ENV: 'test',
@@ -55,18 +55,18 @@ try {
   mongo = await MongoMemoryReplSet.create({ replSet: { count: 1 } });
   await mongoose.connect(mongo.getUri());
   const { ensureV2Indexes } =
-    await import('../apps/api/src/config/v2-indexes.ts');
+    await apiImport('config/v2-indexes.ts');
   await ensureV2Indexes();
-  const { app } = await import('../apps/api/src/app.ts');
-  api = app.listen(4000);
-  await once(api, 'listening');
+  const { createApiApplication } = await apiImport('app.ts');
+  api = await createApiApplication();
+  await api.listen(4000, '0.0.0.0');
   const { DigitalProductModel, EntitlementModel, AdminAuditModel, OrderModel } =
-    await import('../apps/api/src/models/commerce.model.ts');
-  const { UserModel } = await import('../apps/api/src/models/user.model.ts');
+    await apiImport('models/commerce.model.ts');
+  const { UserModel } = await apiImport('models/user.model.ts');
   const { ContactMessageModel } =
-    await import('../apps/api/src/models/contact-message.model.ts');
+    await apiImport('models/contact-message.model.ts');
   const { storePrivatePdf } =
-    await import('../apps/api/src/services/private-asset.service.ts');
+    await apiImport('services/private-asset.service.ts');
   const pdf = Buffer.from('%PDF-1.7\nEnd-to-end fixture only\n%%EOF');
   const key = await storePrivatePdf(pdf);
   const product = await DigitalProductModel.create({
@@ -94,7 +94,7 @@ try {
   const account = (await registration.json()).data.user;
   assert.equal(account.role, 'user');
   checks++;
-  browser = await chromium.launch({ channel: 'msedge', headless: true });
+  browser = await chromium.launch({ channel: process.env.V2_QA_BROWSER_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined), headless: true });
   const ctx = await browser.newContext({
     serviceWorkers: 'block',
     acceptDownloads: true,
@@ -257,7 +257,7 @@ try {
         result: 'PASS',
         checks,
         coverage:
-          'Actual browser/Express/MongoDB/private-PDF/contact/admin/payment-verification/entitlement/refund integration.',
+          'Actual browser/Nest/MongoDB/private-PDF/contact/admin/payment-verification/entitlement/refund integration.',
         limits:
           'Razorpay and Checkout are local fixtures; live provider end-to-end remains blocked on configuration.',
       },
@@ -270,8 +270,8 @@ try {
   globalThis.fetch = originalFetch;
   if (browser) await browser.close();
   if (api) {
-    api.closeAllConnections();
-    await new Promise((resolve) => api.close(resolve));
+    api.getHttpServer().closeAllConnections();
+    await api.close();
   }
   await mongoose.disconnect();
   if (mongo) await mongo.stop();

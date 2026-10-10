@@ -1,6 +1,9 @@
+'use client';
+
 import { PublicCTA } from '../components/PublicCTA';
 import { PUBLIC_ROUTES } from '../constants/public-routes';
 import { buttonVariants } from '@/components/ui/button-variants';
+import { Link } from '@/lib/navigation';
 import {
   ArrowRight,
   BarChart3,
@@ -14,7 +17,6 @@ import {
   Sparkles,
   WifiOff,
 } from 'lucide-react';
-import { Link } from 'react-router';
 
 const FEATURES = [
   {

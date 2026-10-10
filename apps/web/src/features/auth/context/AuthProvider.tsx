@@ -1,3 +1,5 @@
+'use client';
+
 import { getCurrentUser, logoutUser } from '../api/auth.api';
 import {
   AUTH_EXPIRED_EVENT,

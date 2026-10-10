@@ -1,12 +1,12 @@
 // Exercise real generated service worker + Dexie using a loopback API fixture.
-// Requires preview built with VITE_API_URL=http://localhost:4000/api/v1.
+// Requires preview built with NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1.
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { createServer } from 'node:http';
 import { once } from 'node:events';
 import path from 'node:path';
 const require = createRequire(
-  path.resolve(process.env.V2_QA_MODULE_ROOT, 'package.json')
+  path.resolve(process.env.V2_QA_MODULE_ROOT || '.', 'package.json')
 );
 const { chromium } = require('playwright');
 const base = process.env.V2_QA_URL || 'http://127.0.0.1:4173';
@@ -128,7 +128,7 @@ let browser;
 try {
   api.listen(4000, 'localhost');
   await once(api, 'listening');
-  browser = await chromium.launch({ channel: 'msedge', headless: true });
+  browser = await chromium.launch({ channel: process.env.V2_QA_BROWSER_CHANNEL || (process.platform === 'win32' ? 'msedge' : undefined), headless: true });
   const ctx = await browser.newContext({
     viewport: { width: 390, height: 844 },
   });
@@ -148,6 +148,17 @@ try {
   );
   await ctx.setOffline(true);
   await page.reload();
+  await page.getByRole('button', { name: 'Tap to count one chant' }).waitFor();
+  // This URL has never been visited: Next must recover from the generic precache
+  // shell, including dynamic params, instead of relying on a cached RSC request.
+  const fallback = await page.goto(base + `/practice/${mantra.slug}/session/${session._id}?offline-fixture=unvisited`);
+  const fallbackHtml = await fallback.text();
+  assert.ok(fallbackHtml.includes('offline'));
+  assert.ok(!fallbackHtml.includes(user.email));
+  await page.getByRole('button', { name: 'Tap to count one chant' }).waitFor();
+  await page.goto(base + '/settings');
+  await page.getByRole('heading', { name: 'Settings', exact: true }).waitFor();
+  await page.goto(base + `/practice/${mantra.slug}/session/${session._id}`);
   await page.getByRole('button', { name: 'Tap to count one chant' }).waitFor();
   await page.getByRole('button', { name: 'Tap to count one chant' }).click();
   await page.getByRole('button', { name: 'Pause practice' }).click();
@@ -188,14 +199,30 @@ try {
     ),
     true
   );
+  // URL query values can be serialized into Next Flight HTML. Never persist
+  // auth documents or query-bearing documents, even with a public route path.
+  await page.goto(base + '/auth/reset-password?token=private-reset-fixture');
+  await page.locator('form').waitFor();
+  await page.goto(base + '/about?token=private-query-fixture');
+  await page.getByRole('heading', { name: 'About DevSangam', exact: true }).waitFor();
+  assert.equal(await page.evaluate(async () => {
+    const keys = await caches.keys();
+    for (const key of keys) for (const request of await (await caches.open(key)).keys())
+      if (request.url.includes('private-reset-fixture') || request.url.includes('private-query-fixture')) return true;
+    return false;
+  }), false);
+  await ctx.setOffline(true);
+  await page.goto(base + '/auth/reset-password?token=private-reset-fixture');
+  await page.locator('form').waitFor();
+  await ctx.setOffline(false);
   assert.deepEqual(errors, []);
   console.log(
     JSON.stringify(
       {
         result: 'PASS',
-        checks: 13,
+        checks: 21,
         coverage:
-          'Real SW/cache and Dexie offline reload/count/pause/resume/complete/reconnect; one completion; free cache retained and paid text excluded.',
+          'Real SW/cache and Dexie offline/unvisited route recovery, one synced completion, free cache retained, paid text/auth/query tokens excluded, offline reset form recovery.',
         limits:
           'Loopback API fixture. npm test exercises actual MongoDB/API; installed-device push/PWA update remains manual.',
       },

@@ -1,3 +1,5 @@
+'use client';
+
 import { SettingsCard } from './SettingsCard';
 import { LogoutButton } from '@/features/auth/components/LogoutButton';
 import { LogOut } from 'lucide-react';

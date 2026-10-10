@@ -1,3 +1,5 @@
+'use client';
+
 import { AUTH_ASSETS } from '../constants/auth-assets';
 import { DevSangamLogo } from '@/components/brand/DevSangamLogo';
 import type { ReactNode } from 'react';
