@@ -3,6 +3,7 @@
 import { MANTRA_IMAGES } from '../constants/mantra-images';
 import { FavoriteButton } from './FavoriteButton';
 import { getMantraDetailRoute } from '@/app/constants/routes.constants';
+import { MantraImage } from '@/components/shared/MantraImage';
 import { Link } from '@/lib/navigation';
 import type { Mantra } from '@devsangam/types';
 
@@ -22,9 +23,9 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
 
       <div className="grid min-h-[250px] grid-cols-[175px_1fr]">
         <div className="relative min-h-[250px] overflow-hidden bg-[var(--ds-white-03)]">
-          {image ? (
-            <img
+            <MantraImage
               src={image}
+              fallbackSrc={MANTRA_IMAGES[mantra.slug]}
               alt={mantra.title}
               width={175}
               height={250}
@@ -32,9 +33,6 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               decoding="async"
               className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
             />
-          ) : (
-            <div className="absolute inset-0 bg-[var(--ds-white-03)]" />
-          )}
 
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0d1726]/20" />
         </div>

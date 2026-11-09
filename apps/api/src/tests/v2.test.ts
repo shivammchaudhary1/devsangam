@@ -13,12 +13,14 @@ import { MantraModel } from '../models/mantra.model.ts';
 import { PasswordResetTokenModel } from '../models/password-reset-token.model.ts';
 import { PracticeSessionModel } from '../models/practice-session.model.ts';
 import { UserModel } from '../models/user.model.ts';
+import { compressMantraImage } from '../services/mantra-image.service.ts';
 import { storePrivatePdf } from '../services/private-asset.service.ts';
 import { signAccessToken } from '../utils/token.ts';
 import { hashToken } from '../utils/token.ts';
 import { registerSchema } from '../validators/auth/register.schema.ts';
 import { smtpFixture } from './smtp-fixture.ts';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import { type UploadApiResponse,v2 as cloudinary } from 'cloudinary';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import assert from 'node:assert/strict';
@@ -28,8 +30,10 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import type { Server } from 'node:http';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { Writable } from 'node:stream';
 import { after, before, test } from 'node:test';
 import { promisify } from 'node:util';
+import sharp from 'sharp';
 
 let mongo: MongoMemoryReplSet;
 let server: Server;
@@ -387,6 +391,8 @@ test('legacy/free content stays readable; paid text, favorites and practice requ
   const paid = await MantraModel.create({
     title: 'Paid mantra',
     slug: 'paid-test',
+    audioUrl: 'https://example.test/private-audio.mp3',
+    videoUrl: 'https://example.test/private-video.mp4',
     sanskrit: 'private chant',
     transliteration: 'private words',
     meaning: 'private meaning',
@@ -400,7 +406,10 @@ test('legacy/free content stays readable; paid text, favorites and practice requ
     userCookie
   );
   assert.equal(locked.headers.get('x-devsangam-public'), 'false');
-  assert.equal((await locked.json()).data.mantra.sanskrit, '');
+  const lockedMantra = (await locked.json()).data.mantra;
+  assert.equal(lockedMantra.sanskrit, '');
+  assert.equal(lockedMantra.audioUrl, null);
+  assert.equal(lockedMantra.videoUrl, null);
   assert.equal(
     (
       await request(
@@ -1076,4 +1085,109 @@ test('operator promotion CLI only updates an existing account and writes an audi
     await AdminAuditModel.exists({ targetId: userId, action: 'role.promoted' })
   );
   await UserModel.updateOne({ _id: userId }, { role: 'user' });
+});
+
+test('admin mantra CRUD searches across pages and archives/restores without deleting history', async () => {
+  const draft = { title: 'Admin CRUD mantra', slug: 'admin-crud-mantra', sanskrit: 'ॐ',
+    transliteration: 'Om', meaning: 'A sacred syllable', defaultTargets: [108, 216],
+    audioUrl: 'https://example.test/practice.mp3', videoUrl: 'https://example.test/practice.mp4' };
+  assert.equal((await request('/admin/content', 'POST', draft, userCookie)).status, 403);
+  const created = await request('/admin/content', 'POST', draft, adminCookie);
+  assert.equal(created.status, 201);
+  const mantraId = (await created.json()).data.id;
+  await MantraModel.insertMany(Array.from({ length: 23 }, (_, index) => ({
+    ...draft, slug: `admin-page-${index}`, title: `Pagination fixture ${index}`,
+  })));
+  const search = await (await request('/admin/content?q=Admin%20CRUD&limit=1', 'GET', undefined, adminCookie)).json();
+  assert.equal(search.data.total, 1);
+  assert.equal(search.data.items[0]._id, mantraId);
+  assert.equal('imagePublicId' in search.data.items[0], false);
+  const literal = await (await request('/admin/content?q=%5B.*', 'GET', undefined, adminCookie)).json();
+  assert.equal(literal.data.total, 0);
+  assert.equal((await request('/admin/content?q=' + 'x'.repeat(121), 'GET', undefined, adminCookie)).status, 400);
+  assert.equal((await request(`/admin/content/${mantraId}`, 'PUT', { ...draft, slug: 'changed-url' }, adminCookie)).status, 400);
+  assert.equal((await request(`/admin/content/${mantraId}`, 'PUT', { ...draft, title: 'Updated mantra' }, adminCookie)).status, 200);
+  const session = await PracticeSessionModel.create({ userId, mantraId, mantraSlug: draft.slug,
+    targetCount: 108, status: 'completed', completedCount: 108, activeDurationSeconds: 60 });
+  assert.equal((await request(`/admin/content/${mantraId}`, 'DELETE', undefined, adminCookie)).status, 200);
+  assert.ok(await MantraModel.exists({ _id: mantraId }));
+  assert.ok(await PracticeSessionModel.exists({ _id: session.id }));
+  assert.equal((await request('/mantras/' + draft.slug)).status, 404);
+  const archived = await (await request('/admin/content?status=archived&q=Updated', 'GET', undefined, adminCookie)).json();
+  assert.equal(archived.data.total, 1);
+  assert.equal((await request(`/admin/content/${mantraId}/restore`, 'POST', undefined, userCookie)).status, 403);
+  assert.equal((await request(`/admin/content/${mantraId}/restore`, 'POST', undefined, adminCookie)).status, 200);
+  assert.equal((await MantraModel.findById(mantraId))?.isPublished, false);
+  assert.equal((await request(`/admin/content/${mantraId}`, 'PUT', draft, adminCookie)).status, 200);
+  assert.equal((await request('/mantras/' + draft.slug)).status, 200);
+});
+
+test('location aggregates and 30-day activity expose totals without account identifiers', async () => {
+  await UserModel.updateOne({ _id: userId }, { 'preferences.timezone': 'Asia/Kolkata' });
+  assert.equal((await request('/admin/locations', 'GET', undefined, userCookie)).status, 403);
+  const locations = await (await request('/admin/locations', 'GET', undefined, adminCookie)).json();
+  assert.equal(locations.data.source, 'account_timezone');
+  const india = locations.data.groups.find((row: { timezone: string }) => row.timezone === 'Asia/Kolkata');
+  assert.equal(india.region, 'Asia');
+  assert.ok(india.users >= 1);
+  assert.equal('email' in india, false);
+  assert.equal('_id' in india, false);
+  const metrics = await (await request('/admin/metrics', 'GET', undefined, adminCookie)).json();
+  assert.equal(metrics.data.activity.length, 30);
+  assert.ok(metrics.data.activity.some((day: { sessions: number }) => day.sessions > 0));
+});
+
+test('mantra images validate real bytes, compress before storage and enforce admin authorization', async () => {
+  const input = await sharp({ create: { width: 1800, height: 1400, channels: 3,
+    background: '#d4a55c' } }).png().toBuffer();
+  const compressed = await compressMantraImage(input, 'image/png');
+  assert.equal(compressed.info.format, 'webp');
+  assert.equal(compressed.info.width, 1200);
+  assert.ok(compressed.data.length < input.length);
+  await assert.rejects(compressMantraImage(Buffer.from('<svg/>'), 'image/png'));
+  await assert.rejects(compressMantraImage(input, 'image/svg+xml'));
+  const huge = await sharp({ create: { width: 5000, height: 4000, channels: 3,
+    background: '#ffffff' } }).png().toBuffer();
+  await assert.rejects(compressMantraImage(huge, 'image/png'));
+  const mantra = await MantraModel.findOne({ slug: 'admin-crud-mantra' });
+  assert.ok(mantra);
+  async function upload(cookie: string, bytes = input) {
+    const form = new FormData();
+    form.append('image', new Blob([new Uint8Array(bytes)], { type: 'image/png' }), 'test.png');
+    return fetch(base + `/admin/content/${mantra!.id}/image`, { method: 'POST',
+      headers: { Cookie: cookie, Origin: process.env.WEB_ORIGIN! }, body: form });
+  }
+  assert.equal((await upload(userCookie)).status, 403);
+  assert.equal((await upload(adminCookie, Buffer.from('forged image'))).status, 400);
+  assert.equal((await upload(adminCookie, Buffer.alloc(5 * 1024 * 1024 + 1))).status, 413);
+  const originalUpload = cloudinary.uploader.upload_stream;
+  const originalDestroy = cloudinary.uploader.destroy;
+  let storedBytes: Buffer | undefined;
+  process.env.CLOUDINARY_CLOUD_NAME = 'local-fixture';
+  process.env.CLOUDINARY_API_KEY = 'local-fixture';
+  process.env.CLOUDINARY_API_SECRET = 'local-fixture';
+  cloudinary.uploader.upload_stream = ((
+    options: Record<string, unknown>, callback: (error: unknown, result: UploadApiResponse) => void
+  ) => {
+    const chunks: Buffer[] = [];
+    const stream = new Writable({ write(chunk, _encoding, done) { chunks.push(chunk); done(); } });
+    stream.on('finish', () => {
+      storedBytes = Buffer.concat(chunks);
+      callback(null, { secure_url: 'https://example.test/compressed.webp',
+        public_id: options.public_id } as UploadApiResponse);
+    });
+    return stream;
+  }) as typeof originalUpload;
+  cloudinary.uploader.destroy = (async () => ({ result: 'ok' })) as typeof originalDestroy;
+  try {
+    const response = await upload(adminCookie);
+    assert.equal(response.status, 200);
+    assert.ok(storedBytes);
+    assert.equal((await sharp(storedBytes).metadata()).format, 'webp');
+    assert.equal((await MantraModel.findById(mantra.id))?.image, 'https://example.test/compressed.webp');
+    assert.ok(await AdminAuditModel.exists({ targetId: mantra.id, action: 'mantra.image.updated' }));
+  } finally {
+    cloudinary.uploader.upload_stream = originalUpload;
+    cloudinary.uploader.destroy = originalDestroy;
+  }
 });

@@ -40,5 +40,6 @@ jobs:
           npm run test:offline
           npm run test:pwa
           npm run test:e2e:built
+          npm run test:admin
           npm run test:ui
           npm run test:public

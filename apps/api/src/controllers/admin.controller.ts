@@ -7,6 +7,7 @@ import {
 import { ContactMessageModel } from '../models/contact-message.model.ts';
 import { MantraModel } from '../models/mantra.model.ts';
 import { UserModel } from '../models/user.model.ts';
+import { deleteMantraImage, uploadMantraImage } from '../services/mantra-image.service.ts';
 import { storePrivatePdf } from '../services/private-asset.service.ts';
 import { AppError } from '../utils/app-error.ts';
 import { pagination } from '../utils/pagination.ts';
@@ -17,6 +18,7 @@ import {
 } from '../validators/commerce.schema.ts';
 import type { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import { z } from 'zod';
 
 function id(req: Request) {
   const parsed = idSchema.safeParse(req.params.id);
@@ -29,7 +31,7 @@ export async function listAdmin(req: Request, res: Response) {
   const section = String(req.params.section);
   // Every collection has an explicit safe projection; never serialize whole users.
   const collections = {
-    content: { model: MantraModel, fields: '-__v' },
+    content: { model: MantraModel, fields: '+deletedAt -__v' },
     products: { model: DigitalProductModel, fields: '+fileStorageKey -__v' },
     users: { model: UserModel, fields: 'name email role createdAt' },
     orders: { model: OrderModel, fields: '-__v' },
@@ -42,15 +44,31 @@ export async function listAdmin(req: Request, res: Response) {
   const source = collections[section as keyof typeof collections];
   // Separate queries keep each model's inferred types intact.
   const model = source.model as mongoose.Model<unknown>;
+  const options = z.object({ q: z.string().trim().max(120).default(''), status: z.enum(['all', 'published', 'draft', 'archived']).default('all') }).safeParse(req.query);
+  if (!options.success) throw new AppError(400, 'INVALID_FILTER', 'Invalid search or status filter.');
+  const filter: Record<string, unknown> = {};
+  if (section === 'content') {
+    filter.deletedAt = options.data.status === 'archived' ? { $ne: null } : null;
+    if (['published', 'draft'].includes(options.data.status)) filter.isPublished = options.data.status === 'published';
+  }
+  if (options.data.q) {
+    const expression = new RegExp(options.data.q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    const searchFields: Record<string, string[]> = {
+      content: ['title', 'slug', 'deity', 'categories', 'sanskrit', 'transliteration'], products: ['title', 'slug'],
+      users: ['name', 'email', 'role'], orders: ['title', 'status', 'razorpayOrderId', 'razorpayPaymentId'],
+      contact: ['name', 'email', 'category', 'status'], entitlements: ['resourceType', 'status'], audit: ['action', 'targetType'],
+    };
+    filter.$or = searchFields[section].map(field => ({ [field]: expression }));
+  }
   const [raw, total] = await Promise.all([
     model
-      .find()
+      .find(filter)
       .select(source.fields)
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1, _id: -1 })
       .skip(skip)
       .limit(limit)
       .lean(),
-    model.countDocuments(),
+    model.countDocuments(filter),
   ]);
   const items = raw.map((item) => {
     const record = item as Record<string, unknown>;
@@ -78,11 +96,13 @@ export async function saveContent(req: Request, res: Response) {
     const record = resourceId
       ? await model
           .findById(resourceId)
-          .select('+fileStorageKey')
+          .select('+fileStorageKey +deletedAt')
           .session(session)
       : null;
     if (resourceId && !record)
       throw new AppError(404, 'NOT_FOUND', 'Content not found.');
+    if (!product && record?.get('deletedAt')) throw new AppError(409, 'CONTENT_ARCHIVED', 'Restore this mantra before editing.');
+    if (!product && record && record.get('slug') !== result.data.slug) throw new AppError(400, 'IMMUTABLE_SLUG', 'An existing mantra URL cannot be changed; practice records use this slug.');
     if (
       product &&
       'published' in result.data &&
@@ -131,7 +151,7 @@ export async function unpublishContent(req: Request, res: Response) {
   await mongoose.connection.transaction(async (session) => {
     const record = await model.findByIdAndUpdate(
       id(req),
-      { $set: product ? { published: false } : { isPublished: false } },
+      { $set: product ? { published: false } : { isPublished: false, deletedAt: new Date() } },
       { session }
     );
     if (!record) throw new AppError(404, 'NOT_FOUND', 'Content not found.');
@@ -148,6 +168,50 @@ export async function unpublishContent(req: Request, res: Response) {
     );
   });
   res.json({ success: true, data: { unpublished: true } });
+}
+
+export async function restoreMantra(req: Request, res: Response) {
+  const mantraId = id(req);
+  await mongoose.connection.transaction(async session => {
+    const result = await MantraModel.updateOne(
+      { _id: mantraId, deletedAt: { $ne: null } },
+      { deletedAt: null, isPublished: false }, { session }
+    );
+    if (!result.matchedCount) throw new AppError(404, 'NOT_FOUND', 'Archived mantra not found.');
+    await AdminAuditModel.create([{ adminUserId: req.auth!.userId, action: 'content.restored', targetType: 'mantra', targetId: mantraId }], { session });
+  });
+  res.json({ success: true, data: { restored: true } });
+}
+
+export async function uploadContentImage(req: Request, res: Response) {
+  const mantraId = id(req);
+  if (!(await MantraModel.exists({ _id: mantraId, deletedAt: null }))) throw new AppError(404, 'NOT_FOUND', 'Mantra not found.');
+  if (!req.file) throw new AppError(400, 'IMAGE_REQUIRED', 'Choose a JPEG, PNG or WebP image.');
+  const uploaded = await uploadMantraImage(req.file.buffer, req.file.mimetype);
+  let previousId: string | null = null;
+  try {
+    await mongoose.connection.transaction(async session => {
+      const mantra = await MantraModel.findOne({ _id: mantraId, deletedAt: null }).select('+imagePublicId').session(session);
+      if (!mantra) throw new AppError(404, 'NOT_FOUND', 'Mantra not found.');
+      previousId = mantra.imagePublicId ?? null;
+      mantra.image = uploaded.url;
+      mantra.imagePublicId = uploaded.publicId;
+      await mantra.save({ session });
+      await AdminAuditModel.create([{
+        adminUserId: req.auth!.userId, action: 'mantra.image.updated',
+        targetType: 'mantra', targetId: mantraId,
+        metadata: { bytes: uploaded.bytes, width: uploaded.width, height: uploaded.height },
+      }], { session });
+    });
+  } catch (error) {
+    await deleteMantraImage(uploaded.publicId);
+    throw error;
+  }
+  if (previousId) await deleteMantraImage(previousId);
+  res.json({ success: true, data: {
+    image: uploaded.url, bytes: uploaded.bytes,
+    width: uploaded.width, height: uploaded.height,
+  } });
 }
 export async function uploadProductPdf(req: Request, res: Response) {
   const productId = id(req);

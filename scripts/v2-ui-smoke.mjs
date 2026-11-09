@@ -397,6 +397,7 @@ try {
   await adminPage
     .getByRole('button', { name: 'Unpublish', exact: true })
     .click();
+  await adminPage.getByRole('button', { name: 'Confirm unpublish', exact: true }).click();
   await adminPage.getByText('Saved successfully.').waitFor();
   checks++;
   await adminPage.screenshot({

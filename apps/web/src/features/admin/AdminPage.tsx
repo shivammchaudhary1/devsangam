@@ -1,6 +1,14 @@
 'use client';
 
+import { adminSecondaryButton } from './admin.styles';
+import { type ActivityDay, AdminActivityChart } from './AdminActivityChart';
+import { AdminLocationPage } from './AdminLocationPage';
+import { ConfirmDeleteDialog } from './ConfirmDeleteDialog';
+import { MantraImagePicker } from './MantraImagePicker';
+import { MantraImage } from '@/components/shared/MantraImage';
+import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
 import { parseRupees, priceLabel } from '@/features/store/commerce.utils';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { Link, useParams } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import type { ApiResult, PagedItems } from '@devsangam/types';
@@ -24,15 +32,17 @@ import {
   Search,
   ShieldCheck,
   ShoppingBag,
+  Trash2,
   Upload,
   Users,
   X,
 } from 'lucide-react';
-import { type FormEvent, type ReactNode, useMemo, useState } from 'react';
+import { type FormEvent, type ReactNode, useRef, useState } from 'react';
 
 type RecordItem = Record<string, unknown> & { _id: string };
 
 type AdminMetrics = {
+  activity?: ActivityDay[];
   users?: number;
   newUsers?: number;
   practice?: {
@@ -60,8 +70,7 @@ type AdminMetrics = {
 const inputClass =
   'mt-2 min-h-11 w-full rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3.5 py-2.5 text-sm text-[var(--ds-text)] outline-none transition placeholder:text-[var(--ds-muted-soft)] focus:border-[var(--ds-border-gold)] focus:ring-2 focus:ring-[var(--ds-amber-08)]';
 
-const secondaryButtonClass =
-  'ds-secondary-button inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-[11px] font-semibold disabled:pointer-events-none disabled:opacity-45';
+const secondaryButtonClass = adminSecondaryButton;
 
 const primaryButtonClass =
   'ds-gold-button inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-4 text-[11px] font-bold disabled:pointer-events-none disabled:opacity-45';
@@ -72,63 +81,55 @@ const SECTION_COPY: Record<
 > = {
   content: {
     eyebrow: 'Sacred content',
-    description:
-      'Create and manage mantras, publication state, pricing and premium access.',
+    description: 'Create and manage mantras, publication state, pricing and premium access.',
     icon: BookOpen,
   },
   products: {
     eyebrow: 'Digital commerce',
-    description:
-      'Create PDF products, upload private files, publish resources and set pricing.',
+    description: 'Create PDF products, upload private files, publish resources and set pricing.',
     icon: Boxes,
   },
   users: {
     eyebrow: 'Accounts',
-    description:
-      'Review registered accounts and server-authorized account roles.',
+    description: 'Review registered accounts and server-authorized account roles.',
     icon: Users,
   },
   orders: {
     eyebrow: 'Payments',
-    description:
-      'Review Razorpay-backed orders and reconcile incomplete payment states.',
+    description: 'Review Razorpay-backed orders and reconcile incomplete payment states.',
     icon: ShoppingBag,
   },
   contact: {
     eyebrow: 'Support inbox',
-    description:
-      'Review contact requests submitted through the public DevSangam website.',
+    description: 'Review contact requests submitted through the public DevSangam website.',
     icon: MessageSquare,
   },
   entitlements: {
     eyebrow: 'Content access',
-    description:
-      'Inspect server-side access grants created after verified successful payments.',
+    description: 'Inspect server-side access grants created after verified successful payments.',
     icon: ShieldCheck,
   },
   audit: {
     eyebrow: 'Security trail',
-    description:
-      'Review sensitive content and access operations performed by administrators.',
+    description: 'Review sensitive content and access operations performed by administrators.',
     icon: History,
   },
 };
 
 function message(error: unknown) {
-  return error instanceof Error
-    ? error.message
-    : 'The request could not be completed.';
+  return error instanceof Error ? error.message : 'The request could not be completed.';
 }
 
 function humanize(value: string) {
-  return value.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').trim();
+  return value
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/_/g, ' ')
+    .trim();
 }
 
 function formatNumber(value: unknown) {
   const number = Number(value ?? 0);
-  return Number.isFinite(number)
-    ? new Intl.NumberFormat('en-IN').format(number)
-    : '0';
+  return Number.isFinite(number) ? new Intl.NumberFormat('en-IN').format(number) : '0';
 }
 
 function formatDate(value: unknown) {
@@ -151,11 +152,7 @@ function formatDuration(seconds: unknown) {
 
 function statusClass(status: unknown) {
   const value = String(status ?? '').toLowerCase();
-  if (
-    ['paid', 'active', 'published', 'reviewed', 'admin', 'completed'].includes(
-      value
-    )
-  )
+  if (['paid', 'active', 'published', 'reviewed', 'admin', 'completed'].includes(value))
     return 'border-emerald-500/25 bg-emerald-500/10 text-emerald-400';
   if (['failed', 'revoked', 'refunded'].includes(value))
     return 'border-red-500/25 bg-red-500/10 text-red-400';
@@ -193,17 +190,13 @@ function MetricCard({
             <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-[var(--ds-muted)]">
               {label}
             </p>
-            <p className="ds-stat-value mt-3 truncate text-2xl sm:text-3xl">
-              {value}
-            </p>
+            <p className="ds-stat-value mt-3 truncate text-2xl sm:text-3xl">{value}</p>
           </div>
           <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--ds-border-gold)] bg-[var(--ds-amber-08)] text-[var(--ds-amber)]">
             <Icon size={18} />
           </span>
         </div>
-        <p className="mt-4 text-[10px] leading-5 text-[var(--ds-muted)]">
-          {note}
-        </p>
+        <p className="mt-4 text-[10px] leading-5 text-[var(--ds-muted)]">{note}</p>
       </div>
     </article>
   );
@@ -224,9 +217,7 @@ function ProgressLine({
   return (
     <div>
       <div className="mb-2 flex items-center justify-between gap-3">
-        <span className="text-[11px] font-semibold text-[var(--ds-text)]">
-          {label}
-        </span>
+        <span className="text-[11px] font-semibold text-[var(--ds-text)]">{label}</span>
         <span className="text-[10px] text-[var(--ds-muted)]">{caption}</span>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-[var(--ds-white-06)]">
@@ -264,10 +255,7 @@ function RecentList({
         {items.length ? (
           <div className="divide-y divide-[var(--ds-border-soft)]">
             {items.map((item, index) => (
-              <div
-                key={String(item._id ?? item.id ?? index)}
-                className="py-3 first:pt-0 last:pb-0"
-              >
+              <div key={String(item._id ?? item.id ?? index)} className="py-3 first:pt-0 last:pb-0">
                 {render(item)}
               </div>
             ))}
@@ -309,20 +297,13 @@ function MetricsPage() {
   const revenue = data.revenue ?? {};
   const sessions = Number(practice.sessions ?? 0);
   const completed = Number(practice.completed ?? 0);
-  const completionRate =
-    sessions > 0 ? Math.round((completed / sessions) * 100) : 0;
-  const totalMantras =
-    Number(data.freeMantras ?? 0) + Number(data.paidMantras ?? 0);
+  const completionRate = sessions > 0 ? Math.round((completed / sessions) * 100) : 0;
+  const totalMantras = Number(data.freeMantras ?? 0) + Number(data.paidMantras ?? 0);
   const publishedRatio =
     Number(data.products ?? 0) > 0
-      ? Math.round(
-          (Number(data.publishedProducts ?? 0) / Number(data.products ?? 1)) *
-            100
-        )
+      ? Math.round((Number(data.publishedProducts ?? 0) / Number(data.products ?? 1)) * 100)
       : 0;
-  const netRevenue =
-    Number(revenue.capturedRevenuePaise ?? 0) -
-    Number(revenue.refundedPaise ?? 0);
+  const netRevenue = Number(revenue.capturedRevenuePaise ?? 0) - Number(revenue.refundedPaise ?? 0);
 
   return (
     <section>
@@ -331,8 +312,8 @@ function MetricsPage() {
           <p className="ds-eyebrow mb-3">Platform intelligence</p>
           <h1 className="text-3xl sm:text-4xl">Analytics</h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--ds-muted)]">
-            A live operational view of accounts, Sadhana activity, devotional
-            content and verified digital commerce.
+            A live operational view of accounts, Sadhana activity, devotional content and verified
+            digital commerce.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -374,6 +355,7 @@ function MetricsPage() {
         />
       </div>
 
+      <AdminActivityChart days={data.activity ?? []} />
       <div className="mt-5 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
         <article className="ds-panel p-5 sm:p-6">
           <div className="relative z-10">
@@ -430,9 +412,7 @@ function MetricsPage() {
                   className="rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] p-4"
                 >
                   <Icon size={15} className="mb-3 text-[var(--ds-gold)]" />
-                  <p className="text-lg font-semibold text-[var(--ds-text)]">
-                    {String(value)}
-                  </p>
+                  <p className="text-lg font-semibold text-[var(--ds-text)]">{String(value)}</p>
                   <p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-[var(--ds-muted)]">
                     {String(label)}
                   </p>
@@ -447,42 +427,26 @@ function MetricsPage() {
             <p className="ds-eyebrow">Commerce health</p>
             <h2 className="mt-2 text-xl">Payment & access</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--ds-muted)]">
-              Paid access is granted only after server-side Razorpay
-              verification. Admin reconciliation never trusts the browser.
+              Paid access is granted only after server-side Razorpay verification. Admin
+              reconciliation never trusts the browser.
             </p>
             <div className="mt-6 space-y-3">
               {[
-                [
-                  'Captured revenue',
-                  priceLabel(Number(revenue.capturedRevenuePaise ?? 0)),
-                ],
+                ['Captured revenue', priceLabel(Number(revenue.capturedRevenuePaise ?? 0))],
                 ['Refunded', priceLabel(Number(revenue.refundedPaise ?? 0))],
-                [
-                  'Captured payments',
-                  formatNumber(revenue.capturedPayments),
-                ],
-                [
-                  'Products published',
-                  formatNumber(data.publishedProducts),
-                ],
+                ['Captured payments', formatNumber(revenue.capturedPayments)],
+                ['Products published', formatNumber(data.publishedProducts)],
               ].map(([label, value]) => (
                 <div
                   key={label}
                   className="flex items-center justify-between gap-4 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] px-4 py-3"
                 >
-                  <span className="text-[10px] text-[var(--ds-muted)]">
-                    {label}
-                  </span>
-                  <span className="text-sm font-semibold text-[var(--ds-text)]">
-                    {value}
-                  </span>
+                  <span className="text-[10px] text-[var(--ds-muted)]">{label}</span>
+                  <span className="text-sm font-semibold text-[var(--ds-text)]">{value}</span>
                 </div>
               ))}
             </div>
-            <Link
-              to="/admin/orders"
-              className={`${secondaryButtonClass} mt-5 w-full`}
-            >
+            <Link to="/admin/orders" className={`${secondaryButtonClass} mt-5 w-full`}>
               Review payment orders
             </Link>
           </div>
@@ -560,6 +524,7 @@ function Field({
   placeholder,
   hint,
   type = 'text',
+  readOnly,
 }: {
   name: string;
   label: string;
@@ -569,6 +534,7 @@ function Field({
   placeholder?: string;
   hint?: string;
   type?: 'text' | 'url' | 'number';
+  readOnly?: boolean;
 }) {
   const id = `admin-field-${name}`;
   return (
@@ -597,6 +563,7 @@ function Field({
           id={id}
           name={name}
           type={type}
+          readOnly={readOnly}
           required={required}
           defaultValue={
             Array.isArray(initial)
@@ -609,9 +576,7 @@ function Field({
         />
       )}
       {hint ? (
-        <span className="mt-2 block text-[9px] leading-4 text-[var(--ds-muted-soft)]">
-          {hint}
-        </span>
+        <span className="mt-2 block text-[9px] leading-4 text-[var(--ds-muted-soft)]">{hint}</span>
       ) : null}
     </label>
   );
@@ -632,6 +597,8 @@ function ContentEditor({
   const [access, setAccess] = useState(String(initial?.accessType ?? 'free'));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [savedId, setSavedId] = useState<string | null>(initial?._id ?? null);
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -670,6 +637,8 @@ function ContentEditor({
             description: text('description') || null,
             deity: text('deity') || null,
             image: text('image') || null,
+            audioUrl: text('audioUrl') || null,
+            videoUrl: text('videoUrl') || null,
             categories: array('categories'),
             benefits: array('benefits'),
             defaultTargets: array('defaultTargets')
@@ -681,10 +650,29 @@ function ContentEditor({
             isPublished: form.get('published') === 'on',
           };
 
-      await apiRequest(`/admin/${section}${initial ? `/${initial._id}` : ''}`, {
-        method: initial ? 'PUT' : 'POST',
-        body: JSON.stringify(data),
-      });
+      const result = await apiRequest<ApiResult<{ id: string }>>(
+        `/admin/${section}${savedId ? `/${savedId}` : ''}`,
+        {
+          method: savedId ? 'PUT' : 'POST',
+          body: JSON.stringify(data),
+        },
+      );
+      setSavedId(result.data.id);
+      if (!product && imageFile) {
+        const upload = new FormData();
+        upload.append('image', imageFile);
+        try {
+          await apiRequest(`/admin/content/${result.data.id}/image`, {
+            method: 'POST',
+            body: upload,
+          });
+        } catch (failure) {
+          throw new Error(
+            `Mantra saved. Image upload failed: ${message(failure)} Retry Save to upload again; no duplicate mantra will be created.`,
+            { cause: failure },
+          );
+        }
+      }
       onSaved();
     } catch (failure) {
       setError(message(failure));
@@ -698,9 +686,7 @@ function ContentEditor({
       <div className="relative z-10">
         <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="ds-eyebrow">
-              {initial ? 'Edit existing' : 'Create new'}
-            </p>
+            <p className="ds-eyebrow">{initial ? 'Edit existing' : 'Create new'}</p>
             <h2 className="mt-2 text-2xl">
               {initial ? 'Edit' : 'Create'} {product ? 'product' : 'mantra'}
             </h2>
@@ -732,9 +718,7 @@ function ContentEditor({
                   initial={initial?.title}
                   required
                   placeholder={
-                    product
-                      ? 'e.g. Hanuman Chalisa Guide'
-                      : 'e.g. Maha Mrityunjaya Mantra'
+                    product ? 'e.g. Hanuman Chalisa Guide' : 'e.g. Maha Mrityunjaya Mantra'
                   }
                 />
                 <Field
@@ -743,7 +727,12 @@ function ContentEditor({
                   initial={initial?.slug}
                   required
                   placeholder="lowercase-hyphenated-slug"
-                  hint="Use lowercase letters, numbers and hyphens only."
+                  readOnly={!product && Boolean(savedId)}
+                  hint={
+                    !product && savedId
+                      ? 'This URL is preserved for existing practice records.'
+                      : 'Use lowercase letters, numbers and hyphens only.'
+                  }
                 />
               </div>
 
@@ -828,6 +817,22 @@ function ContentEditor({
                     placeholder="https://..."
                   />
                   <Field
+                    name="audioUrl"
+                    label="Audio link"
+                    initial={initial?.audioUrl}
+                    type="url"
+                    placeholder="https://..."
+                    hint="Optional HTTPS audio resource."
+                  />
+                  <Field
+                    name="videoUrl"
+                    label="Video link"
+                    initial={initial?.videoUrl}
+                    type="url"
+                    placeholder="https://..."
+                    hint="Optional HTTPS video resource."
+                  />
+                  <Field
                     name="categories"
                     label="Categories"
                     initial={initial?.categories}
@@ -862,6 +867,13 @@ function ContentEditor({
           </div>
 
           <div className="space-y-5">
+            {!product && (
+              <MantraImagePicker
+                current={String(initial?.image ?? '')}
+                file={imageFile}
+                onChange={setImageFile}
+              />
+            )}
             <section className="rounded-2xl border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] p-4 sm:p-5">
               <div className="flex items-center gap-3">
                 <span className="flex size-9 items-center justify-center rounded-xl border border-[var(--ds-border-gold)] text-[var(--ds-amber)]">
@@ -903,8 +915,8 @@ function ContentEditor({
                     className={inputClass}
                   />
                   <span className="mt-2 block text-[9px] leading-4 text-[var(--ds-muted-soft)]">
-                    The server stores the canonical amount in paise. Checkout
-                    never trusts a browser-supplied amount.
+                    The server stores the canonical amount in paise. Checkout never trusts a
+                    browser-supplied amount.
                   </span>
                 </label>
               ) : (
@@ -923,7 +935,7 @@ function ContentEditor({
                     type="checkbox"
                     disabled={product && !initial?.hasFile}
                     defaultChecked={Boolean(
-                      initial?.[product ? 'published' : 'isPublished'] ?? !product
+                      initial?.[product ? 'published' : 'isPublished'] ?? !product,
                     )}
                     className="mt-0.5 size-4 accent-[var(--ds-amber)]"
                   />
@@ -932,8 +944,7 @@ function ContentEditor({
                       Published
                     </span>
                     <span className="mt-1 block text-[9px] leading-4 text-[var(--ds-muted)]">
-                      Make this {product ? 'resource' : 'mantra'} visible to
-                      users.
+                      Make this {product ? 'resource' : 'mantra'} visible to users.
                     </span>
                   </span>
                 </label>
@@ -959,8 +970,8 @@ function ContentEditor({
               {product && !initial?.hasFile ? (
                 <div className="mt-4 flex gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-[10px] leading-5 text-amber-300">
                   <Upload size={14} className="mt-0.5 shrink-0" />
-                  Save this product as a draft first. Then upload its PDF from
-                  the product list before publishing.
+                  Save this product as a draft first. Then upload its PDF from the product list
+                  before publishing.
                 </div>
               ) : null}
             </section>
@@ -983,10 +994,7 @@ function ContentEditor({
               >
                 Cancel
               </button>
-              <button
-                disabled={busy}
-                className={`${primaryButtonClass} flex-1`}
-              >
+              <button disabled={busy} className={`${primaryButtonClass} flex-1`}>
                 {busy ? 'Saving…' : 'Save'}
               </button>
             </div>
@@ -1025,6 +1033,7 @@ function AdminRecordCard({
   item,
   busy,
   onEdit,
+  onRequestDelete,
   onAct,
   setFeedback,
 }: {
@@ -1032,13 +1041,12 @@ function AdminRecordCard({
   item: RecordItem;
   busy: boolean;
   onEdit: (item: RecordItem) => void;
-  onAct: (path: string, method?: string, body?: FormData) => Promise<void>;
+  onRequestDelete: (item: RecordItem, trigger: HTMLButtonElement) => void;
+  onAct: (path: string, method?: string, body?: FormData) => Promise<boolean>;
   setFeedback: (value: string) => void;
 }) {
   const editable = section === 'content' || section === 'products';
-  const title = String(
-    item.title ?? item.name ?? item.email ?? item.action ?? item._id
-  );
+  const title = String(item.title ?? item.name ?? item.email ?? item.action ?? item._id);
   const subtitle =
     section === 'content'
       ? String(item.deity ?? item.slug ?? '')
@@ -1053,25 +1061,20 @@ function AdminRecordCard({
               : String(item.targetType ?? item.resourceType ?? '');
 
   const badges: ReactNode[] = [];
+  if (item.deletedAt) badges.push(<StatusBadge key="archived">archived</StatusBadge>);
   if (item.status !== undefined)
     badges.push(<StatusBadge key="status">{String(item.status)}</StatusBadge>);
   if (item.role !== undefined)
     badges.push(<StatusBadge key="role">{String(item.role)}</StatusBadge>);
   if (item.accessType !== undefined)
-    badges.push(
-      <StatusBadge key="access">{String(item.accessType)}</StatusBadge>
-    );
+    badges.push(<StatusBadge key="access">{String(item.accessType)}</StatusBadge>);
   if (section === 'content' && item.isPublished !== undefined)
     badges.push(
-      <StatusBadge key="published">
-        {item.isPublished ? 'published' : 'draft'}
-      </StatusBadge>
+      <StatusBadge key="published">{item.isPublished ? 'published' : 'draft'}</StatusBadge>,
     );
   if (section === 'products' && item.published !== undefined)
     badges.push(
-      <StatusBadge key="published">
-        {item.published ? 'published' : 'draft'}
-      </StatusBadge>
+      <StatusBadge key="published">{item.published ? 'published' : 'draft'}</StatusBadge>,
     );
 
   return (
@@ -1080,6 +1083,14 @@ function AdminRecordCard({
         <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0">
             <div className="flex min-w-0 items-center gap-3">
+              {section === 'content' && (
+                <MantraImage
+                  src={String(item.image ?? '')}
+                  fallbackSrc={MANTRA_IMAGES[String(item.slug)]}
+                  alt={`${title} artwork`}
+                  className="size-12 shrink-0 overflow-hidden rounded-xl object-cover"
+                />
+              )}
               <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] text-[var(--ds-gold)]">
                 {section === 'content' ? (
                   <BookOpen size={17} />
@@ -1106,16 +1117,15 @@ function AdminRecordCard({
                 ) : null}
               </div>
             </div>
-            {badges.length ? (
-              <div className="mt-3 flex flex-wrap gap-2">{badges}</div>
-            ) : null}
+            {badges.length ? <div className="mt-3 flex flex-wrap gap-2">{badges}</div> : null}
           </div>
 
           <div className="flex shrink-0 flex-wrap gap-2">
-            {editable ? (
+            {editable && !item.deletedAt ? (
               <>
                 <button
                   className={secondaryButtonClass}
+                  disabled={busy}
                   onClick={() => onEdit(item)}
                 >
                   <Edit3 size={13} />
@@ -1124,13 +1134,23 @@ function AdminRecordCard({
                 <button
                   className={secondaryButtonClass}
                   disabled={busy}
-                  onClick={() => void onAct(`${section}/${item._id}`, 'DELETE')}
+                  onClick={(event) => onRequestDelete(item, event.currentTarget)}
                 >
-                  <EyeOff size={13} />
-                  Unpublish
+                  {section === 'content' ? <Trash2 size={13} /> : <EyeOff size={13} />}
+                  {section === 'content' ? 'Delete' : 'Unpublish'}
                 </button>
               </>
             ) : null}
+            {section === 'content' && Boolean(item.deletedAt) && (
+              <button
+                disabled={busy}
+                onClick={() => void onAct(`content/${item._id}/restore`)}
+                className={secondaryButtonClass}
+              >
+                <RefreshCw size={13} />
+                Restore draft
+              </button>
+            )}
             {section === 'contact' && item.status === 'new' ? (
               <button
                 className={primaryButtonClass}
@@ -1151,8 +1171,7 @@ function AdminRecordCard({
                 Revoke access
               </button>
             ) : null}
-            {section === 'orders' &&
-            !['paid', 'refunded'].includes(String(item.status)) ? (
+            {section === 'orders' && !['paid', 'refunded'].includes(String(item.status)) ? (
               <button
                 className={secondaryButtonClass}
                 disabled={busy}
@@ -1170,19 +1189,13 @@ function AdminRecordCard({
             <>
               <Detail label="Slug">{String(item.slug ?? '—')}</Detail>
               <Detail label="Categories">
-                {Array.isArray(item.categories)
-                  ? item.categories.join(', ') || '—'
-                  : '—'}
+                {Array.isArray(item.categories) ? item.categories.join(', ') || '—' : '—'}
               </Detail>
               <Detail label="Price">
-                {item.accessType === 'paid'
-                  ? priceLabel(Number(item.pricePaise ?? 0))
-                  : 'Free'}
+                {item.accessType === 'paid' ? priceLabel(Number(item.pricePaise ?? 0)) : 'Free'}
               </Detail>
               <Detail label="Default targets">
-                {Array.isArray(item.defaultTargets)
-                  ? item.defaultTargets.join(', ')
-                  : '—'}
+                {Array.isArray(item.defaultTargets) ? item.defaultTargets.join(', ') : '—'}
               </Detail>
             </>
           ) : null}
@@ -1190,16 +1203,10 @@ function AdminRecordCard({
           {section === 'products' ? (
             <>
               <Detail label="Price">
-                {item.accessType === 'paid'
-                  ? priceLabel(Number(item.pricePaise ?? 0))
-                  : 'Free'}
+                {item.accessType === 'paid' ? priceLabel(Number(item.pricePaise ?? 0)) : 'Free'}
               </Detail>
-              <Detail label="PDF">
-                {item.hasFile ? 'Private PDF uploaded' : 'PDF required'}
-              </Detail>
-              <Detail label="Featured">
-                {item.featured ? 'Yes' : 'No'}
-              </Detail>
+              <Detail label="PDF">{item.hasFile ? 'Private PDF uploaded' : 'PDF required'}</Detail>
+              <Detail label="Featured">{item.featured ? 'Yes' : 'No'}</Detail>
               <Detail label="Created">{formatDate(item.createdAt)}</Detail>
             </>
           ) : null}
@@ -1217,14 +1224,10 @@ function AdminRecordCard({
 
           {section === 'orders' ? (
             <>
-              <Detail label="Amount">
-                {priceLabel(Number(item.amountPaise ?? 0))}
-              </Detail>
+              <Detail label="Amount">{priceLabel(Number(item.amountPaise ?? 0))}</Detail>
               <Detail label="Created">{formatDate(item.createdAt)}</Detail>
               <Detail label="Paid">{formatDate(item.paidAt)}</Detail>
-              <Detail label="Refunded">
-                {priceLabel(Number(item.refundedPaise ?? 0))}
-              </Detail>
+              <Detail label="Refunded">{priceLabel(Number(item.refundedPaise ?? 0))}</Detail>
               <Detail label="Razorpay order" mono>
                 {String(item.razorpayOrderId ?? '—')}
               </Detail>
@@ -1243,23 +1246,17 @@ function AdminRecordCard({
           {section === 'contact' ? (
             <>
               <Detail label="Email">{String(item.email ?? '—')}</Detail>
-              <Detail label="Category">
-                {String(item.category ?? 'general')}
-              </Detail>
+              <Detail label="Category">{String(item.category ?? 'general')}</Detail>
               <Detail label="Received">{formatDate(item.createdAt)}</Detail>
               <Detail label="Message">
-                <span className="whitespace-pre-wrap">
-                  {String(item.message ?? '—')}
-                </span>
+                <span className="whitespace-pre-wrap">{String(item.message ?? '—')}</span>
               </Detail>
             </>
           ) : null}
 
           {section === 'entitlements' ? (
             <>
-              <Detail label="Resource type">
-                {humanize(String(item.resourceType ?? '—'))}
-              </Detail>
+              <Detail label="Resource type">{humanize(String(item.resourceType ?? '—'))}</Detail>
               <Detail label="Granted">{formatDate(item.grantedAt)}</Detail>
               <Detail label="User ID" mono>
                 {String(item.userId ?? '—')}
@@ -1272,9 +1269,7 @@ function AdminRecordCard({
 
           {section === 'audit' ? (
             <>
-              <Detail label="Action">
-                {humanize(String(item.action ?? '—'))}
-              </Detail>
+              <Detail label="Action">{humanize(String(item.action ?? '—'))}</Detail>
               <Detail label="When">{formatDate(item.createdAt)}</Detail>
               <Detail label="Target" mono>
                 {String(item.targetId ?? '—')}
@@ -1335,13 +1330,18 @@ function CollectionPage({ section }: { section: string }) {
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [search, setSearch] = useState('');
+  const [status, setStatus] = useState('all');
+  const [pendingDelete, setPendingDelete] = useState<RecordItem | null>(null);
+  const deleteTrigger = useRef<HTMLElement | null>(null);
+  const searchInput = useRef<HTMLInputElement | null>(null);
+  const debouncedSearch = useDebouncedValue(search, 250);
   const cache = useQueryClient();
 
   const query = useQuery({
-    queryKey: ['admin', section, page],
+    queryKey: ['admin', section, page, debouncedSearch, status],
     queryFn: () =>
       apiRequest<ApiResult<PagedItems<RecordItem>>>(
-        `/admin/${section}?page=${page}&limit=20`
+        `/admin/${section}?page=${page}&limit=20&q=${encodeURIComponent(debouncedSearch)}&status=${status}`,
       ),
   });
 
@@ -1359,35 +1359,16 @@ function CollectionPage({ section }: { section: string }) {
       });
       await cache.invalidateQueries({ queryKey: ['admin'] });
       setFeedback('Saved successfully.');
+      return true;
     } catch (failure) {
       setFeedback(message(failure));
+      return false;
     } finally {
       setBusy(false);
     }
   }
 
-  const items = query.data?.data.items ?? [];
-  const filteredItems = useMemo(() => {
-    const needle = search.trim().toLowerCase();
-    if (!needle) return items;
-    return items.filter((item) =>
-      [
-        item.title,
-        item.name,
-        item.email,
-        item.slug,
-        item.status,
-        item.role,
-        item.category,
-        item.action,
-        item.userId,
-        item.razorpayOrderId,
-        item.razorpayPaymentId,
-      ]
-        .filter((value) => value !== undefined && value !== null)
-        .some((value) => String(value).toLowerCase().includes(needle))
-    );
-  }, [items, search]);
+  const filteredItems = query.data?.data.items ?? [];
 
   const title = section === 'content' ? 'Mantras' : section;
 
@@ -1402,10 +1383,7 @@ function CollectionPage({ section }: { section: string }) {
           </p>
         </div>
         {editable ? (
-          <button
-            className={primaryButtonClass}
-            onClick={() => setEditor(null)}
-          >
+          <button className={primaryButtonClass} onClick={() => setEditor(null)}>
             <Plus size={14} />
             Create {section === 'products' ? 'product' : 'mantra'}
           </button>
@@ -1432,20 +1410,65 @@ function CollectionPage({ section }: { section: string }) {
             className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--ds-muted)]"
           />
           <input
-            aria-label="Search current page"
+            aria-label="Search records"
+            ref={searchInput}
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder={`Search ${section === 'content' ? 'mantras' : section} on this page…`}
+            maxLength={120}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
+            placeholder={`Search all ${section === 'content' ? 'mantras' : section}…`}
             className="min-h-11 w-full rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)] pl-10 pr-3 text-sm text-[var(--ds-text)] outline-none focus:border-[var(--ds-border-gold)]"
           />
         </label>
         <div className="flex items-center gap-2 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] px-4 py-2 text-[10px] text-[var(--ds-muted)]">
           <SectionIcon size={14} className="text-[var(--ds-gold)]" />
-          {query.data
-            ? `${formatNumber(query.data.data.total)} total records`
-            : 'Loading records'}
+          {query.data ? `${formatNumber(query.data.data.total)} total records` : 'Loading records'}
         </div>
       </div>
+
+      {section === 'content' && (
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <label className="flex items-center gap-3 text-xs text-[var(--ds-muted)]">
+            Publication status
+            <select
+              aria-label="Publication status"
+              value={status}
+              onChange={(event) => {
+                setStatus(event.target.value);
+                setPage(1);
+              }}
+              className="min-h-10 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3 text-[var(--ds-text)]"
+            >
+              <option value="all">All mantras</option>
+              <option value="published">Published</option>
+              <option value="draft">Drafts</option>
+              <option value="archived">Archived</option>
+            </select>
+          </label>
+          <span className="text-[10px] text-[var(--ds-muted-soft)]">
+            Search covers every page of your library.
+          </span>
+        </div>
+      )}
+      <ConfirmDeleteDialog
+        title={pendingDelete ? String(pendingDelete.title ?? '') : null}
+        product={section === 'products'}
+        busy={busy}
+        error={feedback === 'Saved successfully.' ? '' : feedback}
+        onCancel={() => setPendingDelete(null)}
+        onRestoreFocus={() => {
+          if (deleteTrigger.current?.isConnected) deleteTrigger.current.focus();
+          else searchInput.current?.focus();
+        }}
+        onConfirm={() => {
+          if (pendingDelete)
+            void act(`${section}/${pendingDelete._id}`, 'DELETE').then((success) => {
+              if (success) setPendingDelete(null);
+            });
+        }}
+      />
 
       {feedback ? (
         <p
@@ -1474,16 +1497,11 @@ function CollectionPage({ section }: { section: string }) {
         </div>
       ) : filteredItems.length === 0 ? (
         <div className="ds-panel p-8 text-center sm:p-12">
-          <PackageOpen
-            size={26}
-            className="mx-auto text-[var(--ds-gold)]"
-          />
-          <h2 className="mt-4 text-lg">
-            {search ? 'No matching records' : 'No records yet'}
-          </h2>
+          <PackageOpen size={26} className="mx-auto text-[var(--ds-gold)]" />
+          <h2 className="mt-4 text-lg">{search ? 'No matching records' : 'No records yet'}</h2>
           <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-[var(--ds-muted)]">
             {search
-              ? 'Try a different search for the records loaded on this page.'
+              ? 'Try a different search or publication filter.'
               : editable
                 ? `Create the first ${section === 'products' ? 'digital product' : 'mantra'} from this workspace.`
                 : 'Records will appear here when they are available.'}
@@ -1498,6 +1516,11 @@ function CollectionPage({ section }: { section: string }) {
               item={item}
               busy={busy}
               onEdit={setEditor}
+              onRequestDelete={(item, trigger) => {
+                deleteTrigger.current = trigger;
+                setFeedback('');
+                setPendingDelete(item);
+              }}
               onAct={act}
               setFeedback={setFeedback}
             />
@@ -1531,14 +1554,10 @@ function CollectionPage({ section }: { section: string }) {
 
       {section === 'entitlements' ? (
         <div className="mt-5 flex gap-3 rounded-xl border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] p-4 text-[10px] leading-5 text-[var(--ds-muted)]">
-          <ShieldCheck
-            size={16}
-            className="mt-0.5 shrink-0 text-[var(--ds-gold)]"
-          />
+          <ShieldCheck size={16} className="mt-0.5 shrink-0 text-[var(--ds-gold)]" />
           <p>
-            Paid access is created automatically after a verified captured
-            Razorpay payment. Revoking an entitlement removes access without
-            falsifying payment history.
+            Paid access is created automatically after a verified captured Razorpay payment.
+            Revoking an entitlement removes access without falsifying payment history.
           </p>
         </div>
       ) : null}
@@ -1549,16 +1568,11 @@ function CollectionPage({ section }: { section: string }) {
 export function AdminPage() {
   const { section = 'analytics' } = useParams();
   if (section === 'analytics') return <MetricsPage />;
+  if (section === 'location') return <AdminLocationPage />;
   if (
-    ![
-      'content',
-      'products',
-      'users',
-      'orders',
-      'contact',
-      'entitlements',
-      'audit',
-    ].includes(section)
+    !['content', 'products', 'users', 'orders', 'contact', 'entitlements', 'audit'].includes(
+      section,
+    )
   )
     return (
       <div className="ds-panel p-8">

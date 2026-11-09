@@ -8,7 +8,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useInsightsOverview } from '@/features/insights/hooks/useInsightsOverview';
 import { PracticeSyncManager } from '@/features/practice/components/PracticeSyncManager';
 import { NavLink } from '@/lib/navigation';
-import { Bell, BookOpen, Flame, Settings, Sparkles } from 'lucide-react';
+import { Bell, BookOpen, Flame, Settings, ShieldCheck,Sparkles } from 'lucide-react';
 
 export function AppShell({ children }: { children: import('react').ReactNode }) {
   return (
@@ -196,8 +196,8 @@ function SidebarFooter() {
   return (
     <div className="mt-auto px-4 pb-4">
       {user?.role === 'admin' && (
-        <NavLink to="/admin" className="mb-3 block text-sm underline">
-          Administration
+        <NavLink to="/admin" className="mb-3 flex items-center gap-2 rounded-xl border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] px-3 py-3 text-[11px] font-semibold text-[var(--ds-gold)] transition hover:bg-[var(--ds-amber-10)]">
+          <ShieldCheck size={15}/>Admin dashboard
         </NavLink>
       )}
       <div

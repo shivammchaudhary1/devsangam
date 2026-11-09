@@ -2,13 +2,17 @@ import { AdminGuard, AdminRateLimitGuard } from '../../common/guards.ts';
 import { UploadInterceptor } from '../../common/upload.interceptor.ts';
 import {
   listAdmin,
+  restoreMantra,
   reviewContact,
   revokeEntitlement,
   saveContent,
   unpublishContent,
+  uploadContentImage,
   uploadProductPdf,
 } from '../../controllers/admin.controller.ts';
+import { getAdminLocationMetrics } from '../../services/admin-location.service.ts';
 import { getAdminMetrics } from '../../services/admin-metrics.service.ts';
+import { MAX_MANTRA_IMAGE_BYTES } from '../../services/mantra-image.service.ts';
 import { reconcileOrder } from '../../services/payment.service.ts';
 import { MAX_PDF_BYTES } from '../../services/private-asset.service.ts';
 import { AppError } from '../../utils/app-error.ts';
@@ -33,6 +37,7 @@ const pdfUpload = multer({
   limits: { fileSize: MAX_PDF_BYTES, files: 1, fields: 0 },
 }).single('file');
 const sections = ['content', 'products', 'users', 'orders', 'contact', 'entitlements', 'audit'];
+const imageUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: MAX_MANTRA_IMAGE_BYTES, files: 1, fields: 0 } }).single('image');
 function section(req: Request, write = false) {
   const value = String(req.params.section);
   if (!sections.includes(value)) throw new AppError(404, 'NOT_FOUND', 'Section not found.');
@@ -56,6 +61,21 @@ export class AdminController {
   @UseInterceptors(new UploadInterceptor(pdfUpload))
   upload(@Req() req: Request, @Res() res: Response) {
     return uploadProductPdf(req, res);
+  }
+  @Get('locations')
+  async locations(@Res() res: Response) {
+    return res.json({ success: true, data: await getAdminLocationMetrics() });
+  }
+  @Post('content/:id/image')
+  @HttpCode(200)
+  @UseInterceptors(new UploadInterceptor(imageUpload))
+  image(@Req() req: Request, @Res() res: Response) {
+    return uploadContentImage(req, res);
+  }
+  @Post('content/:id/restore')
+  @HttpCode(200)
+  restore(@Req() req: Request, @Res() res: Response) {
+    return restoreMantra(req, res);
   }
   @Post('orders/:id/reconcile')
   @HttpCode(200)

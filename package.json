@@ -37,7 +37,8 @@
     "test:ssr": "node scripts/ssr-smoke.mjs",
     "test:e2e:built": "npm run build -w @devsangam/api && node scripts/v2-e2e.mjs --compiled",
     "test:visual": "node scripts/migration-visual-smoke.mjs after --compare",
-    "test:pwa": "node scripts/pwa-update-smoke.mjs"
+    "test:pwa": "node scripts/pwa-update-smoke.mjs",
+    "test:admin": "npm run build -w @devsangam/api && node scripts/admin-dashboard-smoke.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",

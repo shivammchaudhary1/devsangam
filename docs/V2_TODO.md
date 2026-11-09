@@ -1,5 +1,67 @@
 # DevSangam V2 tracker
 
+## Admin dashboard enhancement — 10 October 2026
+
+- [x] ADM-001 Extend protected admin APIs and review mantra schema
+  - Scope: cross-page search, safe archive/restore, optional media metadata,
+    timezone/location aggregates, activity series and server image compression/upload.
+  - Acceptance criteria: current DB-role guards cover all endpoints; old mantras and
+    practice schema remain valid; images are validated/compressed before Cloudinary.
+  - Files likely affected: API admin module/controller/services, schemas/types, tests.
+  - Tests: API lint/typecheck and temporary Mongo/provider-fixture integration.
+  - Notes: Existing routes/guards/metrics inspected; latest cleanup baseline root
+    lint/typecheck/build, 13 API tests and 16 visual comparisons pass. Existing
+    AdminPage lint and Mongoose warnings recorded. Location uses saved timezones,
+    not IP/device geolocation. Deletion archives records to preserve practice history.
+    PASS: API lint/typecheck and 16 real Mongo/provider-fixture tests, including
+    cross-page search, archive/restore, compression/signature/size/pixel validation,
+    server-role denial, private media redaction and safe aggregated analytics.
+- [x] ADM-002 Build polished responsive admin navigation and mantra management
+  - Scope: accessible drawer, user/admin switch, location visualizations, searchable
+    mantra CRUD, image previews/uploads and missing/broken-image fallbacks.
+  - Acceptance criteria: desktop/mobile and light/dark layouts, loading/empty/error
+    feedback, confirmation before archive; preserve existing commerce/admin tools.
+  - Files likely affected: web admin features, image component, mantra pages.
+  - Tests: lint/typecheck/build, responsive browser CRUD/drawer/fallback checks.
+  - Notes: PASS: root lint/typecheck/build; 38 real browser/Nest/Mongo checks and
+    14 mobile/desktop light/dark screenshots, including editor/confirmation;
+    existing UI 233 and public 274 checks.
+    Drawer traps/restores focus; delete confirmation restores focus; upload failure
+    retries one saved record; normal users denied. Theme button contrast reviewed.
+    Requested admin enhancement is authorized; V1 screens retain layout.
+- [x] ADM-003 Verify full flow and update operating documentation
+  - Scope: real browser/Nest/Mongo CRUD and upload fixtures, authorization regressions,
+    schema compatibility, root checks and manual provider verification instructions.
+  - Acceptance criteria: local checks pass; actual Cloudinary verification remains
+    BLOCKED until checked using the intended provider account, without exposing secrets.
+  - Files likely affected: scripts/tests, README, V2 deployment/tracker/inventory.
+  - Tests: root lint/typecheck/test/build and targeted browser regressions.
+  - Notes: PASS: root lint/typecheck/build, 16 API integration tests, admin browser
+    38, UI 233, public 274, SSR 190, real SW/Dexie offline 21, PWA update 10 and
+    compiled Nest/browser commerce 20 checks. Visual parity: 16 comparisons;
+    geometry/fonts/colors exact, perceptual differences below the existing 0.1%
+    tolerance. Production dependency audit: zero vulnerabilities. git diff --check
+    passes. Existing Mongoose deprecated `new` warnings remain; no unrelated fix.
+    Windows build initially encountered EBUSY because our preview held standalone
+    output; stopping our preview and rerunning build passed. Delete focus and
+    light-theme contrast issues fixed and verified before completion.
+    ADMIN_DASHBOARD.md contains operating/manual provider steps;
+    ADMIN_DASHBOARD_FILES.md lists all 33 changed files. Quality CI includes the
+    isolated admin browser suite; its first hosted run remains unverified.
+    No production data, live provider, commit, push or deployment changes performed.
+
+- [ ] ADM-004 Verify mantra images with the intended Cloudinary provider account
+  - Scope: Staged image delivery, compression/orientation, replacement cleanup,
+    provider failure/retry and non-admin denial using the intended account.
+  - Acceptance criteria: Exact manual checklist in ADMIN_DASHBOARD.md passes;
+    no secrets/provider IDs are exposed, previous image survives failed uploads.
+  - Files likely affected: staging configuration only; no secret files committed.
+  - Tests: Manual staged JPEG/PNG/WebP uploads, invalid/oversized images, retry,
+    replaced-asset cleanup, theme fallbacks, locked media and 403 authorization.
+  - Notes: BLOCKED — live provider configuration/account verification is external.
+    Server compression and provider success/failure are verified with local stream
+    fixtures. No live Cloudinary operation or deployment was performed.
+
 Next.js/NestJS migration authorized on 10 October 2026 is tracked in
 `NEXT_NEST_MIGRATION.md`. Same UI/functionality, native frameworks and SSR/SEO;
 deployment is explicitly deferred. MIG-001 through MIG-005 are complete locally:

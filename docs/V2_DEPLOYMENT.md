@@ -120,11 +120,14 @@ All routes remain under `/api/v1`. Admin/user routes require active sessions.
 | --- | --- |
 | `POST /contact` | Public; 8 KB parser, strict schema, honeypot, 5/hour, MongoDB receipt |
 | `GET /admin/session` | Current DB admin authorization |
-| `GET /admin/metrics` | DB aggregates and bounded recent activity |
-| `GET /admin/:section` | Paged content/products/users/orders/contact/entitlements/audit; limit max 50 |
+| `GET /admin/metrics` | DB aggregates, bounded recent activity and 30-day UTC activity series |
+| `GET /admin/locations` | Aggregated account timezones/regions; no GPS/IP/personal identifiers |
+| `GET /admin/:section` | Search `q` (max 120 characters), pagination (max 50); content `status=all/published/draft/archived` |
 | `POST /admin/content`, `POST /admin/products` | Validated create with audit |
 | `PUT /admin/content/:id`, `PUT /admin/products/:id` | Validated update with audit |
-| `DELETE /admin/content/:id`, `DELETE /admin/products/:id` | Soft unpublish; preserve purchase history |
+| `DELETE /admin/content/:id`, `DELETE /admin/products/:id` | Archive mantra / unpublish product; preserve practice/purchase history |
+| `POST /admin/content/:id/restore` | Restore archived mantra as unpublished draft |
+| `POST /admin/content/:id/image` | Multipart `image`: validate 5 MB/16 MP JPEG/PNG/WebP, compress and upload via Cloudinary |
 | `POST /admin/products/:id/file` | Private PDF upload; publish requires a file |
 | `POST /admin/contact/:id/review` | Audited message review |
 | `POST /admin/entitlements/:id/revoke` | Audited access revocation |
@@ -174,6 +177,7 @@ npm run test:ssr
 npm run test:offline
 npm run test:pwa
 npm run test:e2e:built
+npm run test:admin
 ```
 
 Use a preview built with `NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1`
@@ -209,6 +213,11 @@ for live sales:
 - Approve professional Privacy/Terms review and the business license/refund policy.
   Publish final policy text before enabling real purchases. Replace placeholders
   only with approved images. No refund promise or legal certification is invented.
+- Verify the intended staging Cloudinary account for mantra compression/upload,
+  replacement cleanup, provider failure/retry and authorization. Follow the exact
+  checklist in [ADMIN_DASHBOARD.md](ADMIN_DASHBOARD.md); fixture uploads do not
+  certify live provider configuration. Existing server-only Cloudinary variables
+  are reused; no new client credentials are introduced.
 - On the selected Next SSR staging runtime, verify deep links, exact CORS/origin,
   secure cookies, refresh/logout/reset through real Zoho SMTP, real Cloudinary avatar
   upload/delete, settings and push delivery/reminders. Check the proxy hop count before

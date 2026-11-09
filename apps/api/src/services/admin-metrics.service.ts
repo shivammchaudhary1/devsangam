@@ -20,6 +20,7 @@ export async function getAdminMetrics() {
     recentUsers,
     recentOrders,
     recentContacts,
+    activity,
   ] = await Promise.all([
     UserModel.countDocuments(),
     UserModel.countDocuments({ createdAt: { $gte: since } }),
@@ -36,8 +37,8 @@ export async function getAdminMetrics() {
         },
       },
     ]),
-    MantraModel.countDocuments({ accessType: { $ne: 'paid' } }),
-    MantraModel.countDocuments({ accessType: 'paid' }),
+    MantraModel.countDocuments({ accessType: { $ne: 'paid' }, deletedAt: null }),
+    MantraModel.countDocuments({ accessType: 'paid', deletedAt: null }),
     DigitalProductModel.countDocuments(),
     DigitalProductModel.countDocuments({ published: true }),
     OrderModel.countDocuments(),
@@ -68,6 +69,7 @@ export async function getAdminMetrics() {
       .sort({ createdAt: -1 })
       .limit(5)
       .lean(),
+    getActivitySeries(),
   ]);
   return {
     users,
@@ -92,5 +94,28 @@ export async function getAdminMetrics() {
     recentUsers,
     recentOrders,
     recentContacts,
+    activity,
   };
+}
+
+async function getActivitySeries() {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const since = new Date(today.getTime() - 29 * 86400000);
+  const group = { $group: {
+    _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: 'UTC' } },
+    count: { $sum: 1 },
+  } };
+  const [practice, users] = await Promise.all([
+    PracticeSessionModel.aggregate<{ _id: string; count: number }>([
+      { $match: { createdAt: { $gte: since } } }, group,
+    ]),
+    UserModel.aggregate<{ _id: string; count: number }>([{ $match: { createdAt: { $gte: since } } }, group]),
+  ]);
+  const sessions = new Map(practice.map(row => [row._id, row.count]));
+  const registrations = new Map(users.map(row => [row._id, row.count]));
+  return Array.from({ length: 30 }, (_, index) => {
+    const date = new Date(since.getTime() + index * 86400000).toISOString().slice(0, 10);
+    return { date, sessions: sessions.get(date) ?? 0, registrations: registrations.get(date) ?? 0 };
+  });
 }

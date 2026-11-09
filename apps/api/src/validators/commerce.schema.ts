@@ -42,6 +42,8 @@ export const mantraAdminSchema = z
     categories: z.array(z.string().max(80)).max(20).default([]),
     deity: z.string().max(160).nullable().default(null),
     image: image.default(null),
+    audioUrl: image.default(null),
+    videoUrl: image.default(null),
     defaultTargets: z
       .array(z.number().int().min(1).max(100000))
       .min(1)

@@ -49,6 +49,8 @@ export async function serializeMantra<
           meaning: '',
           description: null,
           benefits: [],
+          audioUrl: null,
+          videoUrl: null,
         }
       : {}),
   };

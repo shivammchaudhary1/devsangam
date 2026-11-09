@@ -404,7 +404,7 @@ devsangam/
 | `/store/:slug` | Public | Product, price and server-derived access state |
 | `/digital-library` | Protected | Owned resources and free reading |
 | `/digital-library/purchases` | Protected | Orders and provider reconciliation |
-| `/admin/*` | Server-authorized admin | Analytics, mantras, products, orders, users, contact, entitlements and audit |
+| `/admin/*` | Server-authorized admin | Analytics, graphical location, mantras, products, orders, users, contact, entitlements and audit |
 | `/privacy` | Public | Privacy draft pending professional legal review |
 | `/terms` | Public | Terms draft pending professional legal review |
 | `/auth/login` | Guest | Login |
@@ -418,6 +418,13 @@ devsangam/
 | `/insights` | Protected | Practice analytics |
 | `/profile` | Protected | Profile |
 | `/settings` | Protected | Settings |
+
+The responsive admin dashboard includes 30-day activity charts, timezone-based
+regional insights and searchable mantra CRUD with image previews, server-side
+WebP compression, optional media links, confirmation and archive/restore. Admins
+can switch back to the user dashboard. See [admin operating instructions](docs/ADMIN_DASHBOARD.md)
+for access, image limits, manual verification and `npm run test:admin`. There is no
+default admin password; promotion uses the existing audited operator command.
 
 A mantra can be pre-selected when entering practice:
 

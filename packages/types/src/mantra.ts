@@ -13,6 +13,8 @@ export type Mantra = {
   categories: string[];
   deity: string | null;
   image: string | null;
+  audioUrl?: string | null;
+  videoUrl?: string | null;
   defaultTargets: number[];
   estimatedSecondsPerChant: number | null;
   isPublished: boolean;
