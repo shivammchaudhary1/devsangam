@@ -49,7 +49,7 @@ export function PublicFooter() {
               <Link className="block hover:text-[var(--ds-text)]" to={APP_ROUTES.auth.login}>Login</Link>
               <Link className="block hover:text-[var(--ds-text)]" to={APP_ROUTES.auth.register}>Create account</Link>
               <Link className="block hover:text-[var(--ds-text)]" to="/digital-library">My purchases</Link>
-              <Link className="block hover:text-[var(--ds-text)]" to="/">Open DevSangam</Link>
+              <Link className="block hover:text-[var(--ds-text)]" to="/dashboard">Open DevSangam</Link>
             </div>
           </div>
 

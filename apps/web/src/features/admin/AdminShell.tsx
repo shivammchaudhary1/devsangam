@@ -1,6 +1,7 @@
 'use client';
 
 import logoSymbol from '@/assets/Images/common/logoSymbol.webp';
+import { ProfileMenu } from '@/components/layout/ProfileMenu';
 import { Link, NavLink, useLocation } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +11,6 @@ import {
   Boxes,
   Globe2,
   History,
-  Home,
   Menu,
   MessageSquare,
   ShieldCheck,
@@ -134,13 +134,6 @@ function SidebarFooter() {
           </p>
         </div>
       </div>
-      <Link
-        to="/"
-        className="flex items-center gap-2 rounded-xl border border-[var(--ds-border-soft)] px-3 py-2.5 text-[11px] text-[var(--ds-muted)] transition hover:bg-[var(--ds-white-03)] hover:text-[var(--ds-text)]"
-      >
-        <Home size={15} />
-        User dashboard
-      </Link>
     </div>
   );
 }
@@ -248,13 +241,7 @@ export function AdminShell({ children }: { children: import('react').ReactNode }
                   <span className="hidden rounded-full border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[var(--ds-gold)] sm:inline-flex">
                     Secure console
                   </span>
-                  <Link
-                    to="/"
-                    className="flex size-10 items-center justify-center rounded-xl border border-[var(--ds-border-soft)] text-[var(--ds-muted)] transition hover:text-[var(--ds-text)]"
-                    aria-label="Back to app"
-                  >
-                    <Home size={17} />
-                  </Link>
+                  <ProfileMenu />
                 </div>
               </div>
             </header>

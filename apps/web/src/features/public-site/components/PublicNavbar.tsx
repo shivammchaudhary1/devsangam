@@ -3,11 +3,12 @@
 import { PUBLIC_NAVIGATION } from '../constants/public-routes';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import logoSymbol from '@/assets/Images/common/logoSymbol.webp';
+import { ProfileMenu } from '@/components/layout/ProfileMenu';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTheme } from '@/features/theme/hooks/useTheme';
 import { Link, NavLink, useLocation } from '@/lib/navigation';
-import { Menu, Sparkles, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 function NavigationLinks({ onNavigate }: { onNavigate?: () => void }) {
@@ -90,13 +91,11 @@ export function PublicNavbar() {
           {isLoading ? (
             <span className="px-3 text-[10px] text-[var(--ds-muted)]">Checking session…</span>
           ) : isAuthenticated ? (
-            <Link to="/" className={`${buttonVariants()} min-h-10 rounded-xl px-4 text-[11px]`}>
-              Open App
-            </Link>
+            <ProfileMenu />
           ) : (
             <>
               <Link to={APP_ROUTES.auth.login} className={`${buttonVariants({ variant: 'outline' })} min-h-10 rounded-xl px-4 text-[11px]`}>
-                Login
+                Sign In
               </Link>
               <Link to={APP_ROUTES.auth.register} className={`${buttonVariants()} min-h-10 rounded-xl px-4 text-[11px]`}>
                 Get Started
@@ -105,16 +104,28 @@ export function PublicNavbar() {
           )}
         </div>
 
-        <button
-          type="button"
-          aria-label={open ? 'Close navigation' : 'Open navigation'}
-          aria-expanded={open}
-          aria-controls="public-mobile-navigation"
-          onClick={() => setOpenAt(open ? null : location.key)}
-          className="flex size-10 items-center justify-center rounded-xl border border-[var(--ds-border-soft)] text-[var(--ds-text)] lg:hidden"
-        >
-          {open ? <X size={19} /> : <Menu size={19} />}
-        </button>
+        <div className="flex shrink-0 items-center gap-2 lg:hidden">
+          {!isLoading && (isAuthenticated ? (
+            <ProfileMenu />
+          ) : (
+            <Link
+              to={APP_ROUTES.auth.login}
+              className={`${buttonVariants({ variant: 'outline' })} min-h-10 rounded-xl px-3 text-[11px]`}
+            >
+              Sign In
+            </Link>
+          ))}
+          <button
+            type="button"
+            aria-label={open ? 'Close navigation' : 'Open navigation'}
+            aria-expanded={open}
+            aria-controls="public-mobile-navigation"
+            onClick={() => setOpenAt(open ? null : location.key)}
+            className="flex size-10 items-center justify-center rounded-xl border border-[var(--ds-border-soft)] text-[var(--ds-text)]"
+          >
+            {open ? <X size={19} /> : <Menu size={19} />}
+          </button>
+        </div>
       </div>
 
       {open ? (
@@ -138,22 +149,15 @@ export function PublicNavbar() {
                 <option value="system">System</option>
               </select>
             </label>
-            {!isLoading ? (
-              isAuthenticated ? (
-                <Link to="/" className={`${buttonVariants()} min-h-11 rounded-xl`}>
-                  <Sparkles size={14} />
-                  Open App
+            {!isLoading && !isAuthenticated ? (
+              <div className="grid grid-cols-2 gap-2">
+                <Link to={APP_ROUTES.auth.login} className={`${buttonVariants({ variant: 'outline' })} min-h-11 rounded-xl`}>
+                  Sign In
                 </Link>
-              ) : (
-                <div className="grid grid-cols-2 gap-2">
-                  <Link to={APP_ROUTES.auth.login} className={`${buttonVariants({ variant: 'outline' })} min-h-11 rounded-xl`}>
-                    Login
-                  </Link>
-                  <Link to={APP_ROUTES.auth.register} className={`${buttonVariants()} min-h-11 rounded-xl`}>
-                    Get Started
-                  </Link>
-                </div>
-              )
+                <Link to={APP_ROUTES.auth.register} className={`${buttonVariants()} min-h-11 rounded-xl`}>
+                  Get Started
+                </Link>
+              </div>
             ) : null}
           </div>
         </div>

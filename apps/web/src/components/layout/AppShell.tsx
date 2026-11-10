@@ -2,13 +2,13 @@
 
 import { LAYOUT_ASSETS } from './constants/layout-assets';
 import { APP_NAVIGATION } from './constants/navigation.constants';
+import { ProfileMenu } from './ProfileMenu';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
-import { LogoutButton } from '@/features/auth/components/LogoutButton';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useInsightsOverview } from '@/features/insights/hooks/useInsightsOverview';
 import { PracticeSyncManager } from '@/features/practice/components/PracticeSyncManager';
 import { NavLink } from '@/lib/navigation';
-import { Bell, BookOpen, Flame, Settings, ShieldCheck,Sparkles } from 'lucide-react';
+import { BookOpen, Flame, Settings, Sparkles } from 'lucide-react';
 
 export function AppShell({ children }: { children: import('react').ReactNode }) {
   return (
@@ -24,6 +24,10 @@ export function AppShell({ children }: { children: import('react').ReactNode }) 
 
         <div className={'flex min-w-0 flex-1 flex-col'}>
           <MobileHeader />
+
+          <div className="hidden h-[58px] shrink-0 items-center justify-end border-b border-[var(--ds-border-soft)] bg-[var(--ds-sidebar)] px-4 md:flex md:px-6 lg:px-8">
+            <ProfileMenu />
+          </div>
 
           <main
             className={
@@ -195,11 +199,6 @@ function SidebarFooter() {
 
   return (
     <div className="mt-auto px-4 pb-4">
-      {user?.role === 'admin' && (
-        <NavLink to="/admin" className="mb-3 flex items-center gap-2 rounded-xl border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] px-3 py-3 text-[11px] font-semibold text-[var(--ds-gold)] transition hover:bg-[var(--ds-amber-10)]">
-          <ShieldCheck size={15}/>Admin dashboard
-        </NavLink>
-      )}
       <div
         className={
           'mb-3 flex h-11 items-center justify-between ' +
@@ -224,9 +223,6 @@ function SidebarFooter() {
         </span>
       </div>
 
-      <div className={'border-t border-[var(--ds-border-soft)] pt-2'}>
-        <LogoutButton />
-      </div>
     </div>
   );
 }
@@ -292,15 +288,7 @@ function MobileHeader() {
           </span>
         </div>
 
-        <div
-          className={
-            'flex size-8 items-center justify-center ' +
-            'rounded-full border border-[var(--ds-border-soft)] ' +
-            'bg-[var(--ds-white-03)]'
-          }
-        >
-          <Bell size={14} className="text-[var(--ds-muted)]" />
-        </div>
+        <ProfileMenu />
       </div>
     </header>
   );

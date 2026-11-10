@@ -9,7 +9,7 @@ export function PublicCTA() {
   const { isAuthenticated } = useAuth();
   return (
     <Link
-      to={isAuthenticated ? '/' : APP_ROUTES.auth.register}
+      to={isAuthenticated ? APP_ROUTES.dashboard : APP_ROUTES.auth.register}
       className={buttonVariants({ size: 'lg' })}
     >
       {isAuthenticated ? 'Open App' : 'Begin your practice'}
