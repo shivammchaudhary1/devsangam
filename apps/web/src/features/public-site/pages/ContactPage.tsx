@@ -1,6 +1,6 @@
 'use client';
 
-import { PublicPageShell } from '../components/PublicPageShell';
+import { PublicBottomCTA, PublicPageShell } from '../components/PublicPageShell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { apiRequest } from '@/services/api/client';
@@ -43,9 +43,17 @@ export function ContactPage() {
 
   return (
     <PublicPageShell
-      title="Contact"
-      intro="Questions about DevSangam or feedback on your practice experience? We would like to hear from you."
+      title="Contact DevSangam"
+      intro="Need help with your account, mantra practice or digital product access? Send us a message and let us know how we can help."
     >
+      <section aria-label="Contact topics" className="mb-9 grid gap-3 sm:grid-cols-3">
+        {[["Practice guidance", "Questions about mantras, counting and saved practice."], ["Product access", "Help with published PDFs, orders or downloads."], ["General questions", "Partnerships, feedback and your experience."]].map(([heading, copy]) => (
+          <div key={heading} className="rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-02)] p-5">
+            <p className="font-serif text-[17px] text-[var(--ds-cream)]">{heading}</p>
+            <p className="mt-2 text-[11px] leading-6 text-[var(--ds-muted)]">{copy}</p>
+          </div>
+        ))}
+      </section>
       <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
         <aside className="leading-8 text-muted-foreground">
           <h2 className="text-xl text-foreground">Get in touch</h2>
@@ -224,6 +232,7 @@ export function ContactPage() {
           )}
         </form>
       </div>
+      <PublicBottomCTA title="Explore devotional resources" description="Discover available mantra PDFs and learn about the experiences being prepared for the community." href="/store" label="View Products" />
     </PublicPageShell>
   );
 }

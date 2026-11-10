@@ -2,6 +2,7 @@
 
 import { priceLabel } from './commerce.utils';
 import { buttonVariants } from '@/components/ui/button-variants';
+import { ProductCategories } from '@/features/public-site/components/ProductCategories';
 import { PublicPageShell } from '@/features/public-site/components/PublicPageShell';
 import { Link } from '@/lib/navigation';
 import { apiRequest } from '@/services/api/client';
@@ -50,14 +51,15 @@ export function StorePage({ initialData }: { initialData?: StoreResult }) {
 
   return (
     <PublicPageShell
-      title="Digital Library"
-      intro="Explore free and premium devotional reading resources. Purchased items are tied to your account after verified access."
+      title="Devotional Products"
+      intro="Explore mantra PDFs, personal devotional resources and future e-pooja experiences. Published digital files are tied to your account after verified payment."
     >
+      <ProductCategories />
       <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
         <div className="flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-2 rounded-full border border-[var(--ds-border-soft)] px-3 py-2 text-[9px] text-[var(--ds-muted)]">
             <FileText size={12} className="text-[var(--ds-gold)]" />
-            PDF resources
+            Mantra PDF resources
           </span>
           <span className="inline-flex items-center gap-2 rounded-full border border-[var(--ds-border-soft)] px-3 py-2 text-[9px] text-[var(--ds-muted)]">
             <Lock size={12} className="text-[var(--ds-gold)]" />
@@ -72,6 +74,12 @@ export function StorePage({ initialData }: { initialData?: StoreResult }) {
         >
           My digital library
         </Link>
+      </div>
+
+      <div id="digital-pdfs" className="mb-7 scroll-mt-24">
+        <p className="ds-eyebrow">Available digital downloads</p>
+        <h2 className="mt-3 font-serif text-2xl text-[var(--ds-cream)] sm:text-3xl">Mantra PDFs & devotional guides</h2>
+        <p className="mt-3 max-w-2xl text-[12px] leading-7 text-[var(--ds-muted)]">Browse resources published by DevSangam. Paid PDFs unlock only after verified payment; see your personal library for owned downloads.</p>
       </div>
 
       {result.isPending ? (
@@ -91,7 +99,7 @@ export function StorePage({ initialData }: { initialData?: StoreResult }) {
           {!result.data.data.products.length ? (
             <div className="ds-panel p-9 text-center sm:p-12">
               <BookOpen size={28} className="mx-auto text-[var(--ds-gold)]" />
-              <h2 className="mt-4 text-xl">The library is being prepared</h2>
+              <h2 className="mt-4 text-xl">New digital resources are on the way</h2>
               <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-[var(--ds-muted)]">
                 No resources are published yet. When the first PDF is ready, it
                 will appear here automatically.

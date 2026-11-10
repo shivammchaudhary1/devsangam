@@ -2,6 +2,7 @@
 'use client';
 
 import { AstroInsights } from '../components/AstroInsights';
+import heroBackdrop from '@/assets/Images/background-image.webp';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { Link } from '@/lib/navigation';
@@ -27,6 +28,7 @@ import {
   Sun,
   Trash2,
 } from 'lucide-react';
+import Image from 'next/image';
 import { type FormEvent, useState } from 'react';
 
 type Place = { name: string; latitude: number; longitude: number; timezone: string };
@@ -186,6 +188,10 @@ export function AstroPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-5 pb-20 pt-8 sm:px-8 sm:pt-12">
       <header className="relative overflow-hidden rounded-[24px] border border-[var(--ds-border-gold)] bg-[var(--ds-gradient-panel)] px-6 py-10 shadow-[var(--ds-shadow-card)] sm:px-10 sm:py-14">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <Image src={heroBackdrop} alt="" fill sizes="(max-width: 768px) 100vw, 1200px" className="object-cover object-center opacity-[0.16]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--ds-sidebar)] via-[var(--ds-sidebar)]/90 to-[var(--ds-sidebar)]/30" />
+        </div>
         <div aria-hidden="true" className="pointer-events-none absolute -right-14 -top-24 size-72 rounded-full bg-[var(--ds-amber-08)] blur-[70px]" />
         <div className="relative z-10 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
