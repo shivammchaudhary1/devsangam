@@ -16,6 +16,10 @@ const SECTIONS = [
     text: 'Your mantra favorites, practice sessions, counts, duration, completion states, history and streak-related information support dashboard and insights features. These records are associated with your account.',
   },
   {
+    title: 'Astrology readings and birth data',
+    text: 'If you choose to create a Vedic chart, DevSangam stores the name, optional gender choice, date and time of birth, birthplace coordinates, calculated planetary placements and consent timestamp with your account. Your name and gender are not sent to FreeAstrologyAPI; the provider receives place search terms and the birth date, time, coordinates and timezone offset needed for calculation. Your readings are private to your account and can be deleted individually on the Astro page.',
+  },
+  {
     title: 'Device notifications',
     text: 'When you choose to enable push notifications, browser subscription information is stored to deliver notifications. Reminder preferences, local time and timezone support daily reminders. You can disable notifications through Settings and browser controls.',
   },

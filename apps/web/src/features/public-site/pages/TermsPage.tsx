@@ -8,6 +8,10 @@ const SECTIONS = [
     text: 'DevSangam provides tools for personal devotional practice and reflection. It does not promise health, financial or spiritual outcomes. These product terms are a draft for review, not finalized legal text.',
   },
   {
+    title: 'Astrology calculations and interpretation',
+    text: 'Astrology is provided as a cultural and interpretive tool. The accuracy of birth-chart calculations depends on correct birth details, historical time zones and third-party provider availability. These calculations are not scientifically validated predictions or a substitute for medical, financial, legal or other professional advice.',
+  },
+  {
     title: 'Account responsibility',
     text: 'Use accurate account information and keep your sign-in credentials secure. Do not share passwords or use another person’s account without permission. Contact us if you suspect unauthorized access.',
   },

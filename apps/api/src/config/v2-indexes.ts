@@ -1,3 +1,5 @@
+import { AstroExtraUsageModel } from '../models/astro-extra-usage.model.ts';
+import { AstroReadingModel } from '../models/astro-reading.model.ts';
 import {
   AdminAuditModel,
   DigitalProductModel,
@@ -16,5 +18,7 @@ export async function ensureV2Indexes() {
     OrderModel.createIndexes(),
     PaymentEventModel.createIndexes(),
     ContactMessageModel.createIndexes(),
+    AstroReadingModel.createIndexes(),
+    AstroExtraUsageModel.createIndexes(),
   ]);
 }

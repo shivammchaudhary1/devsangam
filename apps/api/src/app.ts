@@ -51,6 +51,27 @@ export async function createApiApplication() {
     }),
     express.json({ limit: '8kb' }),
   );
+  // Limit birth-data queries to protect the provider free tier.
+  const astroLimiterOptions = {
+    windowMs: 60 * 60 * 1000,
+    standardHeaders: 'draft-8' as const,
+    legacyHeaders: false,
+  };
+  application.use(
+    API_BASE_PATH + '/astro/places',
+    rateLimit({ ...astroLimiterOptions, limit: 40 }),
+  );
+  application.use(
+    API_BASE_PATH + '/astro/chart',
+    rateLimit({ ...astroLimiterOptions, limit: 12 }),
+  );
+  application.use(
+    API_BASE_PATH + '/astro',
+    (_req: express.Request, res: express.Response, next: express.NextFunction) => {
+      res.set('Cache-Control', 'private, no-store');
+      next();
+    },
+  );
   application.use(
     API_BASE_PATH + '/payments/webhook',
     express.raw({ type: 'application/json', limit: '64kb' }),
