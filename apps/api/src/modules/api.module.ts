@@ -1,6 +1,7 @@
 import { AdminGuard, AdminRateLimitGuard, OptionalSessionGuard, PaymentRateLimitGuard, SessionGuard } from '../common/guards.ts';
 import { ApiLifecycle } from '../common/lifecycle.ts';
 import { AdminModule } from './admin/admin.module.ts';
+import { AstroModule } from './astro/astro.module.ts';
 import { AuthModule } from './auth/auth.module.ts';
 import { ContactModule } from './contact/contact.module.ts';
 import { HealthModule } from './health/health.module.ts';
@@ -23,6 +24,7 @@ class AuthorizationModule {}
   providers: [ApiLifecycle],
   imports: [
     AuthorizationModule,
+    AstroModule,
     AuthModule,
     UsersModule,
     PracticeModule,
