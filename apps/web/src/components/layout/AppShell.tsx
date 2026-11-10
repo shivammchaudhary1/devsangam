@@ -87,7 +87,7 @@ function DesktopSidebar() {
 function SidebarBrand() {
   return (
     <div className="px-5 pb-6 pt-6">
-      <div className="flex items-center gap-3">
+      <NavLink to="/" aria-label="DevSangam Home" className="flex items-center gap-3">
         <img
           src={LAYOUT_ASSETS.logoSymbol}
           alt="DevSangam"
@@ -109,7 +109,7 @@ function SidebarBrand() {
             Chant. Connect. Transform.
           </p>
         </div>
-      </div>
+      </NavLink>
 
       <div className="ds-gold-line mt-5 opacity-55" />
     </div>
@@ -236,7 +236,7 @@ function MobileHeader() {
         'bg-[var(--ds-sidebar)] px-4 backdrop-blur-xl md:hidden'
       }
     >
-      <div className={'flex min-w-0 items-center gap-2.5'}>
+      <NavLink to="/" aria-label="DevSangam Home" className={'flex min-w-0 items-center gap-2.5'}>
         <img
           src={LAYOUT_ASSETS.logoSymbol}
           alt=""
@@ -264,7 +264,7 @@ function MobileHeader() {
             Chant. Connect. Transform.
           </p>
         </div>
-      </div>
+      </NavLink>
 
       <div className="flex items-center gap-2">
         <NavLink

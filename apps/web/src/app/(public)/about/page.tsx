@@ -1,11 +1,17 @@
 import { AboutPage } from '@/features/public-site/pages/AboutPage';
+import { publicPageJsonLd } from '@/lib/public-structured-data';
 import { pageMetadata } from '@/lib/seo';
-export const metadata = pageMetadata(
-  'About DevSangam',
-  'Learn about DevSangam, its devotional purpose, practice tools and privacy-conscious approach.',
-  '/about',
-  false,
-);
+
+const description = 'Discover DevSangam: a thoughtful space for digital Japamala, mantra Sadhana, offline practice, personal insights and devotional resources.';
+export const metadata = pageMetadata('Our Purpose & Mantra Practice', description, '/about');
+
 export default function Page() {
-  return <AboutPage />;
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: publicPageJsonLd({ pathname: '/about', title: 'About DevSangam', description, type: 'AboutPage' }),
+      }} />
+      <AboutPage />
+    </>
+  );
 }

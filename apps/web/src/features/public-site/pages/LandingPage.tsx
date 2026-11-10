@@ -1,7 +1,9 @@
 'use client';
 
+import { ProductCategories } from '../components/ProductCategories';
 import { PublicCTA } from '../components/PublicCTA';
 import { PUBLIC_ROUTES } from '../constants/public-routes';
+import heroBackdrop from '@/assets/Images/background-image.webp';
 import { buttonVariants } from '@/components/ui/button-variants';
 import { Link } from '@/lib/navigation';
 import {
@@ -17,6 +19,7 @@ import {
   Sparkles,
   WifiOff,
 } from 'lucide-react';
+import Image from 'next/image';
 
 const FEATURES = [
   {
@@ -94,6 +97,10 @@ export function LandingPage() {
   return (
     <div>
       <section className="relative overflow-hidden border-b border-[var(--ds-border-soft)]">
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <Image src={heroBackdrop} alt="" fill priority sizes="100vw" className="object-cover object-center opacity-[0.17]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--ds-obsidian)] via-[var(--ds-obsidian)]/90 to-[var(--ds-obsidian)]/60" />
+        </div>
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-0 size-[520px] -translate-x-1/2 rounded-full bg-[var(--ds-amber-08)] blur-[110px]"
@@ -298,10 +305,10 @@ export function LandingPage() {
             <div>
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--ds-gold)]">
                 <FileText size={12} />
-                Digital devotional library
+                Devotional products
               </div>
               <h2 className="text-3xl sm:text-4xl">
-                Free and premium reading, attached to your account
+                Thoughtfully chosen resources for your practice
               </h2>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--ds-muted)]">
                 Browse published PDF resources. Free items remain accessible to
@@ -315,7 +322,7 @@ export function LandingPage() {
                     size: 'lg',
                   })} min-h-12 rounded-xl`}
                 >
-                  Explore digital library
+                  Explore products
                 </Link>
                 <Link
                   to="/digital-library"
@@ -352,6 +359,8 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      <ProductCategories onLanding />
 
       <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 lg:pb-24">
         <div className="rounded-[22px] border border-[var(--ds-border-gold)] bg-[var(--ds-amber-05)] px-6 py-10 text-center sm:px-10">

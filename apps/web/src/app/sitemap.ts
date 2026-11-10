@@ -11,6 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/privacy',
     '/terms',
     '/store',
+    '/astro',
   ].map((p) => ({ url: SITE_URL + p }));
   // Only public published metadata; bounded pagination and timeout, no paid file keys/text.
   for (let page = 1; page <= 20; page++) {
