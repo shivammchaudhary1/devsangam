@@ -44,7 +44,7 @@ export function LoginPage() {
 
       auth.setUser(response.data.user);
 
-      navigate('/', {
+      navigate('/dashboard', {
         replace: true,
       });
     } catch (error) {

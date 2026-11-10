@@ -1,6 +1,8 @@
 export const APP_ROUTES = {
   home: '/',
 
+  dashboard: '/dashboard',
+
   practice: '/practice',
 
   practiceSession: '/practice/:mantraSlug/session/:sessionId',

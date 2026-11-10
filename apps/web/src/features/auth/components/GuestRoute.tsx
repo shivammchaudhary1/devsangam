@@ -12,7 +12,7 @@ export function GuestRoute({ children }: { children: import('react').ReactNode }
   }
 
   if (auth.isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;

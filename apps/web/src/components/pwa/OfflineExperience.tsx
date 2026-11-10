@@ -83,8 +83,10 @@ export function OfflineExperience() {
   let area: 'public' | 'app' | 'admin' | 'guest' | 'reset' = 'app';
   const segments = pathname.split('/').filter(Boolean).map(decodeURIComponent);
   if (pathname === '/') {
-    area = auth.isAuthenticated ? 'app' : 'public';
-    content = auth.isAuthenticated ? <pages.dashboard /> : <pages.landing />;
+    area = 'public';
+    content = <pages.landing />;
+  } else if (segments[0] === 'dashboard' && segments.length === 1) {
+    content = <pages.dashboard />;
   } else if (segments[0] === 'practice' && segments.length === 4 && segments[2] === 'session') {
     params.mantraSlug = segments[1];
     params.sessionId = segments[3];
