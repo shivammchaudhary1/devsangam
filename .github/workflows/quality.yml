@@ -1,0 +1,45 @@
+name: V1 and V2 quality checks
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm exec playwright -- install --with-deps chromium
+      - name: Next SSR, offline/PWA, compiled Nest and browser regressions
+        shell: bash
+        env:
+          HOSTNAME: 0.0.0.0
+        run: |
+          npm run preview -w @devsangam/web >"$RUNNER_TEMP/devsangam-next.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://localhost:4173/about >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://localhost:4173/about >/dev/null
+          npm run test:ssr
+          npm run test:offline
+          npm run test:pwa
+          npm run test:e2e:built
+          npm run test:admin
+          npm run test:ui
+          npm run test:public

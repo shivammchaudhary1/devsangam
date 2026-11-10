@@ -1,3 +1,5 @@
+'use client';
+
 import { Loader2, User } from 'lucide-react';
 
 type ProfileAvatarProps = {

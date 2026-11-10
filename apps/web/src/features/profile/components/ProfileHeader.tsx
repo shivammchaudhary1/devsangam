@@ -1,6 +1,8 @@
+'use client';
+
 import { APP_ROUTES } from '@/app/constants/routes.constants';
+import { Link } from '@/lib/navigation';
 import { Settings, Sparkles } from 'lucide-react';
-import { Link } from 'react-router';
 
 export function ProfileHeader() {
   return (

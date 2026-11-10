@@ -1,3 +1,5 @@
+'use client';
+
 import { AccountSessionSettings } from '../components/AccountSessionSettings';
 import { AppearanceSettings } from '../components/AppearanceSettings';
 import { NotificationSettings } from '../components/NotificationSettings';

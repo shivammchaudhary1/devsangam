@@ -1,3 +1,5 @@
+'use client';
+
 import { formatDashboardDate } from '../utils/dashboard-formatters';
 import { CalendarDays, Flame, Sparkles } from 'lucide-react';
 

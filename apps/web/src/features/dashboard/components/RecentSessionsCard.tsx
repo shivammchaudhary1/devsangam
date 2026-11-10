@@ -1,3 +1,5 @@
+'use client';
+
 import {
   formatDurationCompact,
   formatMantraSlug,
@@ -8,9 +10,9 @@ import { DashboardMessage } from './DashboardMessage';
 import { APP_ROUTES } from '@/app/constants/routes.constants';
 import { Skeleton } from '@/components/loading/Skeleton';
 import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
+import { Link } from '@/lib/navigation';
 import type { Mantra, PracticeSession } from '@devsangam/types';
 import { Flame, Sparkles } from 'lucide-react';
-import { Link } from 'react-router';
 
 type RecentSessionsCardProps = {
   sessions: PracticeSession[];

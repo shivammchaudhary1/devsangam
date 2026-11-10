@@ -1,3 +1,5 @@
+'use client';
+
 import { Music2, Volume2, VolumeX } from 'lucide-react';
 import { memo, type ReactNode } from 'react';
 

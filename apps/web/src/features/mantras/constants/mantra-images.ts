@@ -4,8 +4,8 @@ import mahamrityunjayaImage from '@/assets/Images/mantras/shiva-mahamrityunjaya.
 import omNamahShivayaImage from '@/assets/Images/mantras/shiva-om-namah-shivaya.webp';
 
 export const MANTRA_IMAGES: Record<string, string> = {
-  'gayatri-mantra': gayatriImage,
-  'hare-krishna-mahamantra': hareKrishnaImage,
-  'mahamrityunjaya-mantra': mahamrityunjayaImage,
-  'om-namah-shivaya': omNamahShivayaImage,
+  'gayatri-mantra': gayatriImage.src,
+  'hare-krishna-mahamantra': hareKrishnaImage.src,
+  'mahamrityunjaya-mantra': mahamrityunjayaImage.src,
+  'om-namah-shivaya': omNamahShivayaImage.src,
 };

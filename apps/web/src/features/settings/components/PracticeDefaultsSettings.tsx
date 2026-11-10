@@ -1,3 +1,5 @@
+'use client';
+
 import { formatSettingNumber } from '../utils/settings-formatters';
 import { SettingsCard, SettingsRow } from './SettingsCard';
 import { Globe2, Loader2, Target } from 'lucide-react';

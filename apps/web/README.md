@@ -1,75 +1,41 @@
-# React + TypeScript + Vite
+# DevSangam Next frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Native Next.js App Router with React 19, existing feature components, Tailwind/Radix
+styles, React Query, Dexie and Workbox. Public pages and published store metadata
+are server-rendered. Private screens bootstrap through the original cookie API;
+no account/entitlement data enters shared HTML caches.
 
-Currently, two official plugins are available:
+From the repository root:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Install: `npm ci`
+- Develop on port 5173: `npm run dev:web`
+- Build Next standalone + PWA: `npm run build -w @devsangam/web`
+- Start on port 5173 (or PORT): `npm run start -w @devsangam/web`
+- QA preview on port 4173: `npm run preview -w @devsangam/web`
 
-## React Compiler
+Use `.env.example` for the public API/canonical URL and optional server API base.
+`start`/`preview` load the local ignored `.env`; hosting must supply runtime server
+variables. NEXT_PUBLIC variables are embedded at build time. The build copies
+public/static into `.next/standalone/apps/web`; generated worker/build artifacts
+stay ignored. Local .env files are stripped from the standalone output; source
+files remain untouched. Auth routes and query-bearing HTML use network-only
+fetches with a generic offline fallback, preventing persistent reset-token caches.
+No static HTML export is used.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+[Migration and checks](../../docs/NEXT_NEST_MIGRATION.md).
+Deployment selection and live provider/device verification are deferred.
 
-## Expanding the ESLint configuration
+## Development reload loop and old Vite cache
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Development explicitly uses Webpack. On this Windows setup, Turbopack repeatedly
+reported `HMR hash mismatch` and reloaded even a fresh browser context. Webpack
+was verified with stable home/login navigation and no page errors or reloads.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+An existing browser profile may still have the Vite service worker from the old
+app. Requests for `/src/main.tsx`, `/@react-refresh` or
+`/@vite-plugin-pwa/pwa-entry-point-loaded` indicate stale Vite HTML. For
+`http://localhost:5173` only, open DevTools > Application > Service Workers and
+unregister the old worker. Close all tabs for that local origin, then reopen it.
+Do not use Clear site data: IndexedDB contains saved/unsynced practice sessions.
+The unregistered worker's caches no longer control navigation; deleting practice
+data or changing production workers is unnecessary.

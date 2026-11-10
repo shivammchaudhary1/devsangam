@@ -1,3 +1,5 @@
+'use client';
+
 import { FullScreenLoader } from '@/components/loading/FullScreenLoader';
 
 export function RouteLoadingFallback() {

@@ -1,6 +1,8 @@
 export const APP_ROUTES = {
   home: '/',
 
+  dashboard: '/dashboard',
+
   practice: '/practice',
 
   practiceSession: '/practice/:mantraSlug/session/:sessionId',
@@ -43,7 +45,5 @@ export function getPracticeRoute(mantraSlug?: string) {
 }
 
 export function getPracticeSessionRoute(mantraSlug: string, sessionId: string) {
-  return `/practice/${encodeURIComponent(
-    mantraSlug
-  )}/session/${encodeURIComponent(sessionId)}`;
+  return `/practice/${encodeURIComponent(mantraSlug)}/session/${encodeURIComponent(sessionId)}`;
 }

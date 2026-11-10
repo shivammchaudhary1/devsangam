@@ -1,8 +1,11 @@
+'use client';
+
 import { MANTRA_IMAGES } from '../constants/mantra-images';
 import { FavoriteButton } from './FavoriteButton';
 import { getMantraDetailRoute } from '@/app/constants/routes.constants';
+import { MantraImage } from '@/components/shared/MantraImage';
+import { Link } from '@/lib/navigation';
 import type { Mantra } from '@devsangam/types';
-import { Link } from 'react-router';
 
 type MantraCardProps = {
   mantra: Mantra;
@@ -20,9 +23,9 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
 
       <div className="grid min-h-[250px] grid-cols-[175px_1fr]">
         <div className="relative min-h-[250px] overflow-hidden bg-[var(--ds-white-03)]">
-          {image ? (
-            <img
+            <MantraImage
               src={image}
+              fallbackSrc={MANTRA_IMAGES[mantra.slug]}
               alt={mantra.title}
               width={175}
               height={250}
@@ -30,9 +33,6 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               decoding="async"
               className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 group-hover:scale-[1.03]"
             />
-          ) : (
-            <div className="absolute inset-0 bg-[var(--ds-white-03)]" />
-          )}
 
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0d1726]/20" />
         </div>
@@ -50,7 +50,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
             </h2>
 
             <p className="mt-2 line-clamp-2 font-serif text-sm leading-6 text-amber-50">
-              {mantra.sanskrit}
+              {mantra.locked ? 'Premium · Locked' : mantra.sanskrit}
             </p>
 
             <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-400">
@@ -79,7 +79,7 @@ export function MantraCard({ mantra, isFavorite }: MantraCardProps) {
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 transition group-hover:text-amber-200"
               aria-label={`View ${mantra.title}`}
             >
-              View mantra
+              {mantra.locked ? 'Unlock mantra' : 'View mantra'}
               <span aria-hidden="true">→</span>
             </Link>
           </div>

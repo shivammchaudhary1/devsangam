@@ -1,3 +1,5 @@
+'use client';
+
 import { ChevronDown, Globe2 } from 'lucide-react';
 import type { ReactNode } from 'react';
 

@@ -1,3 +1,5 @@
+'use client';
+
 import { Loader2, Pause, Play, RotateCcw, Waves } from 'lucide-react';
 import { memo, type ReactNode } from 'react';
 

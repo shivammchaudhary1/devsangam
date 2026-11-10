@@ -1,5 +1,6 @@
 import { AppError } from '../utils/app-error.ts';
 import type { ErrorRequestHandler } from 'express';
+import { MulterError } from 'multer';
 
 function isDuplicateKeyError(error: unknown): error is {
   code: number;
@@ -24,6 +25,30 @@ export const errorHandler: ErrorRequestHandler = (
   _next
 ) => {
   void _next;
+  if (error instanceof MulterError) {
+    response.status(error.code === 'LIMIT_FILE_SIZE' ? 413 : 400).json({
+      success: false,
+      error: {
+        code: 'INVALID_UPLOAD',
+        message: 'Upload is invalid or exceeds the allowed size.',
+      },
+    });
+    return;
+  }
+
+  if (
+    error?.type === 'entity.too.large' ||
+    error?.type === 'entity.parse.failed'
+  ) {
+    response.status(error.type === 'entity.too.large' ? 413 : 400).json({
+      success: false,
+      error: {
+        code: 'INVALID_BODY',
+        message: 'Request body is invalid or too large.',
+      },
+    });
+    return;
+  }
 
   if (error instanceof AppError) {
     response.status(error.statusCode).json({
@@ -55,7 +80,11 @@ export const errorHandler: ErrorRequestHandler = (
     return;
   }
 
-  console.error('Unhandled API error:', error);
+  // Error payloads/stacks from providers and parsers may contain private values.
+  console.error(
+    'Unhandled API error:',
+    error instanceof Error ? error.name : 'UnknownError'
+  );
 
   response.status(500).json({
     success: false,

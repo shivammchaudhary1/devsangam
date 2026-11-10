@@ -1,3 +1,5 @@
+'use client';
+
 import type { ToastId, ToastItem as ToastItemData } from './toast.types';
 import { ToastItem } from './ToastItem';
 

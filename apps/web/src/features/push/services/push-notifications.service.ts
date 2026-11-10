@@ -100,7 +100,7 @@ async function getRegistrationForSubscription() {
    * Avoid waiting forever on navigator.serviceWorker.ready
    * in that environment.
    */
-  if (import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     throw new Error(
       'Push notifications require the production PWA. Build and preview the app before testing.'
     );

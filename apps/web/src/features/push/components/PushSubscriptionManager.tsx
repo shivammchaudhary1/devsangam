@@ -1,3 +1,5 @@
+'use client';
+
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { synchronizeExistingPushSubscription } from '@/features/push/services/push-notifications.service';
 import { useEffect } from 'react';

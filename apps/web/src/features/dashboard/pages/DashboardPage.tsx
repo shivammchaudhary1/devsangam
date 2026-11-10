@@ -1,3 +1,5 @@
+'use client';
+
 import { DashboardBackground } from '../components/DashboardBackground';
 import {
   DesktopDashboardHeader,

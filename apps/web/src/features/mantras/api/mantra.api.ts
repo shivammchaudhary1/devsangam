@@ -28,7 +28,7 @@ export async function getMantras(
   const response = await apiRequest<MantraListResponse>(
     `/mantras${query ? `?${query}` : ''}`,
     {
-      skipAuthRefresh: true,
+      skipAuthRefresh: false,
     }
   );
 
@@ -39,7 +39,7 @@ export async function getMantraBySlug(slug: string): Promise<Mantra> {
   const response = await apiRequest<MantraDetailResponse>(
     `/mantras/${encodeURIComponent(slug)}`,
     {
-      skipAuthRefresh: true,
+      skipAuthRefresh: false,
     }
   );
 

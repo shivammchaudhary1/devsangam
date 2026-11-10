@@ -13,9 +13,9 @@ export type AppNavigationItem = {
 
 export const APP_NAVIGATION: readonly AppNavigationItem[] = [
   {
-    label: 'Home',
-    mobileLabel: 'Home',
-    path: APP_ROUTES.home,
+    label: 'Dashboard',
+    mobileLabel: 'Dashboard',
+    path: APP_ROUTES.dashboard,
     icon: Home,
   },
   {

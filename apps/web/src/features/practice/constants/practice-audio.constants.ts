@@ -1,5 +1,1 @@
-import omSound from '@/assets/audio/om.mp3';
-
-export const PRACTICE_AUDIO = {
-  om: omSound,
-} as const;
+export const PRACTICE_AUDIO = { om: '/sounds/om.mp3' } as const;

@@ -1,7 +1,9 @@
+'use client';
+
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from '@/lib/navigation';
 import { Loader2, LogOut } from 'lucide-react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 export function LogoutButton() {
   const auth = useAuth();

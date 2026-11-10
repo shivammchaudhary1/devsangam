@@ -1,5 +1,6 @@
 import { MantraModel } from '../models/mantra.model.ts';
 import { PracticeSessionModel } from '../models/practice-session.model.ts';
+import { requireMantraAccess } from '../services/content-access.service.ts';
 import { AppError } from '../utils/app-error.ts';
 import type { Request, Response } from 'express';
 import { Types } from 'mongoose';
@@ -119,6 +120,7 @@ export async function createPracticeSession(
     .lean();
 
   if (existingSession) {
+    await requireMantraAccess(userId, existingSession.mantraId);
     response.status(200).json({
       success: true,
       data: {
@@ -157,6 +159,7 @@ export async function createPracticeSession(
     throw new AppError(404, 'MANTRA_NOT_FOUND', 'Mantra not found.');
   }
 
+  await requireMantraAccess(userId, mantra._id);
   const session = await PracticeSessionModel.create({
     userId,
     mantraId: mantra._id,
@@ -251,6 +254,9 @@ export async function updatePracticeSession(
     );
   }
 
+  // Revoked access must not trap the user in V1's single unfinished session.
+  if (request.body?.status !== 'abandoned')
+    await requireMantraAccess(userId, session.mantraId);
   if (session.status === 'completed') {
     throw new AppError(
       409,
@@ -338,6 +344,7 @@ export async function completePracticeSession(
     );
   }
 
+  await requireMantraAccess(userId, session.mantraId);
   if (session.status === 'completed') {
     response.status(200).json({
       success: true,

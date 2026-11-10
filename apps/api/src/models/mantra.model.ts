@@ -65,6 +65,7 @@ const mantraSchema = new Schema(
     },
 
     defaultTargets: {
+      // Existing practice fields and defaults stay unchanged.
       type: [Number],
       default: [108],
     },
@@ -80,6 +81,12 @@ const mantraSchema = new Schema(
       default: true,
       index: true,
     },
+    accessType: { type: String, enum: ['free', 'paid'], default: 'free' },
+    imagePublicId: { type: String, default: null, select: false },
+    audioUrl: { type: String, default: null, trim: true },
+    videoUrl: { type: String, default: null, trim: true },
+    deletedAt: { type: Date, default: null, select: false },
+    pricePaise: { type: Number, default: 0, min: 0 },
   },
   {
     timestamps: true,

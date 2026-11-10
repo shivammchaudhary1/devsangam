@@ -1,3 +1,5 @@
+'use client';
+
 import { getSettingsErrorMessage } from '../utils/settings-formatters';
 import { SettingsCard, SettingsRow } from './SettingsCard';
 import { SettingToggle } from './SettingToggle';

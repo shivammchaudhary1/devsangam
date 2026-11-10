@@ -1,3 +1,5 @@
+'use client';
+
 type SkeletonProps = {
   className?: string;
 };

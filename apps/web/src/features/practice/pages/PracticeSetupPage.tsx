@@ -1,3 +1,5 @@
+'use client';
+
 import {
   MAX_CUSTOM_PRACTICE_TARGET,
   MIN_CUSTOM_PRACTICE_TARGET,
@@ -14,7 +16,9 @@ import { MANTRA_IMAGES } from '@/features/mantras/constants/mantra-images';
 import { useFavorites } from '@/features/mantras/hooks/useFavorites';
 import { useMantra } from '@/features/mantras/hooks/useMantra';
 import { useMantras } from '@/features/mantras/hooks/useMantras';
+import { PurchaseButton } from '@/features/payments/PurchaseButton';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
+import { useNavigate, useSearchParams } from '@/lib/navigation';
 import type { Mantra } from '@devsangam/types';
 import {
   ArrowRight,
@@ -29,7 +33,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
 
 const PRACTICE_MANTRA_LIMIT = 5;
 
@@ -86,7 +89,9 @@ export function PracticeSetupPage() {
   const [customTarget, setCustomTarget] = useState('');
 
   const browseMantras = useMemo(() => {
-    const availableMantras = browseMantrasQuery.data ?? [];
+    const availableMantras = (browseMantrasQuery.data ?? []).filter(
+      (mantra) => !mantra.locked
+    );
 
     const newestMantras = [...availableMantras].sort(
       (first, second) =>
@@ -102,7 +107,10 @@ export function PracticeSetupPage() {
       return newestMantras.slice(0, PRACTICE_MANTRA_LIMIT);
     }
 
-    const preferredAndNewest = [...favoriteMantras, ...newestMantras];
+    const preferredAndNewest = [
+      ...favoriteMantras.filter((mantra) => !mantra.locked),
+      ...newestMantras,
+    ];
 
     const uniqueMantras = new Map<string, Mantra>();
 
@@ -210,7 +218,7 @@ export function PracticeSetupPage() {
   }
 
   async function handleStartPractice() {
-    if (!selectedMantra) {
+    if (!selectedMantra || selectedMantra.locked) {
       return;
     }
 
@@ -229,6 +237,19 @@ export function PracticeSetupPage() {
       // Error state is rendered below.
     }
   }
+
+  if (selectedMantra?.locked)
+    return (
+      <section className="mx-auto max-w-3xl p-6">
+        <h1 className="font-display text-2xl">{selectedMantra.title}</h1>
+        <p className="my-5">Unlock this mantra before starting practice.</p>
+        <PurchaseButton
+          itemId={selectedMantra._id}
+          itemType="mantra"
+          pricePaise={selectedMantra.pricePaise ?? 0}
+        />
+      </section>
+    );
 
   if (isMantraLoading) {
     return (

@@ -1,4 +1,7 @@
 export type Mantra = {
+  accessType?: 'free' | 'paid';
+  pricePaise?: number;
+  locked?: boolean;
   _id: string;
   slug: string;
   title: string;
@@ -10,6 +13,8 @@ export type Mantra = {
   categories: string[];
   deity: string | null;
   image: string | null;
+  audioUrl?: string | null;
+  videoUrl?: string | null;
   defaultTargets: number[];
   estimatedSecondsPerChant: number | null;
   isPublished: boolean;

@@ -1,3 +1,5 @@
+'use client';
+
 import { useInsightsOverview } from '../hooks/useInsightsOverview';
 import { formatInsightsNumber } from '../utils/insights-format.utils';
 import type { DailyPracticeActivity } from '@devsangam/types';

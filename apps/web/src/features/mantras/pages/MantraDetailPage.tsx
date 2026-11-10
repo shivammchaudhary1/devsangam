@@ -1,11 +1,16 @@
+'use client';
+
 import { FavoriteButton } from '../components/FavoriteButton';
 import { MANTRA_IMAGES } from '../constants/mantra-images';
 import { useFavorites } from '../hooks/useFavorites';
 import { useMantra } from '../hooks/useMantra';
 import { getEstimatedChantMinutes } from '../utils/mantra.utils';
 import { APP_ROUTES, getPracticeRoute } from '@/app/constants/routes.constants';
+import { MantraImage } from '@/components/shared/MantraImage';
+import { PurchaseButton } from '@/features/payments/PurchaseButton';
+import { priceLabel } from '@/features/store/commerce.utils';
+import { Link, useNavigate, useParams } from '@/lib/navigation';
 import { ArrowLeft, Clock3, Play, Sparkles } from 'lucide-react';
-import { Link, useNavigate, useParams } from 'react-router';
 
 export function MantraDetailPage() {
   const { slug } = useParams<{
@@ -57,6 +62,25 @@ export function MantraDetailPage() {
     );
   }
 
+  if (mantra.locked)
+    return (
+      <section className="mx-auto max-w-3xl p-6 sm:p-10">
+        <Link to={APP_ROUTES.library} className="underline">
+          Back to Library
+        </Link>
+        <h1 className="mt-6 font-display text-3xl">{mantra.title}</h1>
+        <p className="my-5">
+          Unlock this mantra for {priceLabel(mantra.pricePaise ?? 0)} to read
+          and practice.
+        </p>
+        <PurchaseButton
+          itemId={mantra._id}
+          itemType="mantra"
+          pricePaise={mantra.pricePaise ?? 0}
+        />
+      </section>
+    );
+
   const isFavorite = favoriteMantras.some(
     (favorite) => favorite._id === mantra._id
   );
@@ -88,9 +112,9 @@ export function MantraDetailPage() {
           <div className="grid lg:grid-cols-[380px_1fr]">
             {/* Image */}
             <div className="relative min-h-[330px] overflow-hidden bg-[var(--ds-white-03)] sm:min-h-[400px] lg:min-h-[520px]">
-              {image ? (
-                <img
+                <MantraImage
                   src={image}
+                  fallbackSrc={MANTRA_IMAGES[mantra.slug]}
                   alt={mantra.title}
                   width={760}
                   height={1040}
@@ -99,9 +123,6 @@ export function MantraDetailPage() {
                   fetchPriority="high"
                   className="absolute inset-0 h-full w-full object-cover object-center"
                 />
-              ) : (
-                <div className="absolute inset-0 bg-[var(--ds-white-03)]" />
-              )}
 
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b1523]/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0b1523]/60" />
             </div>
@@ -196,6 +217,20 @@ export function MantraDetailPage() {
         {/* Detail content */}
         <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
           <div className="space-y-6">
+            {(mantra.audioUrl?.startsWith('https://') || mantra.videoUrl?.startsWith('https://')) && (
+              <section className="flex flex-wrap gap-3 rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-5">
+                <h2 className="w-full text-sm font-semibold">Practice resources</h2>
+                {[
+                  { url: mantra.audioUrl, label: 'Listen to audio' },
+                  { url: mantra.videoUrl, label: 'Watch video' },
+                ].map(({ url, label }) => url?.startsWith('https://') && (
+                  <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-elevated)] px-4 py-3 text-xs text-[var(--ds-text)] transition hover:border-[var(--ds-border-gold)]">
+                    <Play size={14} />{label}
+                  </a>
+                ))}
+              </section>
+            )}
             {/* About */}
             {mantra.description ? (
               <section className="rounded-2xl border border-[var(--ds-border-soft)] bg-[var(--ds-white-03)] p-5 sm:p-6">
@@ -272,7 +307,9 @@ export function MantraDetailPage() {
                       key={target}
                       className="min-w-[88px] rounded-xl border border-[var(--ds-border-soft)] bg-[var(--ds-night)] px-3 py-3 text-center"
                     >
-                      <p className="font-serif text-lg text-[var(--ds-cream)]">{target}</p>
+                      <p className="font-serif text-lg text-[var(--ds-cream)]">
+                        {target}
+                      </p>
 
                       <p className="mt-1 text-[10px] text-slate-500">
                         {minutes ? `~${minutes} min` : 'chants'}

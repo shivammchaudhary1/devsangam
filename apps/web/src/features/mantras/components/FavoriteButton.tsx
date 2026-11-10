@@ -1,3 +1,5 @@
+'use client';
+
 import { useToggleFavorite } from '../hooks/useToggleFavorite';
 import type { Mantra } from '@devsangam/types';
 import { Heart, Loader2 } from 'lucide-react';

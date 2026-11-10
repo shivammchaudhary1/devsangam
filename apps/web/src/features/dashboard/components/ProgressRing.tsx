@@ -1,3 +1,5 @@
+'use client';
+
 type ProgressRingProps = {
   progress: number;
   size: number;

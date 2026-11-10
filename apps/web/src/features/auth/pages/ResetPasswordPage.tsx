@@ -1,3 +1,5 @@
+'use client';
+
 import { resetPassword } from '../api/auth.api';
 import { AuthCard } from '../components/AuthCard';
 import { AuthLayout } from '../components/AuthLayout';
@@ -8,6 +10,7 @@ import {
   resetPasswordSchema,
 } from '../schemas/reset-password.schema';
 import { Button } from '@/components/ui/button';
+import { Link, useNavigate, useSearchParams } from '@/lib/navigation';
 import { isApiError } from '@/services/api/client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
@@ -21,7 +24,6 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate, useSearchParams } from 'react-router';
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
